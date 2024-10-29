@@ -1,0 +1,17 @@
+page{
+    width: 5.5in;
+    height: 8in;
+    border: 5px solid;
+    background-color:hotpink;
+    margin: 10px;
+}
+#printbtn{
+    width: 60px;
+    border: 2px solid;
+    border-radius: 5px;
+    margin: 3px;
+}
+#printbtn:hover{
+    background-color: darkgray;
+    transform: scale(1.1);
+}
