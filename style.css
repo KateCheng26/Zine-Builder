@@ -1,17 +1,52 @@
+/* .grid-container {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    background-color: #2196F3;
+    padding: 10px;
+} */
+/* .grid-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+} */
+
+body{
+    margin: 0px;
+
+}
+.twoPages{
+    display:flex;
+    flex-direction: row;
+}
 .page{
-    width: 5.5in;
-    height: 8in;
+    box-sizing: border-box;
+    height:8.5in;
     border: 5px solid;
     background-color:hotpink;
-    margin: 10px;
+    margin: 0px;
+    flex:50%;
+
 }
 #printbtn{
     width: 60px;
     border: 2px solid;
     border-radius: 5px;
-    margin: 3px;
+    margin: 0px;
 }
 #printbtn:hover{
     background-color: darkgray;
     transform: scale(1.1);
 }
+@media print{
+    .twoPages{  page-break-after: always;}
+}
+
+
+/* @media print{
+    .twopages{ 
+        page-break-after: always;
+        page-break-inside: auto;
+    }
+}  */
