@@ -12,12 +12,26 @@
 <div class="header">
     <h1>Zine Builder</h1>
 </div>
-<a href = "editor.html">
-    <div class="projects">
-        <p>+</p>
-        <h2>New Project</h2>
-    </div>
-</a>
 
+<div class="allProjects">
+    <a onclick = "displayInput();" style = "text-decoration: none">
+        <div class="projects">
+            <p id="plus">+</p>
+            <br>
+            <p id="projectText">New Project</p>
+        </div>
+    </a>
+    <div id="projectNamePicker">
+        <label id = "inputText">Project Name:</label><br>
+        <input id = enterProjectName></input>
+        <button onclick="newProject();document.getElementById('enterProjectName').value = '';">submit</button>
+    </div>
+</div>
+    <script type="module" src="quinnscript.js"></script>
+    <script type="module">
+        import {newProject, displayInput} from './quinnscript.js';
+        window.newProject = newProject;
+        window.displayInput = displayInput;
+      </script>
 </body>
 </html>
