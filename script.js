@@ -19,6 +19,16 @@ export const displayInput = function(){
     document.getElementById('projectNamePicker').style.display='unset';
 }
 
+export const checkLogin = async function(){
+  //checking that the user is logged in
+  auth.onAuthStateChanged((user) => {
+    if (!user) {
+      //user is not signed in, redirect to login page
+      window.location.href = "login.html";
+    }
+  })
+}
+
 export const newProject = async function(){
     try {
         var collectionName = document.getElementById('enterProjectName').value;
