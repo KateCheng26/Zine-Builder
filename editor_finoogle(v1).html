@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zine Editor</title>
+    <link rel="stylesheet" href="style.css" media="screen">
+    <link rel="stylesheet" href="print.css" media="print">
+    <script src="script.js"></script>
+    <script type="module">
+        import {saveDoc} from './script.js';
+        window.saveDoc = saveDoc;
+    
+    </script>
+</head>
+<body>
+    <div class="container">
+        <button onclick="saveDoc();">save document</button>
+        <div class="page-container">
+            <div class="editor">
+                <div class="page" id ="1">
+                  
+                </div>
+                <div class="tools" id = "tools">
+                    <button onclick="addTextBox('1')">T</button>
+                    <button>+</button>
+                </div>
+            </div>
+
+        
+            <div class="editor">
+                <div class="page" id ="2">
+                    
+                </div>
+                <div class="tools">
+                    <button>T</button>
+                    <button>+</button>
+                </div>
+            </div>
+        </div>  
+        <div class="page-container">
+            <div class="editor">
+                <div class="page" id ="3">
+                    
+                </div>
+                <div class="tools">
+                    <button>T</button>
+                    <button>+</button>
+                </div>
+            </div>
+
+            <div class="editor">
+                <div class="page" id ="4">
+                    
+                </div>
+                <div class="tools">
+                    <button>T</button>
+                    <button>+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
