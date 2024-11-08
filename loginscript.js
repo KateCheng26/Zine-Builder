@@ -24,7 +24,7 @@ export const login = function (email, password){
     // Signed in 
     const user = userCredential.user;
     //sucessful sign-in: update window
-    window.location.href = "mockup.html";
+    window.location.href = "homepage.html";
   })
   .catch((error) => {
     //error catch log messages
