@@ -18,16 +18,14 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 
-var username;
-
 //login function for submit button
 export const login = function (email, password){
   //call signInWithEmailAndPassword, firebase function
   signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // Signed in 
-      username = userCredential.user.uid;
-      console.log(String(username));
+     
+      sessionStorage.setItem('username', userCredential.user.email);
     //sucessful sign-in: update window
     window.location.href = "homepage.html";
   })
@@ -72,7 +70,7 @@ export const newProject = async function(){
       var collectionName = document.getElementById('enterProjectName').value;
       //creates a new collection since it doesn't exist and makes a document called projectName
       await addDoc(collection(db, collectionName), {
-          projectName: collectionName
+          projectName: collectionName,
       });
       //adds 2 page documents
       await addDoc(collection(db, collectionName),{
@@ -81,12 +79,10 @@ export const newProject = async function(){
       await addDoc(collection(db, collectionName),{
           pageNumber: 2
       });
-      await addDoc(collection(db, collectionName),{
-        userName: username
-      });
       //adds the name of the collection to a seperate collection of names in order to loop through it later
       await addDoc(collection(db, "collection-names"),{
-        projectName: collectionName
+        projectName: collectionName,
+        userName: sessionStorage.getItem('username')
       });
       //displays all projects
       showProjects();
@@ -101,7 +97,7 @@ export const showProjects = async function(){
   //removes everything from the allProjects div
   document.getElementById("allProjects").innerHTML = "";
   //creates a query of all documents in collection-names
-  const q = query(collection(db, "collection-names"));
+  const q = query(collection(db, "collection-names"), where("userName", "==", sessionStorage.getItem('username')));
   const allProjects = await getDocs(q);
   //shows the new project button
   displayNewProjectButton(); 
