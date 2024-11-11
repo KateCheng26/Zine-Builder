@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    
+<div class="header">
+    <h1>Zine Builder</h1>
+</div>
+
+<div class="allProjects">
+    <a onclick = "displayInput();" style = "text-decoration: none">
+        <div class="projects">
+            <p id="plus">+</p>
+            <br>
+            <p id="projectText">New Project</p>
+        </div>
+    </a>
+    <div id="projectNamePicker">
+        <label id = "inputText">Project Name:</label><br>
+        <input id = enterProjectName></input>
+        <button onclick="newProject();document.getElementById('enterProjectName').value = '';">submit</button>
+    </div>
+</div>
+    <script type="module" src="script.js"></script>
+    <script type="module">
+        import {newProject, displayInput} from './script.js';
+        window.newProject = newProject;
+        window.displayInput = displayInput;
+        window.checkLogin = checkLogin;
+        checkLogin();
+      </script>
+</body>
+</html>

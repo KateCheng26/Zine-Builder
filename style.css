@@ -1,0 +1,63 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    margin: 0;
+}
+h1{
+    font-family: "Kalam", cursive;
+    text-align: center;
+    font-size: 4.5vh; 
+    color: #ffffff;
+}
+.header{
+    padding: 1%;
+    background-color: #793140;
+}
+.projects{
+    padding:0px;
+    padding-top:3vh;
+    margin: 4vw;
+    width: 20vw;
+    height: 20vw;
+    background-color: #D9D9D9;
+    text-align: center;
+    vertical-align: top;
+}
+.projects:hover{
+    cursor:pointer;
+}
+#plus{
+    margin: 0px;
+    line-height: 70%;
+    font-size: 15vw;
+    font-weight: 800;
+    color:#793140;
+}
+#projectText{
+    margin:0px;
+    font-size: 2vw;
+    font-weight:700;
+    color: black;
+}
+#projectNamePicker{
+    display:none;
+}
+#enterProjectName{
+    margin-left: 4vw;
+    height: 3vw;
+    width: 15vw;
+    font-size: 2vw;
+}
+#inputText{
+    margin-left:4vw;
+    font-size: 2vw;
+    font-weight:700;
+    color: black;
+}
+#submitButton{
+    padding:0px;
+    width: 5vw;
+    height: 3vw;
+    font-size: 1.2vw;
+}
