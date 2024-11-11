@@ -1,6 +1,7 @@
 // Import Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getFirestore, collection, addDoc, setDoc, getDocs, doc, updateDoc, deleteDoc, query, where, getCountFromServer} from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDaacl1g-63bYmdKk0EzPHMLe5CZLU53Sk",
@@ -14,6 +15,28 @@ const firebaseConfig = {
 //initialize Firbase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
+
+
+var username;
+
+//login function for submit button
+export const login = function (email, password){
+  //call signInWithEmailAndPassword, firebase function
+  signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+      username = userCredential.user.uid;
+      console.log(String(username));
+    //sucessful sign-in: update window
+    window.location.href = "homepage.html";
+  })
+  .catch((error) => {
+    //error catch log messages
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
+}
 
 //method that makes the Project Name input show up
 export const displayInput = function(){
@@ -58,6 +81,9 @@ export const newProject = async function(){
       await addDoc(collection(db, collectionName),{
           pageNumber: 2
       });
+      await addDoc(collection(db, collectionName),{
+        userName: username
+      });
       //adds the name of the collection to a seperate collection of names in order to loop through it later
       await addDoc(collection(db, "collection-names"),{
         projectName: collectionName
@@ -91,7 +117,7 @@ export const showProjects = async function(){
 
     var stabImage = document.createElement("img");
     stabImage.src = "images/stab.png";
-    stabImage.style.width = "25vw";
+    stabImage.style.width = "13vw";
     newProjectDiv.appendChild(stabImage);
 
     var newProjectName = document.createElement("p");
@@ -110,9 +136,6 @@ export const addTextBox = function(page) {
   textBox.className = "text-box"; 
   textBox.id = "c"+page; 
   
-  
-  
-      
 
   if (num_children < 3) {
       document.getElementById(page).appendChild(textBox);
