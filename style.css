@@ -3,6 +3,8 @@
 }
 body{
     margin: 0;
+    display:flex;
+    flex-direction:column;
 }
 h1{
     font-family: "Kalam", cursive;
@@ -10,27 +12,36 @@ h1{
     font-size: 4.5vh; 
     color: #ffffff;
 }
+#allProjects{
+    display:flex;
+    flex-wrap:wrap;
+}
 .header{
+    width:100vw;
     padding: 1%;
     background-color: #793140;
 }
 .projects{
     padding:0px;
-    padding-top:3vh;
     margin: 4vw;
-    width: 20vw;
-    height: 20vw;
+    width: 17vw;
+    height: 17vw;
     background-color: #D9D9D9;
-    text-align: center;
-    vertical-align: top;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0px 0px 4px ;
+    
 }
 .projects:hover{
     cursor:pointer;
+    border: 0.2vw solid #5c5c5c;
 }
 #plus{
     margin: 0px;
     line-height: 70%;
-    font-size: 15vw;
+    font-size: 14vw;
     font-weight: 800;
     color:#793140;
 }
@@ -39,25 +50,37 @@ h1{
     font-size: 2vw;
     font-weight:700;
     color: black;
+    font-family: serif;
 }
 #projectNamePicker{
     display:none;
+    position:fixed;
+    margin-left:1.1vw;
+    margin-top: 9.4vw;
 }
 #enterProjectName{
     margin-left: 4vw;
-    height: 3vw;
-    width: 15vw;
-    font-size: 2vw;
+    height: 2vw;
+    width: 10vw;
+    font-size: 1.5vw;
+    border:0.15vw solid black;
 }
 #inputText{
     margin-left:4vw;
-    font-size: 2vw;
+    font-size: 1.2vw;
     font-weight:700;
     color: black;
+    font-family: serif;
 }
 #submitButton{
+    margin:0px;
     padding:0px;
-    width: 5vw;
-    height: 3vw;
+    width: 4.6vw;
+    height: 2vw;
     font-size: 1.2vw;
+    border: 0.15vw solid black;
+    border-radius: 0.3vw;
+    font-weight:700;
+    font-family: serif;
+    background-color:#D9D9D9;
 }
