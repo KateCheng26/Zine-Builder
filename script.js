@@ -123,6 +123,64 @@ export const showProjects = async function(){
   })
 }
 
+//save document
+export const saveDoc =  async function(){
+    //get all docs in the project
+    const phoogdocs = await getDocs(collection(db, "Test Project"));
+
+    //for each doc
+    phoogdocs.forEach((item) => {
+        //log id and page number (project name doc is undefined for page number)
+        console.log(item.id + ", " + item.data().pageNumber);
+
+        //pull page element with the same page number as doc
+        var page = document.getElementById(item.data().pageNumber);
+
+        //make list of all child elements of page ^^^^
+        var children = page.children;
+
+        //loop through children
+        for(let i = 0; i < children.length; i++){
+
+            //on first loop update column 1
+            if (i==0){
+
+                //define item to update
+                const updateItem = doc(db, "Test Project", item.id);
+
+                //run updateDoc()
+                updateDoc(updateItem, {
+                    c1: children[i].innerHTML
+                });
+            
+            //on second loop update column 2
+            } else if (i==1) {
+
+                //define item to update
+                const updateItem = doc(db, "Test Project", item.id);
+
+                //run updateDoc()
+                updateDoc(updateItem, {
+                    c2: children[i].innerHTML
+                });
+            
+            //on third loop update column 3
+            } else {
+
+                //define item to update
+                const updateItem = doc(db, "Test Project", item.id);
+
+                //run updateDoc()
+                updateDoc(updateItem, {
+                    c3: children[i].innerHTML
+                });
+            }
+        }
+    })
+}
+
+
+
 export const addTextBox = function(page) {
 
   const textBox = document.createElement("div")
