@@ -4,18 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zine Editor</title>
-    <link rel="stylesheet" href="style.css" media="screen">
+    <link rel="stylesheet" href="style_finoogle(v1).css" media="screen">
     <link rel="stylesheet" href="print.css" media="print">
     <script src="script.js"></script>
     <script type="module">
-        import {saveDoc} from './script.js';
-        window.saveDoc = saveDoc;
-    
+        import {saveProject, addTextBox, loadProject, addPage} from './script.js';
+        window.saveProject = saveProject;
+        window.loadProject = loadProject;
+        window.addTextBox = addTextBox;
+        window.addPage = addPage;
     </script>
 </head>
 <body>
-    <div class="container">
-        <button onclick="saveDoc();">save document</button>
+    <div class="top-bar">
+        <button onclick="saveProject();">save document</button>
+        <button onclick="loadProject();">load document</button>
+    </div>
+    <div class="container" id="container">
         <div class="page-container">
             <div class="editor">
                 <div class="page" id ="1">
@@ -33,31 +38,13 @@
                     
                 </div>
                 <div class="tools">
-                    <button>T</button>
+                    <button onclick="addTextBox('2')">T</button>
                     <button>+</button>
                 </div>
             </div>
         </div>  
-        <div class="page-container">
-            <div class="editor">
-                <div class="page" id ="3">
-                    
-                </div>
-                <div class="tools">
-                    <button>T</button>
-                    <button>+</button>
-                </div>
-            </div>
-
-            <div class="editor">
-                <div class="page" id ="4">
-                    
-                </div>
-                <div class="tools">
-                    <button>T</button>
-                    <button>+</button>
-                </div>
-            </div>
-        </div>
+    </div>
+    <div class="bottom-bar">
+        <button onclick="addPage()">+</button>
     </div>
 </body>
