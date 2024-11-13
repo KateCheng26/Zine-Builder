@@ -123,8 +123,130 @@ export const showProjects = async function(){
   })
 }
 
+
+export const loadProject =  async function(){
+    const phoogdocs = await getDocs(collection(db, "Test Project"));
+    
+    phoogdocs.forEach((item) => {
+
+        var page = document.getElementById(item.data().pageNumber);
+
+        // console.log(item.id + ", " + item.data().pageNumber);
+        // console.log(content);
+        // console.log();
+
+        page.innerHTML = ""
+        var children = page.children;
+
+        if (item.data().c1 != null) {
+            addTextBox(page.id)
+        }
+        if (item.data().c2 != null) {
+            addTextBox(page.id)
+        }
+        if (!item.data().c3 != null) {
+            addTextBox(page.id)
+        }
+
+        for (let i = 0; i < children.length; i++) {
+            if (i==0){
+                children[i].innerHTML = item.data().c1
+            } else if (i==1){
+                children[i].innerHTML = item.data().c2
+            } else {
+                children[i].innerHTML = item.data().c3
+            }
+            
+        }
+
+    });
+}
+
+export const addPage = function(){
+    
+    //create elements
+
+    //page-container
+    const pageContainer = document.createElement("div");
+    pageContainer.className = "page-container";
+
+    //editors
+    const editor1 = document.createElement("div");
+    editor1.className = "editor";
+
+    const editor2 = document.createElement("div");
+    editor2.className = "editor";
+
+    //pages
+
+        //amount of pages
+    const pages = document.getElementsByClassName("page");
+
+    const page1 = document.createElement("div");
+    page1.className = "page";
+    page1.id = pages.length + 1;
+
+    const page2 = document.createElement("div");
+    page2.className = "page";
+    page2.id = pages.length + 2;
+
+    // tools
+
+    const tools1 = document.createElement("div");
+    tools1.className = "tools";
+
+    const tools2 = document.createElement("div");
+    tools2.className = "tools";
+
+    //butons
+    const button1 = document.createElement("button");
+    button1.innerHTML = "T"
+    var setFunction = addTextBox.bind(this,pages.length + 1);
+    button1.onclick = setFunction;
+
+
+    const button2 = document.createElement("button");
+    button2.innerHTML = "+"
+
+
+    const button3 = document.createElement("button");
+    button3.innerHTML = "T"
+    var setFunction = addTextBox.bind(this,pages.length + 2);
+    button3.onclick = setFunction;
+
+
+    const button4 = document.createElement("button");
+    button4.innerHTML = "+"
+
+
+    //concat
+        //buttons to tools
+    tools1.appendChild(button1);
+    tools1.appendChild(button2);
+    tools2.appendChild(button3);
+    tools2.appendChild(button4);
+
+        //pages and tools to editor
+    editor1.appendChild(page1);
+    editor1.appendChild(tools1);
+
+    editor2.appendChild(page2);
+    editor2.appendChild(tools2);
+
+        //editors to page-container
+    pageContainer.appendChild(editor1);
+    pageContainer.appendChild(editor2);
+
+        //page-container to container
+    document.getElementById("container").appendChild(pageContainer);
+
+}
+
 //save document
-export const saveDoc =  async function(){
+export const saveProject =  async function(){
+    //add all pages
+
+
     //get all docs in the project
     const phoogdocs = await getDocs(collection(db, "Test Project"));
 
@@ -188,11 +310,10 @@ export const addTextBox = function(page) {
 
   textBox.setAttribute("contenteditable", "true")
   textBox.className = "text-box"; 
-  textBox.id = "c"+page; 
-  
+
 
   if (num_children < 3) {
-      document.getElementById(page).appendChild(textBox);
+    document.getElementById(page).appendChild(textBox);
   }
 }
 
