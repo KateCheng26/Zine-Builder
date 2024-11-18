@@ -16,9 +16,11 @@
     </script>
 </head>
 <body>
-    <div class="top-bar">
-        <button onclick="saveProject('Test Project');">save document</button>
-        <button onclick="loadProject('Test Project');">load document</button>
+    <div class = menudiv>
+        <button class = "menubutton" onclick = "window.location.href = 'homepage.html'">back to home</button>
+        <button class = "menubutton" onclick ="saveProject();">save project</button>
+        <button class = "menubutton" onclick="loadProject();">load project</button>
+        <button class = "menubutton" onclick="deleteProject();">delete project</button>
     </div>
     <div class="container" id="container">
         <div class="page-container">
@@ -45,6 +47,6 @@
         </div>  
     </div>
     <div class="bottom-bar">
-        <button onclick="addPage()">+</button>
+        <button class = "menubutton" onclick="addPage()">add project</button>
     </div>
 </body>
