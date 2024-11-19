@@ -170,6 +170,66 @@ async function deleteFromCollectionNames(docId){
 }
 
 
+export const newProject = async function(){
+  try {
+      //saves whatever the user inputs as the name of the collection
+      var collectionName = document.getElementById('enterProjectName').value;
+      //creates a new collection since it doesn't exist and makes a document called projectName
+      await addDoc(collection(db, collectionName), {
+          projectName: collectionName,
+      });
+      //adds 2 page documents
+      await addDoc(collection(db, collectionName),{
+          pageNumber: "1"
+      });
+      await addDoc(collection(db, collectionName),{
+          pageNumber: "2"
+      });
+      //adds the name of the collection to a seperate collection of names in order to loop through it later
+      await addDoc(collection(db, "collection-names"),{
+        projectName: collectionName,
+        userName: sessionStorage.getItem('username')
+      });
+      //displays all projects
+      showProjects();
+  }
+  // Print error message if there are any errors
+  catch (e) {
+    console.error("Error adding item to database: ", e);
+  } 
+}
+
+export const showProjects = async function(){
+  //removes everything from the allProjects div
+  document.getElementById("allProjects").innerHTML = "";
+  //creates a query of all documents in collection-names
+  const q = query(collection(db, "collection-names"), where("userName", "==", sessionStorage.getItem('username')));
+  const allProjects = await getDocs(q);
+  //shows the new project button
+  displayNewProjectButton(); 
+  //for each document in collection-names, create and append a div with text in it
+  allProjects.forEach((project) =>{
+    // console.log(project.data().projectName);
+    var newProjectDiv = document.createElement("div");
+    newProjectDiv.className = "projects";
+    newProjectDiv.addEventListener("click", function(){
+      window.location.href="editor.html";
+    });
+    document.getElementById("allProjects").appendChild(newProjectDiv);
+
+    var stabImage = document.createElement("img");
+    stabImage.src = "images/stab.png";
+    stabImage.style.width = "13vw";
+    newProjectDiv.appendChild(stabImage);
+
+    var newProjectName = document.createElement("p");
+    newProjectName.innerHTML = project.data().projectName;
+    newProjectName.id = "projectText";
+    newProjectDiv.appendChild(newProjectName);
+  })
+}
+
+
 export const loadProject =  async function(project){
     const phoogdocs = await getDocs(collection(db, project));
     
@@ -180,6 +240,7 @@ export const loadProject =  async function(project){
             }
         })
     console.log(allPageNums)
+    
     for (let i = 0; i < (allPageNums.length - 2)/2; i++) {
         addPage()
     }
