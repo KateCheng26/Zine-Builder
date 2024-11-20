@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zine Editor</title>
-    <link rel="stylesheet" href="style_finoogle(v1).css" media="screen">
+    <link rel="stylesheet" href="editor.css" media="screen">
     <link rel="stylesheet" href="print.css" media="print">
     <script src="script.js"></script>
     <script type="module">
-        import {saveProject, addTextBox, loadProject, addPage} from './script.js';
+        import {saveProject, addTextBox, loadProject, addPage, addImage} from './script.js';
         window.saveProject = saveProject;
         window.loadProject = loadProject;
         window.addTextBox = addTextBox;
         window.addPage = addPage;
+        window.addImage = addImage;
     </script>
 </head>
 <body>
@@ -37,11 +38,18 @@
         
             <div class="editor">
                 <div class="page" id ="2">
-                    
+                    <div id="image-container"></div>
                 </div>
-                <div class="tools">
+                <div class="tools" id="tools">
                     <button onclick="addTextBox('2')">T</button>
-                    <button>+</button>
+                    <!-- <button  onclick="addImage()">+</button> -->
+                    <!-- <label for="input-file" id="image-input">+</label>
+                    <input type="file" class="file" accept="image/png, image/jpeg, image/jpg" id="input-file"> -->
+                    <!-- Hidden file input to upload an image -->
+                    <input type="file" id="image-input" accept="image/*" style="display: none;">
+                    
+                    <!-- Button that triggers file input -->
+                    <button onclick="triggerFileInput()">Upload Image</button>
                 </div>
             </div>
         </div>  
@@ -49,4 +57,59 @@
     <div class="bottom-bar">
         <button class = "menubutton" onclick="addPage()">add project</button>
     </div>
+
+    <!-- <script>
+        console.log("is this running");
+        var label = document.getElementById("addImg");
+        label.addEventListener("click",addImage);
+        
+        // label.addEventListener("click", addImage());
+
+        const addImage = function(){
+            console.log("function is running");
+            const img = document.createElement("img");
+            img.className = "upload-image";
+
+            document.getElementById("pageContainer").appendChild(img);
+
+            console.log("test");
+
+            let uploadedImage = document.getElementById("upload-image");
+            let inputFile = document.getElementById("input-file");
+            uploadedImage.src = URL.createObjectURL(inputFile.files[0]);
+
+        }
+        // })
+
+    </script> -->
+
+    <script>
+        // Function to trigger file input when the button is clicked
+        function triggerFileInput() {
+            document.getElementById('image-input').click(); // Open file dialog
+        }
+
+        // Function to handle image upload and display
+        document.getElementById('image-input').addEventListener('change', function() {
+            var file = this.files[0]; // Get the selected file
+
+            if (file) {
+                var reader = new FileReader();
+
+                reader.onload = function(event) {
+                    // Create a new div and img element to display the uploaded image
+                    var imageContainer = document.getElementById('image-container');
+                    // imageContainer.innerHTML = ''; // Clear any existing image
+                    var img = document.createElement('img');
+                    img.src = event.target.result; // Set the image source to the uploaded file
+                    imageContainer.appendChild(img); // Append the image to the container
+                };
+
+                reader.readAsDataURL(file); // Read the file as a data URL
+            } else {
+                alert("Please select an image first.");
+            }
+        });
+    </script>
+
 </body>
