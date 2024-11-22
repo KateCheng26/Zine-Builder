@@ -1,92 +1,218 @@
 * {
-	margin: 0;
-	padding: 0;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
 
+}
+
+html {
+    background-color: #e7e7e7;
 }
 
 .container {
     display: block;
-    height: 100vw;
+    height: 100%;
 }
+
+
 .page-container {
-    border: 1px solid black;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    
+    grid-template-rows: 100%;
+    width: 100%;
+    max-height: 90vh;
+    height: fit-content;
 }
 
 
 .editor {
     height: auto;
-    padding: 20px;
-    border: 1px solid green;
+    padding: 10px;
+    margin-bottom: 1rem;
+    display: inline;    
 }
+
 .col {
     background-color: pink;
 }
+
 .page {
+
+    background-color: white;
+    box-shadow: 0px 5px 10px 0px #dadada;
+    max-height: 90%;
     aspect-ratio: 5.5/8.5;
-    border: 1px solid black;
     display: grid;
-    gap: 1rem;
+    gap: 3%;
+    padding: 1%;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 100%;
+    margin: 0 auto;
+    justify-content: center;
 }
 
-.tools {
+
+.tools{
+    background-color: rgb(140, 140, 140);
+    content-visibility: hidden;
+    width: fit-content;
     padding: 5px;
+    padding-inline: 20px;
+    border-radius: 20px;
     text-align: center;
-    border: 1px solid blue;
+    margin: 0 auto;
+    margin-top: 10px;
+    transition-property:content-visibility;
+    transition-delay: 2s;
+    box-shadow: 0px 5px 10px 0px #dadada;
 }
 
-button {
+.tools:hover {
+    background-color: white;
+    content-visibility: visible;
+    width: 7.25rem;
+    height: auto;
     padding: 5px;
+    padding-inline: 20px;
+    border-radius: 50px;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 10px;
 }
+
+
+.text-button, .img-button, .page-button, .menubutton{
+    text-align: center;
+    transition: .6s ease;
+    border: none;
+}
+
+.text-button, .img-button, .page-button{
+    margin-inline: .25rem;
+    padding: 5px;
+    width: 3rem;
+    height: 3rem;
+    background-color: transparent;
+    border-radius: 100% ;
+}
+
+.top-bar {
+    background-color: #e7e7e7;
+    padding: 10px;
+    /* position: fixed;
+    width: 100vw; */
+    top: 0; 
+}
+.menu{
+    border-radius: 25px;
+    padding: 5px;
+    padding-inline: 10px;
+    background-color: #f1f1f1;
+    margin-top: 10px;
+    
+
+/* background-color: #e7e7e7; */
+}
+.menubutton{
+    margin-inline: .01rem;
+    width: 2rem;
+    height: 2rem;
+    background-color: transparent;
+    border-radius: 7px;
+}
+
+#delete {
+    float: right;
+}
+
+.text-button:hover, .img-button:hover, .page-button:hover,.menubutton:hover{
+
+    background-color: rgb(206, 206, 206);
+
+}
+
+.text-button:active, .img-button:active, .page-button:active, .menubutton:active{
+
+    background-color: rgb(136, 136, 136);
+    transition: .2s ease;
+
+}
+
+.page-button {
+    width: 4.5rem;
+    height: 4.5rem;
+    margin-top: -100%;
+    background-color: white;
+    box-shadow: 0px 5px 10px 0px #dadada;
+}
+
+.bottom-bar {
+    height: 3rem;
+    padding: .25rem;
+    text-align: center;
+}
+
 
 .text-box {
-    width: 94%;
-    margin: 3%;
-    background-color: pink;
-    overflow: hidden;
-}
 
-
-
-/* 
-body {
-    margin: 0px;
-    padding: 0px;
-}
-
-#webpage {
-    width: 100%;
-    height: auto;
-    margin: 0px;
-    background-color: #eeeeee;
-    box-sizing: border-box;
-}
-
-#row {
-    padding-top: 0;
-    padding: 20px;
-	width: 100%;
-	padding: 0;
-    justify-content: center;
-    border: 1px solid red;
-}   
-
-#page-container {
-    width: auto;
-    position: relative;
-	float: left;
-    border: 1px solid green;
-}
-#half-page {
     background-color: white;
-    width: 5.5in;
-    height: 8.5in;
-    border: 1px solid black;
+    width: 88%;
+    margin: 3%;
+    padding: 3%;
+    overflow: hidden;
+    outline: none;
+    border-radius: 5px;
+    border: 1px dotted white;
+    transition: all .4s ease;
+    
 }
- */
+
+
+.text-box:hover {
+    border: 1px dotted rgb(255, 88, 88);
+    
+}
+
+.text-box:focus {
+    border: 1px solid rgb(255, 0, 0);
+}
+
+[contenteditable=true]:empty:not(:focus):before{
+    content: attr(placeholder);
+    pointer-events: none;
+    display: block;
+    opacity: 0.5;
+    font-style: italic;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: smaller;
+  }
+
+
+  
+
+@media only screen and (max-width: 768px) {
+
+.page-container {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 90vh 90vh;
+    width: 100%;
+    max-height: none;
+}
+
+.page {
+    min-width: 330px;
+}
+
+.page-button {
+    margin: 0%;
+}
+
+.bottom-bar {
+    height: auto;
+    padding-bottom: 1rem;
+}
+
+}
