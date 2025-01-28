@@ -94,13 +94,13 @@ html {
     margin-top: 10px;
 }
 
-.text-button, .img-button, .page-button, .menubutton, .formatbutton{
+.text-button, .img-button, .page-button, .menubutton, .format-button{
     text-align: center;
     transition: .6s ease;
     border: none;
 }
 
-.text-button, .img-button, .page-button, .formatbutton{
+.text-button, .img-button, .page-button, .format-button{
     margin-inline: .25rem;
     padding: 5px;
     width: 3rem;
@@ -138,13 +138,13 @@ html {
     float: right;
 }
 
-.text-button:hover, .img-button:hover, .page-button:hover,.menubutton:hover, .formatbutton:hover{
+.text-button:hover, .img-button:hover, .page-button:hover,.menubutton:hover, .format-button:hover{
 
     background-color: rgb(206, 206, 206);
 
 }
 
-.text-button:active, .img-button:active, .page-button:active, .menubutton:active, .formatbutton:active{
+.text-button:active, .img-button:active, .page-button:active, .menubutton:active, .format-button:active{
 
     background-color: rgb(136, 136, 136);
     transition: .2s ease;
