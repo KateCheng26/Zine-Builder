@@ -82,14 +82,25 @@ html {
     margin-top: 10px;
 }
 
+.text_and_img {
+    background-color:white;
+    width: 5rem;
+    height: auto;
+    padding:5px;
+    padding-inline:20px;
+    border-radius: 50px;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 10px;
+}
 
-.text-button, .img-button, .page-button, .menubutton{
+.text-button, .img-button, .page-button, .menubutton, .formatbutton{
     text-align: center;
     transition: .6s ease;
     border: none;
 }
 
-.text-button, .img-button, .page-button{
+.text-button, .img-button, .page-button, .formatbutton{
     margin-inline: .25rem;
     padding: 5px;
     width: 3rem;
@@ -127,13 +138,13 @@ html {
     float: right;
 }
 
-.text-button:hover, .img-button:hover, .page-button:hover,.menubutton:hover{
+.text-button:hover, .img-button:hover, .page-button:hover,.menubutton:hover, .formatbutton:hover{
 
     background-color: rgb(206, 206, 206);
 
 }
 
-.text-button:active, .img-button:active, .page-button:active, .menubutton:active{
+.text-button:active, .img-button:active, .page-button:active, .menubutton:active, .formatbutton:active{
 
     background-color: rgb(136, 136, 136);
     transition: .2s ease;
