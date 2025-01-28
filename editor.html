@@ -32,38 +32,52 @@
         <div class="page-container">
             <div class="editor">
                 <div class="page" id ="1">
-                  
+                    <div class="image-container1" id="image-container1"></div>
+                    <div class="text_and_img" id = "text_and_img">
+                        <button class = "text-button" onclick="addTextBox('1')">
+                            <span class="material-symbols-outlined">
+                                text_fields
+                            </span>
+                        </button>
+                        <input type="file" id="image-input" accept="image/*" style="display: none;">
+                        <button onclick="triggerFileInput('1')" class = "img-button">
+                            <span class="material-symbols-outlined">
+                                image
+                            </span>
+                        </button>
+                    </div>
                 </div>
-                <div class="tools" id = "tools">
-                    <button class = "text-button" onclick="addTextBox('1')">
+                <div class = "tools" id = "tools">
+                    <button class = "format-button" onclick="window.location.href = 'format.html'">
                         <span class="material-symbols-outlined">
-                            text_fields
+                            dashboard
                         </span>
-                    </button>
-                    <button onclick="triggerFileInput()" class = "img-button">
-                        <span class="material-symbols-outlined">
-                            image
-                        </span>
-                    </button>
                 </div>
+                
             </div>
         
             <div class="editor">
                 <div class="page" id ="2">
-                    
+                    <div class="image-container2" id="image-container2"></div>
+                    <div class="text_and_img" id = "text_and_img">
+                        <button class = "text-button" onclick="addTextBox('2')">
+                            <span class="material-symbols-outlined">
+                                text_fields
+                            </span>
+                        </button>
+                        <input type="file" id="image-input" accept="image/*" style="display: none;">
+                        <button onclick="triggerFileInput('2')" class = "img-button">
+                            <span class="material-symbols-outlined">
+                                image
+                            </span>
+                        </button>
+                    </div>
                 </div>
                 <div class="tools">
-                    <button class = "text-button" onclick="addTextBox('2')">
+                    <button class = "format-button" onclick="window.location.href = 'format.html'">
                         <span class="material-symbols-outlined">
-                            text_fields
+                            dashboard
                         </span>
-                    </button>
-                    <input type="file" id="image-input" accept="image/*" style="display: none;">
-                    <button onclick="triggerFileInput()" class = "img-button">
-                        <span class="material-symbols-outlined">
-                            image
-                        </span>
-                    </button>
                 </div>
             </div>
         </div>  
@@ -78,17 +92,18 @@
    
     <script type = "module" src="script.js"></script>
     <script type="module">
-        import {saveProject, addTextBox, loadProject, addPage, deleteProject} from './script.js';
+        import {saveProject, addTextBox, loadProject, addPage} from './script.js';
         window.saveProject = saveProject;
         window.loadProject = loadProject;
         window.addTextBox = addTextBox;
         window.addPage = addPage;
-        window.deleteProject = deleteProject;
     </script>
 
     <script>
         // Function to trigger file input when the button is clicked
-        function triggerFileInput() {
+        function triggerFileInput(page) {
+            var page_number = page;
+            sessionStorage.setItem("pageNum", page_number);
             document.getElementById('image-input').click(); // Open file dialog
         }
         // Function to handle image upload and display
@@ -98,7 +113,7 @@
                 var reader = new FileReader();
                 reader.onload = function(event) {
                     // Create a new div and img element to display the uploaded image
-                    var imageContainer = document.getElementById('image-container');
+                    var imageContainer = document.getElementById('image-container'+sessionStorage.getItem("pageNum"));
                     // imageContainer.innerHTML = ''; // Clear any existing image
                     var img = document.createElement('img');
                     img.src = event.target.result; // Set the image source to the uploaded file
