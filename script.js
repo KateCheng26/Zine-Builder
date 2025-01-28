@@ -170,10 +170,6 @@ async function deleteFromCollectionNames(docId){
 }
 
 
-
-
-
-
 export const loadProject =  async function(project){
     const phoogdocs = await getDocs(collection(db, project));
     
@@ -184,7 +180,6 @@ export const loadProject =  async function(project){
             }
         })
     console.log(allPageNums)
-    
     for (let i = 0; i < (allPageNums.length - 2)/2; i++) {
         addPage()
     }
@@ -229,81 +224,187 @@ export const loadProject =  async function(project){
 
 export const addPage = function(){
     
-    //create elements
+  //create elements
 
-    //page-container
-    const pageContainer = document.createElement("div");
-    pageContainer.className = "page-container";
+  //page-container
+  const pageContainer = document.createElement("div");
+  pageContainer.className = "page-container";
 
-    //editors
-    const editor1 = document.createElement("div");
-    editor1.className = "editor";
+  //editors
+  const editor1 = document.createElement("div");
+  editor1.className = "editor";
 
-    const editor2 = document.createElement("div");
-    editor2.className = "editor";
+  const editor2 = document.createElement("div");
+  editor2.className = "editor";
 
-    //pages
+  //pages
 
-        //amount of pages
-    const pages = document.getElementsByClassName("page");
+      //amount of pages
+  const pages = document.getElementsByClassName("page");
 
-    const page1 = document.createElement("div");
-    page1.className = "page";
-    page1.id = pages.length + 1;
+  const page1 = document.createElement("div");
+  page1.className = "page";
+  page1.id = pages.length + 1;
 
-    const page2 = document.createElement("div");
-    page2.className = "page";
-    page2.id = pages.length + 2;
+  const page2 = document.createElement("div");
+  page2.className = "page";
+  page2.id = pages.length + 2;
 
-    // tools
+  // file input stuff
 
-    const tools1 = document.createElement("div");
-    tools1.className = "tools";
+  const imgcontainer1 = document.createElement("div");
+  imgcontainer1.className = "image-container1";
+  const imgcontainer2 = document.createElement("div");
+  imgcontainer2.className = "image-container2";
 
-    const tools2 = document.createElement("div");
-    tools2.className = "tools";
+  const imginput = document.createElement("input")
+  imginput.type = "file";
+  imginput.style ="display: none;"
+  imginput.id = "image-input";
 
-    //butons
-    const button1 = document.createElement("button");
-    button1.innerHTML = "T"
-    var setFunction = addTextBox.bind(this,pages.length + 1);
-    button1.onclick = setFunction;
-
-
-    const button2 = document.createElement("button");
-    button2.innerHTML = "+"
-
-
-    const button3 = document.createElement("button");
-    button3.innerHTML = "T"
-    var setFunction = addTextBox.bind(this,pages.length + 2);
-    button3.onclick = setFunction;
+  const imginput2 = document.createElement("input")
+  imginput2.type = "file";
+  imginput2.style ="display: none;"
+  imginput2.id = "image-input";
 
 
-    const button4 = document.createElement("button");
-    button4.innerHTML = "+"
+  // tools
+
+  const tools1 = document.createElement("div");
+  tools1.className = "tools";
+
+  const tools2 = document.createElement("div");
+  tools2.className = "tools";
 
 
-    //concat
-        //buttons to tools
-    tools1.appendChild(button1);
-    tools1.appendChild(button2);
-    tools2.appendChild(button3);
-    tools2.appendChild(button4);
+  const textholder1 = document.createElement("div");
+  textholder1.className = "text_and_img";
+  const textholder2 = document.createElement("div");
+  textholder2.className = "text_and_img";
 
-        //pages and tools to editor
-    editor1.appendChild(page1);
-    editor1.appendChild(tools1);
+  //butons
+  const button1 = document.createElement("button");
+  var setFunction = addTextBox.bind(this,pages.length + 1);
+  button1.onclick = setFunction;
+  button1.className = "text-button";
 
-    editor2.appendChild(page2);
-    editor2.appendChild(tools2);
 
-        //editors to page-container
-    pageContainer.appendChild(editor1);
-    pageContainer.appendChild(editor2);
+  const button2 = document.createElement("button");
+  var setFunction2 = triggerFileInput.bind(this,pages.length + 1);
+  button2.onclick = setFunction2;
+  button2.className = "img-button";
 
-        //page-container to container
-    document.getElementById("container").appendChild(pageContainer);
+  // const freeDiv = document.createElement("div");
+  // freeDiv.className = "free-div";
+
+  // const button2 = document.createElement("button");
+  // button2.innerHTML = "+"
+  // const button1input = document.createElement("input");
+  // var setFunction = triggerFileInput.bind(this,pages.length + 1);
+  // button1input.onclick = setFunction;
+
+
+
+  const button3 = document.createElement("button");
+  var setFunction = addTextBox.bind(this,pages.length + 2);
+  button3.onclick = setFunction;
+  button3.className = "text-button";
+
+
+  const button4 = document.createElement("button");
+  var setFunction2 = triggerFileInput.bind(this,pages.length + 2);
+  button4.onclick = setFunction2;
+  button4.className = "img-button";
+
+
+  const formatbutton = document.createElement("button");
+  formatbutton.onclick = () => {
+    window.location.href = 'format.html';
+  };
+  formatbutton.className = "format-button";
+  formatbutton.title = "Choose Format";
+
+
+  const formatbutton2 = document.createElement("button");
+  formatbutton2.onclick = () => {
+    window.location.href = 'format.html';
+  };
+  formatbutton2.className = "format-button";
+  formatbutton2.title = "Choose Format";
+
+
+  
+  // span
+  const span1 = document.createElement("span");
+  span1.innerHTML = "text_fields"
+  span1.className = "material-symbols-outlined";
+
+  const span2 = document.createElement("span");
+  span2.innerHTML = "image"
+  span2.className = "material-symbols-outlined";
+
+  const span3 = document.createElement("span");
+  span3.innerHTML = "text_fields"
+  span3.className = "material-symbols-outlined";
+
+  const span4 = document.createElement("span");
+  span4.innerHTML = "image"
+  span4.className = "material-symbols-outlined";
+
+  const formatspan1 = document.createElement("span");
+  formatspan1.innerHTML = "dashboard"
+  formatspan1.className = "material-symbols-outlined";
+
+  const formatspan2 = document.createElement("span");
+  formatspan2.innerHTML = "dashboard"
+  formatspan2.className = "material-symbols-outlined";
+
+
+  // concat
+      //spans to buttons
+  formatbutton.appendChild(formatspan1);
+  formatbutton2.appendChild(formatspan2);
+  button1.appendChild(span1);
+  button2.appendChild(span2);
+  button3.appendChild(span3);
+  button4.appendChild(span4);
+
+      //buttons to tools
+  tools1.appendChild(formatbutton);
+  tools2.appendChild(formatbutton2);
+  textholder1.appendChild(button1);
+  textholder1.appendChild(button2);
+  textholder2.appendChild(button3);
+  textholder2.appendChild(button4);
+  textholder1.appendChild(imginput);
+  textholder2.appendChild(imginput2);
+  // tools2.appendChild(button3);
+  // tools2.appendChild(button4);
+
+      //pages and tools to editor
+  page1.appendChild(imgcontainer1);
+  page1.appendChild(textholder1);
+  editor1.appendChild(page1);
+  editor1.appendChild(tools1);
+  // editor1.appendChild(tools1);
+
+  page2.appendChild(imgcontainer2);
+  page2.appendChild(textholder2);
+  editor2.appendChild(page2);
+  editor2.appendChild(tools2);
+
+  // freeDiv.appendChild(button1);
+  // freeDiv.appendChild(button2);
+
+  // page1.appendChild(freeDiv);
+
+      //editors to page-container
+  pageContainer.appendChild(editor1);
+  pageContainer.appendChild(editor2);
+
+      //page-container to container
+  document.getElementById("container").appendChild(pageContainer);
+
 
 }
 
@@ -398,6 +499,7 @@ export const addTextBox = function(page) {
   let num_children = document.getElementById(page).childElementCount;
 
   textBox.setAttribute("contenteditable", "true")
+  textBox.setAttribute("placeholder","Add Text...")
   textBox.className = "text-box"; 
 
 
@@ -405,3 +507,9 @@ export const addTextBox = function(page) {
     document.getElementById(page).appendChild(textBox);
   }
 }
+
+window.addEventListener('beforeunload',
+  function (e) {
+    e.preventDefault();
+    e.returnValue = '';
+});
