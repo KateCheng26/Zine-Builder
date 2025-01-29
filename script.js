@@ -461,13 +461,15 @@ export const addEmptyPages = function(){
 
 }
 
+
 //save document
 export const saveProject =  async function(project){
     //add all pages
-
-
+    console.log("started process")
+    
     //get all docs in the project
     var phoogdocs = await getDocs(collection(db, project));
+    console.log("found docs\n")
 
     //Get all page numbers from all docs
     const allPageNums = []
@@ -476,74 +478,88 @@ export const saveProject =  async function(project){
             allPageNums.push(String(item.data().pageNumber))
         }
     })
+    console.log("Got page nums:")
     console.log(allPageNums)
 
     //get all pages
-    const allPages = document.getElementsByClassName("page")
+
+    const allPages = document.querySelectorAll("[class^=page-]")
+    for (let i = 0; i < allPages.length; i++) {
+      console.log(allPages[i].id)
+    }
 
 
     for (let i = 0; i < allPages.length; i++) {
         if (!(allPageNums.includes(allPages[i].id))){
-            console.log("page not exists")
             await addDoc(collection(db, project),{
                 pageNumber: allPages[i].id
             });
         }
     }
+    
 
     phoogdocs = await getDocs(collection(db, project));
-
+    
     //for each doc
     phoogdocs.forEach((item) => {
         //log id and page number (project name doc is undefined for page number)
-        console.log(item.id + ", " + item.data().pageNumber);
+        if(item.data().pageNumber != null) {
+          //pull page element with the same page number as doc
+          var page = document.getElementById(item.data().pageNumber);
+          console.log(page.id)
 
-        //pull page element with the same page number as doc
-        var page = document.getElementById(item.data().pageNumber);
+          //define item to update
+          const updateItem = doc(db, project, item.id);
+          
+          //get format (class name is format)
+          var format_name = page.className;
+          
+          //update format
+          updateDoc(updateItem, {
+            format: format_name
+          });
 
-        //make list of all child elements of page ^^^^
-        var children = page.children;
+          console.log(format_name)
+          //make list of all child elements of page ^^^^
+          var children = page.children;
 
-        //loop through children
-        for(let i = 0; i < children.length; i++){
 
-            //on first loop update column 1
-            if (i==0){
+          
+          //list of all child element content
+          var content = []
 
-                //define item to update
-                const updateItem = doc(db, project, item.id);
-
-                //run updateDoc()
-                updateDoc(updateItem, {
-                    c1: children[i].innerHTML
-                });
-            
-            //on second loop update column 2
-            } else if (i==1) {
-
-                //define item to update
-                const updateItem = doc(db, project, item.id);
-
-                //run updateDoc()
-                updateDoc(updateItem, {
-                    c2: children[i].innerHTML
-                });
-            
-            //on third loop update column 3
+          //loop through children
+          for(let i = 0; i < children.length; i++){
+            //if innerhtml of given child element is not undefined add its content to content list
+            if (children[i].innerHTML != undefined) {
+              //add content to content list
+              content.push(children[i].innerHTML);
             } else {
-
-                //define item to update
-                const updateItem = doc(db, project, item.id);
-
-                //run updateDoc()
-                updateDoc(updateItem, {
-                    c3: children[i].innerHTML
-                });
+              //add empty string to content list if content is undefined
+              content.push("");
             }
+          }
+
+          console.log(content)
+          //update content attr with content list
+          updateDoc(updateItem, {
+            content: content
+          });
         }
     })
+
 }
 
+
+//scroll to the second to last page
+export const scrollBottom = function() {
+  //get pages
+  const pages = document.getElementsByClassName("page-0");
+  //log second to last page
+  console.log(pages[pages.length - 2].id)
+  //scroll page into view
+  pages[pages.length - 2].scrollIntoView();
+  }
 
 
 export const addTextBox = function(page) {
