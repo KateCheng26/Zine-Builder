@@ -240,7 +240,7 @@ export const addPage = function(){
   //pages
 
       //amount of pages
-  const pages = document.getElementsByClassName("page");
+  const pages = document.querySelectorAll("[class^=page-]")
 
   const page1 = document.createElement("div");
   page1.className = "page";
