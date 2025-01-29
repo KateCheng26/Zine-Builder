@@ -170,58 +170,111 @@ async function deleteFromCollectionNames(docId){
 }
 
 
+function constructForm1(page){
+  page.innerHTML = ""
+  const div1 = document.createElement("div");
+  div1.className = "cell-1-1";
+  div1.setAttribute("contenteditable", "true")
+  div1.setAttribute("placeholder","Add Text...")
+
+  const div2 = document.createElement("div");
+  div2.className = "cell-1-2";
+  div2.setAttribute("contenteditable", "true")
+  div2.setAttribute("placeholder","Add Text...")
+
+  const div3 = document.createElement("div");
+  div3.className = "cell-1-3";
+  div3.setAttribute("contenteditable", "true")
+  div3.setAttribute("placeholder","Add Text...")
+
+
+  page.appendChild(div1);
+  page.appendChild(div2);
+  page.appendChild(div3);
+}
+
+function constructForm2(page){
+  page.innerHTML = ""
+  const div1 = document.createElement("div");
+  div1.className = "cell-2-1";
+  div1.setAttribute("contenteditable", "true")
+  div1.setAttribute("placeholder","Add Text...")
+
+  const div2 = document.createElement("div");
+  div2.className = "cell-2-2";
+  div2.setAttribute("contenteditable", "true")
+  div2.setAttribute("placeholder","Add Text...")
+
+  const div3 = document.createElement("div");
+  div3.className = "cell-2-3";
+  div3.setAttribute("contenteditable", "true")
+  div3.setAttribute("placeholder","Add Text...")
+
+  const div4 = document.createElement("div");
+  div4.className = "cell-2-4";
+  div4.setAttribute("contenteditable", "true")
+  div4.setAttribute("placeholder","Add Text...")
+
+  page.appendChild(div1);
+  page.appendChild(div2);
+  page.appendChild(div3);
+  page.appendChild(div4);
+}
+
+//load the projectt
 export const loadProject =  async function(project){
+    //get all documents
     const phoogdocs = await getDocs(collection(db, project));
     
+    const pages = document.querySelectorAll("[class^=page-]")
+    //create list of page numbers from firebase documents
     const allPageNums = []
+        //for each doc
         phoogdocs.forEach((item) => {
+            //if page number is not undefined
             if (item.data().pageNumber != undefined){
+              //add num to list
                 allPageNums.push(String(item.data().pageNumber))
             }
         })
-    console.log(allPageNums)
-    for (let i = 0; i < (allPageNums.length - 2)/2; i++) {
-        addPage()
+
+    // //subtract two from the amount of pages and divide by 2
+    // //this is the proper amount of times to call add page because add page adds 2 pages
+    // //-2 because by default, there are 2 pages already created
+    for (let i = 0; i < (allPageNums.length - pages.length)/2; i++) {
+      addEmptyPages()
     }
 
-
+    //for each doc
     phoogdocs.forEach((item) => {
-
-        var page = document.getElementById(item.data().pageNumber);
-
-        // console.log(item.id + ", " + item.data().pageNumber);
-        // console.log(content);
-        // console.log();
-        //Get all page numbers from all docs
+      if (item.data().pageNumber != undefined) {
         
 
+        //get page by page number of document pageNumber = 1 pulls page.id => 1
+        var page = document.getElementById(item.data().pageNumber);
+        page.className = item.data().format
+
+        //clear page
         page.innerHTML = ""
         var children = page.children;
 
-        if (item.data().c1 != null) {
-            addTextBox(page.id)
+        if(page.className == "page-1"){
+          constructForm1(page)
+        }else if(page.className == "page-2") {
+          constructForm2(page)
         }
-        if (item.data().c2 != null) {
-            addTextBox(page.id)
+        
+        
+        var content = item.data().content;
+        for (let i = 0; i < content.length; i++) {
+          children[i].innerHTML = content[i];
         }
-        if (!item.data().c3 != null) {
-            addTextBox(page.id)
-        }
-
-        for (let i = 0; i < children.length; i++) {
-            if (i==0){
-                children[i].innerHTML = item.data().c1
-            } else if (i==1){
-                children[i].innerHTML = item.data().c2
-            } else {
-                children[i].innerHTML = item.data().c3
-            }
-            
-        }
-
-    });
+                
+      }
+    },
+  );
+  
 }
-
 export const addEmptyPages = function(){
     
   //create elements
