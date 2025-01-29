@@ -222,7 +222,7 @@ export const loadProject =  async function(project){
     });
 }
 
-export const addPage = function(){
+export const addEmptyPages = function(){
     
   //create elements
 
@@ -243,11 +243,11 @@ export const addPage = function(){
   const pages = document.querySelectorAll("[class^=page-]")
 
   const page1 = document.createElement("div");
-  page1.className = "page";
+  page1.className = "page-0";
   page1.id = pages.length + 1;
 
   const page2 = document.createElement("div");
-  page2.className = "page";
+  page2.className = "page-0";
   page2.id = pages.length + 2;
 
   // file input stuff
