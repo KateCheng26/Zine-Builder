@@ -1,8 +1,8 @@
 * {
-    margin: 0;
-    padding: 0;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
+	margin: 0;
+	padding: 0;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
     scroll-behavior: smooth;
 
 }
@@ -11,13 +11,15 @@ html {
     background-color: #e7e7e7;
 }
 
+/* all pages */
 .container {
     display: block;
     height: 100%;
 }
 
 
-.page-container {
+/* set of two pages */
+.pages-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 100%;
@@ -27,6 +29,7 @@ html {
 }
 
 
+/* group of page and toolbar */
 .editor {
     height: auto;
     padding: 10px;
@@ -34,73 +37,57 @@ html {
     display: inline;    
 }
 
-.col {
-    background-color: pink;
-}
-
-.page {
+/*page*/
+[class^="page-"] {
 
     background-color: white;
     box-shadow: 0px 5px 10px 0px #dadada;
     max-height: 90%;
     aspect-ratio: 5.5/8.5;
     display: grid;
-    gap: 3%;
+    row-gap: 1.5%;
+    column-gap: 2%;
     padding: 1%;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 100%;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
     margin: 0 auto;
     justify-content: center;
 }
 
 
-.tools{
-    background-color: rgb(140, 140, 140);
-    content-visibility: hidden;
-    width: fit-content;
-    padding: 5px;
-    padding-inline: 20px;
-    border-radius: 20px;
-    text-align: center;
-    margin: 0 auto;
-    margin-top: 10px;
-    transition-property:content-visibility;
-    transition-delay: 2s;
-    box-shadow: 0px 5px 10px 0px #dadada;
-}
 
-.tools:hover {
+
+
+
+/*toolbar*/
+
+
+.tools {
     background-color: white;
     content-visibility: visible;
-    width: 7.25rem;
+    width: fit-content;
     height: auto;
-    padding: 5px;
-    padding-inline: 20px;
+    padding: 10px;
     border-radius: 50px;
     text-align: center;
     margin: 0 auto;
     margin-top: 10px;
 }
 
-.text_and_img {
-    background-color:white;
-    width: 5rem;
-    height: auto;
-    padding:5px;
-    padding-inline:20px;
-    border-radius: 50px;
-    text-align: center;
-    margin: 0 auto;
-    margin-top: 10px;
+
+button {
+    cursor: pointer;
 }
 
-.text-button, .img-button, .page-button, .menubutton, .format-button{
+/*all buttons*/
+.format-button, .pages-button, .menubutton{
     text-align: center;
     transition: .6s ease;
     border: none;
 }
 
-.text-button, .img-button, .page-button, .format-button{
+/*content editing buttons*/
+.format-button, .pages-button{
     margin-inline: .25rem;
     padding: 5px;
     width: 3rem;
@@ -109,22 +96,23 @@ html {
     border-radius: 100% ;
 }
 
-.top-bar {
+/*top section*/
+.top-bar {  
     background-color: #e7e7e7;
     padding: 10px;
-    /* position: fixed;
-    width: 100vw; */
     top: 0; 
 }
+
+/*subsection of top-bar (contains file buttons)*/
 .menu{
     border-radius: 25px;
     padding: 5px;
-    padding-inline: 10px;
+    padding-inline: 20px;
     background-color: #f1f1f1;
     margin-top: 10px;
     
 
-/* background-color: #e7e7e7; */
+/*home, delete, and save buttons*/
 }
 .menubutton{
     margin-inline: .01rem;
@@ -134,24 +122,96 @@ html {
     border-radius: 7px;
 }
 
+/*delete button*/
 #delete {
     float: right;
 }
 
-.text-button:hover, .img-button:hover, .page-button:hover,.menubutton:hover, .format-button:hover{
+.format-button:hover, .pages-button:hover,.menubutton:hover{
 
     background-color: rgb(206, 206, 206);
 
 }
 
-.text-button:active, .img-button:active, .page-button:active, .menubutton:active, .format-button:active{
+.format-button:active, .pages-button:active, .menubutton:active{
 
     background-color: rgb(136, 136, 136);
     transition: .2s ease;
 
 }
 
-.page-button {
+/* Popup container - can be anything you want */
+.format-button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* The actual popup */
+.format-button .format-text {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+  }
+
+  
+  .contentContainer{
+    pointer-events:none;
+    position:fixed;
+    width:100%;
+    height:105%;
+    left:0;
+    top:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+
+.content {
+    pointer-events:all;
+    width: 50vw;    
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    user-select: none;
+    background-color: rgb(140, 140, 140);
+    text-align: center;
+    border-radius:1vw;
+    visibility: hidden;
+    text-align: center;
+    z-index: 11;
+    position: absolute;
+} 
+
+.format-button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  
+.show {
+    visibility: visible;
+  }
+  
+
+/*button that creates new pages*/
+.pages-button {
     width: 4.5rem;
     height: 4.5rem;
     margin-top: -100%;
@@ -159,6 +219,7 @@ html {
     box-shadow: 0px 5px 10px 0px #dadada;
 }
 
+/*parent div of page-button*/
 .bottom-bar {
     height: 3rem;
     padding: .25rem;
@@ -166,6 +227,7 @@ html {
 }
 
 
+/*Box for text*/
 .text-box {
 
     background-color: white;
@@ -190,6 +252,10 @@ html {
     border: 1px solid rgb(255, 0, 0);
 }
 
+/*
+this adds placeholder text to the text boxes
+.placeholder cannot be used normally because it is a content editable div
+*/
 [contenteditable=true]:empty:not(:focus):before{
     content: attr(placeholder);
     pointer-events: none;
@@ -200,12 +266,26 @@ html {
     font-size: smaller;
   }
 
+#formatButtonImage {
+    margin:10%;
+    width:10%;
+    aspect-ratio: 5.5/8.5;;
+}
 
-  
+#formatButtonImage:hover {
+    cursor:pointer;
+    transform:scale(1,1);
+}
 
+
+
+/*
+styling for Iphone screens and smaller
+changes layout
+*/
 @media only screen and (max-width: 768px) {
 
-.page-container {
+.pages-container {
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: 90vh 90vh;
@@ -215,9 +295,11 @@ html {
 
 .page {
     min-width: 330px;
+    min-height: 510px;
+    aspect-ratio: 5.5/8.5;
 }
 
-.page-button {
+.pages-button {
     margin: 0%;
 }
 
