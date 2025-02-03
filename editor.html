@@ -6,6 +6,7 @@
     <title>Zine Editor</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="editor.css" media="screen">
+    <link rel="stylesheet" href="format.css" media="screen">
     <script src="script.js"></script>
 </head>
 <body>
@@ -105,7 +106,7 @@
     </div>
 
     <script type="module">
-        import {saveProject, loadProject, addPages, deleteProject, chooseFormat, scrollBottom, closeFormatPopup, addTextBox} from './script.js';
+        import {saveProject, loadProject, addPages, deleteProject, chooseFormat, scrollBottom, closeFormatPopup, addTextBox, changeFormat} from './script.js';
         window.saveProject = saveProject;
         window.loadProject = loadProject;
         window.addPages = addPages;
@@ -114,6 +115,7 @@
         window.chooseFormat = chooseFormat;
         window.closeFormatPopup  = closeFormatPopup;
         window.addTextBox = addTextBox;
+        window.changeFormat = changeFormat ;
     </script>
     
     <script>
