@@ -657,11 +657,16 @@ export const addTextBox = function(page) {
   textBox.innerHTML = "";
 }
 
-export const chooseFormat = function(){
-  var popup = document.getElementById("format-popup");
+export const chooseFormat = function(pageNumber){
+  sessionStorage.setItem('pageNumber', pageNumber);
+  var popup = document.getElementById("content");
   popup.classList.add("show");
+  var popup = document.getElementById("contentContainer");
+  popup.classList.add("color");
 }
 export const closeFormatPopup = function(){
-  var popup = document.getElementById("format-popup");
+  var popup = document.getElementById("content");
   popup.classList.remove("show");
+  var popup = document.getElementById("contentContainer");
+  popup.classList.remove("color");
 }
