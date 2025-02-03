@@ -80,7 +80,7 @@ button {
 }
 
 /*all buttons*/
-.format-button, .pages-button, .menubutton{
+.format-button, .pages-button, .menubutton, .text-button, .img-button{
     text-align: center;
     transition: .6s ease;
     border: none;
@@ -127,7 +127,7 @@ button {
     float: right;
 }
 
-.format-button:hover, .pages-button:hover,.menubutton:hover{
+.format-button:hover, .pages-button:hover,.menubutton:hover, .text-button:hover, .img-button:hover{
 
     background-color: rgb(206, 206, 206);
 
