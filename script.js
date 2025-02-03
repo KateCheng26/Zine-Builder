@@ -169,7 +169,6 @@ async function deleteFromCollectionNames(docId){
   }
 }
 
-
 function constructForm1(page){
   page.innerHTML = ""
   const div1 = document.createElement("div");
@@ -221,6 +220,112 @@ function constructForm2(page){
   page.appendChild(div4);
 }
 
+function constructForm3(page){
+  page.innerHTML = ""
+  const div1 = document.createElement("div");
+  div1.className = "cell-3-1";
+  div1.setAttribute("contenteditable", "true")
+  div1.setAttribute("placeholder","Add Text...")
+
+  const div2 = document.createElement("div");
+  div2.className = "cell-3-2";
+  div2.setAttribute("contenteditable", "true")
+  div2.setAttribute("placeholder","Add Text...")
+
+  const div3 = document.createElement("div");
+  div3.className = "cell-3-3";
+  div3.setAttribute("contenteditable", "true")
+  div3.setAttribute("placeholder","Add Text...")
+
+  const div4 = document.createElement("div");
+  div4.className = "cell-3-4";
+  div4.setAttribute("contenteditable", "true")
+  div4.setAttribute("placeholder","Add Text...")
+
+  page.appendChild(div1);
+  page.appendChild(div2);
+  page.appendChild(div3);
+  page.appendChild(div4);
+}
+
+function constructForm4(page){
+  page.innerHTML = ""
+  const div1 = document.createElement("div");
+  div1.className = "cell-4-1";
+  div1.setAttribute("contenteditable", "true")
+  div1.setAttribute("placeholder","Add Text...")
+
+  const div2 = document.createElement("div");
+  div2.className = "cell-4-2";
+  div2.setAttribute("contenteditable", "true")
+  div2.setAttribute("placeholder","Add Text...")
+
+  const div3 = document.createElement("div");
+  div3.className = "cell-4-3";
+  div3.setAttribute("contenteditable", "true")
+  div3.setAttribute("placeholder","Add Text...")
+
+  const div4 = document.createElement("div");
+  div4.className = "cell-4-4";
+  div4.setAttribute("contenteditable", "true")
+  div4.setAttribute("placeholder","Add Text...")
+
+  page.appendChild(div1);
+  page.appendChild(div2);
+  page.appendChild(div3);
+  page.appendChild(div4);
+}
+
+function constructForm5(page){
+  page.innerHTML = ""
+  const div1 = document.createElement("div");
+  div1.className = "cell-5-1";
+  div1.setAttribute("contenteditable", "true")
+  div1.setAttribute("placeholder","Add Text...")
+
+  const div2 = document.createElement("div");
+  div2.className = "cell-5-2";
+  div2.setAttribute("contenteditable", "true")
+  div2.setAttribute("placeholder","Add Text...")
+
+  const div3 = document.createElement("div");
+  div3.className = "cell-5-3";
+  div3.setAttribute("contenteditable", "true")
+  div3.setAttribute("placeholder","Add Text...")
+
+  const div4 = document.createElement("div");
+  div4.className = "cell-5-4";
+  div4.setAttribute("contenteditable", "true")
+  div4.setAttribute("placeholder","Add Text...")
+
+  page.appendChild(div1);
+  page.appendChild(div2);
+  page.appendChild(div3);
+  page.appendChild(div4);
+}
+
+function constructForm6(page){
+  page.innerHTML = ""
+  const div1 = document.createElement("div");
+  div1.className = "cell-6-1";
+  div1.setAttribute("contenteditable", "true")
+  div1.setAttribute("placeholder","Add Text...")
+
+  const div2 = document.createElement("div");
+  div2.className = "cell-6-2";
+  div2.setAttribute("contenteditable", "true")
+  div2.setAttribute("placeholder","Add Text...")
+
+  const div3 = document.createElement("div");
+  div3.className = "cell-6-3";
+  div3.setAttribute("contenteditable", "true")
+  div3.setAttribute("placeholder","Add Text...")
+
+  page.appendChild(div1);
+  page.appendChild(div2);
+  page.appendChild(div3);
+}
+
 //load the projectt
 export const loadProject =  async function(project){
     //get all documents
@@ -262,6 +367,14 @@ export const loadProject =  async function(project){
           constructForm1(page)
         }else if(page.className == "page-2") {
           constructForm2(page)
+        }else if(page.className == "page-3") {
+          constructForm3(page)
+        }else if(page.className == "page-4") {
+          constructForm4(page)
+        }else if(page.className == "page-5") {
+          constructForm5(page)
+        }else if(page.className == "page-6") {
+          constructForm6(page)
         }
         
         
@@ -275,13 +388,15 @@ export const loadProject =  async function(project){
   );
   
 }
-export const addEmptyPages = function(){
+
+
+export const addPages = function(){
     
   //create elements
 
   //page-container
-  const pageContainer = document.createElement("div");
-  pageContainer.className = "page-container";
+  const pagesContainer = document.createElement("div");
+  pagesContainer.className = "pages-container";
 
   //editors
   const editor1 = document.createElement("div");
@@ -292,7 +407,7 @@ export const addEmptyPages = function(){
 
   //pages
 
-      //amount of pages
+    //amount of pages
   const pages = document.querySelectorAll("[class^=page-]")
 
   const page1 = document.createElement("div");
@@ -303,24 +418,6 @@ export const addEmptyPages = function(){
   page2.className = "page-0";
   page2.id = pages.length + 2;
 
-  // file input stuff
-
-  const imgcontainer1 = document.createElement("div");
-  imgcontainer1.className = "image-container1";
-  const imgcontainer2 = document.createElement("div");
-  imgcontainer2.className = "image-container2";
-
-  const imginput = document.createElement("input")
-  imginput.type = "file";
-  imginput.style ="display: none;"
-  imginput.id = "image-input";
-
-  const imginput2 = document.createElement("input")
-  imginput2.type = "file";
-  imginput2.style ="display: none;"
-  imginput2.id = "image-input";
-
-
   // tools
 
   const tools1 = document.createElement("div");
@@ -329,137 +426,69 @@ export const addEmptyPages = function(){
   const tools2 = document.createElement("div");
   tools2.className = "tools";
 
-
-  const textholder1 = document.createElement("div");
-  textholder1.className = "text_and_img";
-  const textholder2 = document.createElement("div");
-  textholder2.className = "text_and_img";
-
   //butons
   const button1 = document.createElement("button");
-  var setFunction = addTextBox.bind(this,pages.length + 1);
-  button1.onclick = setFunction;
-  button1.className = "text-button";
+  button1.className = "format-button";
+  button1.title = "Formats";
+  button1.onclick = () => {
+    chooseFormat();
+  };
 
 
   const button2 = document.createElement("button");
-  var setFunction2 = triggerFileInput.bind(this,pages.length + 1);
-  button2.onclick = setFunction2;
-  button2.className = "img-button";
-
-  // const freeDiv = document.createElement("div");
-  // freeDiv.className = "free-div";
-
-  // const button2 = document.createElement("button");
-  // button2.innerHTML = "+"
-  // const button1input = document.createElement("input");
-  // var setFunction = triggerFileInput.bind(this,pages.length + 1);
-  // button1input.onclick = setFunction;
-
-
-
-  const button3 = document.createElement("button");
-  var setFunction = addTextBox.bind(this,pages.length + 2);
-  button3.onclick = setFunction;
-  button3.className = "text-button";
-
-
-  const button4 = document.createElement("button");
-  var setFunction2 = triggerFileInput.bind(this,pages.length + 2);
-  button4.onclick = setFunction2;
-  button4.className = "img-button";
-
-
-  const formatbutton = document.createElement("button");
-  formatbutton.onclick = () => {
-    window.location.href = 'format.html';
+  button2.className = "format-button";
+  button2.title = "Formats";
+  button2.onclick = () => {
+    chooseFormat();
   };
-  formatbutton.className = "format-button";
-  formatbutton.title = "Choose Format";
-
-
-  const formatbutton2 = document.createElement("button");
-  formatbutton2.onclick = () => {
-    window.location.href = 'format.html';
-  };
-  formatbutton2.className = "format-button";
-  formatbutton2.title = "Choose Format";
-
-
   
   // span
   const span1 = document.createElement("span");
-  span1.innerHTML = "text_fields"
+  span1.innerHTML = "dashboard"
   span1.className = "material-symbols-outlined";
 
   const span2 = document.createElement("span");
-  span2.innerHTML = "image"
+  span2.innerHTML = "dashboard"
   span2.className = "material-symbols-outlined";
 
-  const span3 = document.createElement("span");
-  span3.innerHTML = "text_fields"
-  span3.className = "material-symbols-outlined";
 
-  const span4 = document.createElement("span");
-  span4.innerHTML = "image"
-  span4.className = "material-symbols-outlined";
-
-  const formatspan1 = document.createElement("span");
-  formatspan1.innerHTML = "dashboard"
-  formatspan1.className = "material-symbols-outlined";
-
-  const formatspan2 = document.createElement("span");
-  formatspan2.innerHTML = "dashboard"
-  formatspan2.className = "material-symbols-outlined";
-
-
-  // concat
+  //concat
       //spans to buttons
-  formatbutton.appendChild(formatspan1);
-  formatbutton2.appendChild(formatspan2);
   button1.appendChild(span1);
   button2.appendChild(span2);
-  button3.appendChild(span3);
-  button4.appendChild(span4);
 
       //buttons to tools
-  tools1.appendChild(formatbutton);
-  tools2.appendChild(formatbutton2);
-  textholder1.appendChild(button1);
-  textholder1.appendChild(button2);
-  textholder2.appendChild(button3);
-  textholder2.appendChild(button4);
-  textholder1.appendChild(imginput);
-  textholder2.appendChild(imginput2);
-  // tools2.appendChild(button3);
-  // tools2.appendChild(button4);
+  tools1.appendChild(button1);
+  tools2.appendChild(button2);
 
       //pages and tools to editor
-  page1.appendChild(imgcontainer1);
-  page1.appendChild(textholder1);
   editor1.appendChild(page1);
   editor1.appendChild(tools1);
-  // editor1.appendChild(tools1);
 
-  page2.appendChild(imgcontainer2);
-  page2.appendChild(textholder2);
   editor2.appendChild(page2);
   editor2.appendChild(tools2);
 
-  // freeDiv.appendChild(button1);
-  // freeDiv.appendChild(button2);
+      //editors to pages-container
+  pagesContainer.appendChild(editor1);
+  pagesContainer.appendChild(editor2);
 
-  // page1.appendChild(freeDiv);
-
-      //editors to page-container
-  pageContainer.appendChild(editor1);
-  pageContainer.appendChild(editor2);
-
-      //page-container to container
-  document.getElementById("container").appendChild(pageContainer);
+      //pages-container to container
+  document.getElementById("container").appendChild(pagesContainer);
 
 
 }
+
+
+//scroll to the second to last page
+export const scrollBottom = function() {
+  //get pages
+  const pages = document.getElementsByClassName("page-0");
+  //log second to last page
+  console.log(pages[pages.length - 2].id)
+  //scroll page into view
+  pages[pages.length - 2].scrollIntoView();
+  }
+
 
 
 //save document
@@ -550,35 +579,11 @@ export const saveProject =  async function(project){
 
 }
 
-
-//scroll to the second to last page
-export const scrollBottom = function() {
-  //get pages
-  const pages = document.getElementsByClassName("page-0");
-  //log second to last page
-  console.log(pages[pages.length - 2].id)
-  //scroll page into view
-  pages[pages.length - 2].scrollIntoView();
-  }
-
-
-export const addTextBox = function(page) {
-
-  const textBox = document.createElement("div")
-  let num_children = document.getElementById(page).childElementCount;
-
-  textBox.setAttribute("contenteditable", "true")
-  textBox.setAttribute("placeholder","Add Text...")
-  textBox.className = "text-box"; 
-
-
-  if (num_children < 3) {
-    document.getElementById(page).appendChild(textBox);
-  }
+export const chooseFormat = function(){
+  var popup = document.getElementById("format-popup");
+  popup.classList.add("show");
 }
-
-window.addEventListener('beforeunload',
-  function (e) {
-    e.preventDefault();
-    e.returnValue = '';
-});
+export const closeFormatPopup = function(){
+  var popup = document.getElementById("format-popup");
+  popup.classList.remove("show");
+}
