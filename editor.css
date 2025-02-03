@@ -170,15 +170,20 @@ button {
 }
 
 
-.content {
+.content  {
     pointer-events:all;
-    width:50vw;  
+    width: 75vw;
+    aspect-ratio: 8.5/5.5;
+    padding: 2%;
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 3%;
     user-select: none;
-    background-color: rgb(140, 140, 140);
+    background-color: rgb(194, 194, 194);
     text-align: center;
     border-radius:1vw;
     visibility: hidden;
-    text-align: center;
     z-index: 11;
     position: absolute;
 } 
@@ -195,6 +200,11 @@ button {
 .show {
     visibility: visible;
   }
+
+.color {
+    background-color: #00000070;
+}
+  
   
 
 /*button that creates new pages*/
