@@ -391,7 +391,7 @@ export const loadProject =  async function(project){
 
 
 export const addPages = function(){
-    
+   
   //create elements
 
   //page-container
@@ -426,6 +426,12 @@ export const addPages = function(){
   const tools2 = document.createElement("div");
   tools2.className = "tools";
 
+  const textImgDiv = document.createElement("div");
+  textImgDiv.id = "text_and_img"+(pages.length+2);
+
+  const textImgDiv2 = document.createElement("div");
+  textImgDiv.id = "text_and_img"+(pages.length+1);
+
   //butons
   const button1 = document.createElement("button");
   button1.className = "format-button";
@@ -434,6 +440,16 @@ export const addPages = function(){
     chooseFormat();
   };
 
+  const imginput = document.createElement("input")
+  imginput.type = "file";
+  imginput.style ="display: none;"
+  imginput.id = "image-input";
+
+  
+  const imginput2 = document.createElement("input")
+  imginput2.type = "file";
+  imginput2.style ="display: none;"
+  imginput2.id = "image-input";
 
   const button2 = document.createElement("button");
   button2.className = "format-button";
@@ -442,6 +458,31 @@ export const addPages = function(){
     chooseFormat();
   };
   
+  const button3 = document.createElement("button");
+  button3.className = "text-button";
+  button3.title = "Text";
+  var setFunction = addTextBox.bind(this,pages.length + 1);
+  button3.onclick = setFunction;
+
+  const button4 = document.createElement("button");
+  button4.className = "img-button";
+  button4.title = "Image";
+  var setFunction = triggerFileInput.bind(this,pages.length + 1);
+  button4.onclick = setFunction;
+
+  const button5 = document.createElement("button");
+  button5.className = "text-button";
+  button5.title = "Text";
+  var setFunction = addTextBox.bind(this,pages.length + 2);
+  button5.onclick = setFunction;
+
+  const button6 = document.createElement("button");
+  button6.className = "img-button";
+  button6.title = "Image";
+  var setFunction = triggerFileInput.bind(this,pages.length + 1);
+  button6.onclick = setFunction;
+
+
   // span
   const span1 = document.createElement("span");
   span1.innerHTML = "dashboard"
@@ -451,15 +492,43 @@ export const addPages = function(){
   span2.innerHTML = "dashboard"
   span2.className = "material-symbols-outlined";
 
+  const span3 = document.createElement("span");
+  span3.innerHTML = "text_fields"
+  span3.className = "material-symbols-outlined";
 
+  const span4 = document.createElement("span");
+  span4.innerHTML = "image"
+  span4.className = "material-symbols-outlined";
+
+  const span5 = document.createElement("span");
+  span5.innerHTML = "text_fields"
+  span5.className = "material-symbols-outlined";
+
+  const span6 = document.createElement("span");
+  span6.innerHTML = "image"
+  span6.className = "material-symbols-outlined";
   //concat
       //spans to buttons
   button1.appendChild(span1);
   button2.appendChild(span2);
+  button3.appendChild(span3);
+  button4.appendChild(span4);
+  button5.appendChild(span5);
+  button6.appendChild(span6);
 
       //buttons to tools
   tools1.appendChild(button1);
   tools2.appendChild(button2);
+  textImgDiv.appendChild(button3);
+  textImgDiv.appendChild(button4);
+  textImgDiv2.appendChild(button5);
+  textImgDiv2.appendChild(button6);
+
+  textImgDiv.appendChild(imginput);
+  textImgDiv2.appendChild(imginput2);
+
+  page1.appendChild(textImgDiv);
+  page2.appendChild(textImgDiv2);
 
       //pages and tools to editor
   editor1.appendChild(page1);
@@ -477,7 +546,6 @@ export const addPages = function(){
 
 
 }
-
 
 //scroll to the second to last page
 export const scrollBottom = function() {
@@ -577,6 +645,16 @@ export const saveProject =  async function(project){
         }
     })
 
+}
+
+export const addTextBox = function(page) {
+  const textBox = document.getElementById("text_and_img"+page);
+
+  textBox.setAttribute("contenteditable", "true")
+  textBox.setAttribute("placeholder","Add Text...")
+  textBox.className = "text-box"; 
+  
+  textBox.innerHTML = "";
 }
 
 export const chooseFormat = function(){
