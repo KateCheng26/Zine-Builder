@@ -326,6 +326,25 @@ function constructForm6(page){
   page.appendChild(div3);
 }
 
+export const changeFormat = function(format){
+  var pageNumber = sessionStorage.getItem('pageNumber'); 
+  var page = document.getElementById(pageNumber);
+  page.className = format;
+  if(page.className == "page-1"){
+    constructForm1(page)
+  }else if(page.className == "page-2") {
+    constructForm2(page)
+  }else if(page.className == "page-3") {
+    constructForm3(page)
+  }else if(page.className == "page-4") {
+    constructForm4(page)
+  }else if(page.className == "page-5") {
+    constructForm5(page)
+  }else if(page.className == "page-6") {
+    constructForm6(page)
+  }
+}
+
 //load the projectt
 export const loadProject =  async function(project){
     //get all documents
