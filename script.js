@@ -36,6 +36,16 @@ export const login = function (email, password){
   });
 }
 
+export const logout = function (){
+  signOut(auth)
+  .then(() => {
+    window.location.href = "index.html"
+  }).catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
+}
+
 //method that makes the Project Name input show up
 export const displayInput = function(){
     document.getElementById('projectNamePicker').style.display='unset';
