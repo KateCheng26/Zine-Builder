@@ -183,157 +183,1407 @@ function constructForm1(page){
   page.innerHTML = ""
   const div1 = document.createElement("div");
   div1.className = "cell-1-1";
-  div1.setAttribute("contenteditable", "true")
-  div1.setAttribute("placeholder","Add Text...")
+  div1.id = page.id+"-1"
 
   const div2 = document.createElement("div");
   div2.className = "cell-1-2";
-  div2.setAttribute("contenteditable", "true")
-  div2.setAttribute("placeholder","Add Text...")
+  div1.id = page.id+"-2"
 
   const div3 = document.createElement("div");
   div3.className = "cell-1-3";
-  div3.setAttribute("contenteditable", "true")
-  div3.setAttribute("placeholder","Add Text...")
+  div1.id = page.id+"-3"
 
+  const imginput = document.createElement("input");
+  imginput.type = "file";
+  imginput.style ="display: none;"
+  imginput.id = "image-input";
+
+  const button1 = document.createElement("button");
+  button1.className = "text-button";
+  button1.title = "Text";
+  var setFunction = function(){
+    const textBox = button1.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button1.onclick = setFunction;
+
+  const button2 = document.createElement("button");
+  button2.className = "img-button";
+  button2.id = "img-button";
+  button2.title = "Image";
+
+  // span
+  const span1 = document.createElement("span");
+  span1.innerHTML = "text_fields"
+  span1.className = "material-symbols-outlined";
+
+  const span2 = document.createElement("span");
+  span2.innerHTML = "image"
+  span2.className = "material-symbols-outlined";
+
+  const imginput2 = document.createElement("input");
+  imginput2.type = "file";
+  imginput2.style ="display: none;"
+  imginput2.id = "image-input2";
+
+  const button21 = document.createElement("button");
+  button21.className = "text-button";
+  button21.title = "Text";
+  var setFunction = function(){
+    const textBox = button21.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button21.onclick = setFunction;
+
+  const button22 = document.createElement("button");
+  button22.className = "img-button";
+  button22.id = "img-button";
+  button22.title = "Image";
+
+  // span
+  const span21 = document.createElement("span");
+  span21.innerHTML = "text_fields"
+  span21.className = "material-symbols-outlined";
+
+  const span22 = document.createElement("span");
+  span22.innerHTML = "image"
+  span22.className = "material-symbols-outlined";
+
+  const imginput3 = document.createElement("input");
+  imginput3.type = "file";
+  imginput3.style ="display: none;"
+  imginput3.id = "image-input3";
+
+  const button31 = document.createElement("button");
+  button31.className = "text-button";
+  button31.title = "Text";
+  var setFunction = function(){
+    const textBox = button31.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button31.onclick = setFunction;
+
+  const button32 = document.createElement("button");
+  button32.className = "img-button";
+  button32.id = "img-button";
+  button32.title = "Image";
+
+  // span
+  const span31 = document.createElement("span");
+  span31.innerHTML = "text_fields"
+  span31.className = "material-symbols-outlined";
+
+  const span32 = document.createElement("span");
+  span32.innerHTML = "image"
+  span32.className = "material-symbols-outlined";
+
+
+  button1.appendChild(span1);
+  button2.appendChild(span2);
+  div1.appendChild(imginput);
+  div1.appendChild(button1);
+  div1.appendChild(button2);
+
+  button21.appendChild(span21);
+  button22.appendChild(span22);
+  div2.appendChild(imginput2);
+  div2.appendChild(button21);
+  div2.appendChild(button22);
+
+  button31.appendChild(span31);
+  button32.appendChild(span32);
+  div3.appendChild(imginput3);
+  div3.appendChild(button31);
+  div3.appendChild(button32);
 
   page.appendChild(div1);
   page.appendChild(div2);
   page.appendChild(div3);
+
+  button2.onclick = function(){
+    document.getElementById('image-input').click();
+  }
+
+  button22.onclick = function(){
+    document.getElementById('image-input2').click();
+  }
+
+  button32.onclick = function(){
+    document.getElementById('image-input3').click();
+  }
+
+  imginput.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button2.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+
+  imginput2.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button22.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+
+  imginput3.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button32.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
 }
 
 function constructForm2(page){
   page.innerHTML = ""
   const div1 = document.createElement("div");
   div1.className = "cell-2-1";
-  div1.setAttribute("contenteditable", "true")
-  div1.setAttribute("placeholder","Add Text...")
 
   const div2 = document.createElement("div");
   div2.className = "cell-2-2";
-  div2.setAttribute("contenteditable", "true")
-  div2.setAttribute("placeholder","Add Text...")
 
   const div3 = document.createElement("div");
   div3.className = "cell-2-3";
-  div3.setAttribute("contenteditable", "true")
-  div3.setAttribute("placeholder","Add Text...")
 
   const div4 = document.createElement("div");
   div4.className = "cell-2-4";
-  div4.setAttribute("contenteditable", "true")
-  div4.setAttribute("placeholder","Add Text...")
+
+  const imginput = document.createElement("input");
+  imginput.type = "file";
+  imginput.style ="display: none;"
+  imginput.id = "image-input";
+
+  const button1 = document.createElement("button");
+  button1.className = "text-button";
+  button1.title = "Text";
+  var setFunction = function(){
+    const textBox = button1.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button1.onclick = setFunction;
+
+  const button2 = document.createElement("button");
+  button2.className = "img-button";
+  button2.id = "img-button";
+  button2.title = "Image";
+
+  // span
+  const span1 = document.createElement("span");
+  span1.innerHTML = "text_fields"
+  span1.className = "material-symbols-outlined";
+
+  const span2 = document.createElement("span");
+  span2.innerHTML = "image"
+  span2.className = "material-symbols-outlined";
+
+  const imginput2 = document.createElement("input");
+  imginput2.type = "file";
+  imginput2.style ="display: none;"
+  imginput2.id = "image-input2";
+
+  const button21 = document.createElement("button");
+  button21.className = "text-button";
+  button21.title = "Text";
+  var setFunction = function(){
+    const textBox = button21.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button21.onclick = setFunction;
+
+  const button22 = document.createElement("button");
+  button22.className = "img-button";
+  button22.id = "img-button";
+  button22.title = "Image";
+
+  // span
+  const span21 = document.createElement("span");
+  span21.innerHTML = "text_fields"
+  span21.className = "material-symbols-outlined";
+
+  const span22 = document.createElement("span");
+  span22.innerHTML = "image"
+  span22.className = "material-symbols-outlined";
+
+  const imginput3 = document.createElement("input");
+  imginput3.type = "file";
+  imginput3.style ="display: none;"
+  imginput3.id = "image-input3";
+
+  const button31 = document.createElement("button");
+  button31.className = "text-button";
+  button31.title = "Text";
+  var setFunction = function(){
+    const textBox = button31.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button31.onclick = setFunction;
+
+  const button32 = document.createElement("button");
+  button32.className = "img-button";
+  button32.id = "img-button";
+  button32.title = "Image";
+
+  // span
+  const span31 = document.createElement("span");
+  span31.innerHTML = "text_fields"
+  span31.className = "material-symbols-outlined";
+
+  const span32 = document.createElement("span");
+  span32.innerHTML = "image"
+  span32.className = "material-symbols-outlined";
+
+  const imginput4 = document.createElement("input");
+  imginput4.type = "file";
+  imginput4.style ="display: none;"
+  imginput4.id = "image-input3";
+
+  const button41 = document.createElement("button");
+  button41.className = "text-button";
+  button41.title = "Text";
+  var setFunction = function(){
+    const textBox = button41.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button41.onclick = setFunction;
+
+  const button42 = document.createElement("button");
+  button42.className = "img-button";
+  button42.id = "img-button";
+  button42.title = "Image";
+
+  // span
+  const span41 = document.createElement("span");
+  span41.innerHTML = "text_fields"
+  span41.className = "material-symbols-outlined";
+
+  const span42 = document.createElement("span");
+  span42.innerHTML = "image"
+  span42.className = "material-symbols-outlined";
+
+
+  button1.appendChild(span1);
+  button2.appendChild(span2);
+  div1.appendChild(imginput);
+  div1.appendChild(button1);
+  div1.appendChild(button2);
+
+  button21.appendChild(span21);
+  button22.appendChild(span22);
+  div2.appendChild(imginput2);
+  div2.appendChild(button21);
+  div2.appendChild(button22);
+
+  button31.appendChild(span31);
+  button32.appendChild(span32);
+  div3.appendChild(imginput3);
+  div3.appendChild(button31);
+  div3.appendChild(button32);
+
+  button41.appendChild(span41);
+  button42.appendChild(span42);
+  div4.appendChild(imginput4);
+  div4.appendChild(button41);
+  div4.appendChild(button42);
 
   page.appendChild(div1);
   page.appendChild(div2);
   page.appendChild(div3);
   page.appendChild(div4);
+
+  button2.onclick = function(){
+    document.getElementById('image-input').click();
+  }
+
+  button22.onclick = function(){
+    document.getElementById('image-input2').click();
+  }
+
+  button32.onclick = function(){
+    document.getElementById('image-input3').click();
+  }
+
+  imginput.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button2.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+
+  imginput2.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button22.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+
+  imginput3.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button32.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
 }
 
 function constructForm3(page){
   page.innerHTML = ""
   const div1 = document.createElement("div");
   div1.className = "cell-3-1";
-  div1.setAttribute("contenteditable", "true")
-  div1.setAttribute("placeholder","Add Text...")
 
   const div2 = document.createElement("div");
   div2.className = "cell-3-2";
-  div2.setAttribute("contenteditable", "true")
-  div2.setAttribute("placeholder","Add Text...")
 
   const div3 = document.createElement("div");
   div3.className = "cell-3-3";
-  div3.setAttribute("contenteditable", "true")
-  div3.setAttribute("placeholder","Add Text...")
 
   const div4 = document.createElement("div");
   div4.className = "cell-3-4";
-  div4.setAttribute("contenteditable", "true")
-  div4.setAttribute("placeholder","Add Text...")
+
+  const imginput = document.createElement("input");
+  imginput.type = "file";
+  imginput.style ="display: none;"
+  imginput.id = "image-input";
+
+  const button1 = document.createElement("button");
+  button1.className = "text-button";
+  button1.title = "Text";
+  var setFunction = function(){
+    const textBox = button1.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button1.onclick = setFunction;
+
+  const button2 = document.createElement("button");
+  button2.className = "img-button";
+  button2.id = "img-button";
+  button2.title = "Image";
+
+  // span
+  const span1 = document.createElement("span");
+  span1.innerHTML = "text_fields"
+  span1.className = "material-symbols-outlined";
+
+  const span2 = document.createElement("span");
+  span2.innerHTML = "image"
+  span2.className = "material-symbols-outlined";
+
+  const imginput2 = document.createElement("input");
+  imginput2.type = "file";
+  imginput2.style ="display: none;"
+  imginput2.id = "image-input2";
+
+  const button21 = document.createElement("button");
+  button21.className = "text-button";
+  button21.title = "Text";
+  var setFunction = function(){
+    const textBox = button21.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button21.onclick = setFunction;
+
+  const button22 = document.createElement("button");
+  button22.className = "img-button";
+  button22.id = "img-button";
+  button22.title = "Image";
+
+  // span
+  const span21 = document.createElement("span");
+  span21.innerHTML = "text_fields"
+  span21.className = "material-symbols-outlined";
+
+  const span22 = document.createElement("span");
+  span22.innerHTML = "image"
+  span22.className = "material-symbols-outlined";
+
+  const imginput3 = document.createElement("input");
+  imginput3.type = "file";
+  imginput3.style ="display: none;"
+  imginput3.id = "image-input3";
+
+  const button31 = document.createElement("button");
+  button31.className = "text-button";
+  button31.title = "Text";
+  var setFunction = function(){
+    const textBox = button31.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button31.onclick = setFunction;
+
+  const button32 = document.createElement("button");
+  button32.className = "img-button";
+  button32.id = "img-button";
+  button32.title = "Image";
+
+  // span
+  const span31 = document.createElement("span");
+  span31.innerHTML = "text_fields"
+  span31.className = "material-symbols-outlined";
+
+  const span32 = document.createElement("span");
+  span32.innerHTML = "image"
+  span32.className = "material-symbols-outlined";
+
+  const imginput4 = document.createElement("input");
+  imginput4.type = "file";
+  imginput4.style ="display: none;"
+  imginput4.id = "image-input3";
+
+  const button41 = document.createElement("button");
+  button41.className = "text-button";
+  button41.title = "Text";
+  var setFunction = function(){
+    const textBox = button41.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button41.onclick = setFunction;
+
+  const button42 = document.createElement("button");
+  button42.className = "img-button";
+  button42.id = "img-button";
+  button42.title = "Image";
+
+  // span
+  const span41 = document.createElement("span");
+  span41.innerHTML = "text_fields"
+  span41.className = "material-symbols-outlined";
+
+  const span42 = document.createElement("span");
+  span42.innerHTML = "image"
+  span42.className = "material-symbols-outlined";
+
+
+  button1.appendChild(span1);
+  button2.appendChild(span2);
+  div1.appendChild(imginput);
+  div1.appendChild(button1);
+  div1.appendChild(button2);
+
+  button21.appendChild(span21);
+  button22.appendChild(span22);
+  div2.appendChild(imginput2);
+  div2.appendChild(button21);
+  div2.appendChild(button22);
+
+  button31.appendChild(span31);
+  button32.appendChild(span32);
+  div3.appendChild(imginput3);
+  div3.appendChild(button31);
+  div3.appendChild(button32);
+
+  button41.appendChild(span41);
+  button42.appendChild(span42);
+  div4.appendChild(imginput4);
+  div4.appendChild(button41);
+  div4.appendChild(button42);
 
   page.appendChild(div1);
   page.appendChild(div2);
   page.appendChild(div3);
   page.appendChild(div4);
+
+  button2.onclick = function(){
+    document.getElementById('image-input').click();
+  }
+
+  button22.onclick = function(){
+    document.getElementById('image-input2').click();
+  }
+
+  button32.onclick = function(){
+    document.getElementById('image-input3').click();
+  }
+
+  imginput.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button2.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+
+  imginput2.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button22.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+
+  imginput3.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button32.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
 }
 
 function constructForm4(page){
   page.innerHTML = ""
   const div1 = document.createElement("div");
   div1.className = "cell-4-1";
-  div1.setAttribute("contenteditable", "true")
-  div1.setAttribute("placeholder","Add Text...")
 
   const div2 = document.createElement("div");
   div2.className = "cell-4-2";
-  div2.setAttribute("contenteditable", "true")
-  div2.setAttribute("placeholder","Add Text...")
 
   const div3 = document.createElement("div");
   div3.className = "cell-4-3";
-  div3.setAttribute("contenteditable", "true")
-  div3.setAttribute("placeholder","Add Text...")
 
   const div4 = document.createElement("div");
   div4.className = "cell-4-4";
-  div4.setAttribute("contenteditable", "true")
-  div4.setAttribute("placeholder","Add Text...")
+
+  const imginput = document.createElement("input");
+  imginput.type = "file";
+  imginput.style ="display: none;"
+  imginput.id = "image-input";
+
+  const button1 = document.createElement("button");
+  button1.className = "text-button";
+  button1.title = "Text";
+  var setFunction = function(){
+    const textBox = button1.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button1.onclick = setFunction;
+
+  const button2 = document.createElement("button");
+  button2.className = "img-button";
+  button2.id = "img-button";
+  button2.title = "Image";
+
+  // span
+  const span1 = document.createElement("span");
+  span1.innerHTML = "text_fields"
+  span1.className = "material-symbols-outlined";
+
+  const span2 = document.createElement("span");
+  span2.innerHTML = "image"
+  span2.className = "material-symbols-outlined";
+
+  const imginput2 = document.createElement("input");
+  imginput2.type = "file";
+  imginput2.style ="display: none;"
+  imginput2.id = "image-input2";
+
+  const button21 = document.createElement("button");
+  button21.className = "text-button";
+  button21.title = "Text";
+  var setFunction = function(){
+    const textBox = button21.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button21.onclick = setFunction;
+
+  const button22 = document.createElement("button");
+  button22.className = "img-button";
+  button22.id = "img-button";
+  button22.title = "Image";
+
+  // span
+  const span21 = document.createElement("span");
+  span21.innerHTML = "text_fields"
+  span21.className = "material-symbols-outlined";
+
+  const span22 = document.createElement("span");
+  span22.innerHTML = "image"
+  span22.className = "material-symbols-outlined";
+
+  const imginput3 = document.createElement("input");
+  imginput3.type = "file";
+  imginput3.style ="display: none;"
+  imginput3.id = "image-input3";
+
+  const button31 = document.createElement("button");
+  button31.className = "text-button";
+  button31.title = "Text";
+  var setFunction = function(){
+    const textBox = button31.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button31.onclick = setFunction;
+
+  const button32 = document.createElement("button");
+  button32.className = "img-button";
+  button32.id = "img-button";
+  button32.title = "Image";
+
+  // span
+  const span31 = document.createElement("span");
+  span31.innerHTML = "text_fields"
+  span31.className = "material-symbols-outlined";
+
+  const span32 = document.createElement("span");
+  span32.innerHTML = "image"
+  span32.className = "material-symbols-outlined";
+
+  const imginput4 = document.createElement("input");
+  imginput4.type = "file";
+  imginput4.style ="display: none;"
+  imginput4.id = "image-input3";
+
+  const button41 = document.createElement("button");
+  button41.className = "text-button";
+  button41.title = "Text";
+  var setFunction = function(){
+    const textBox = button41.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button41.onclick = setFunction;
+
+  const button42 = document.createElement("button");
+  button42.className = "img-button";
+  button42.id = "img-button";
+  button42.title = "Image";
+
+  // span
+  const span41 = document.createElement("span");
+  span41.innerHTML = "text_fields"
+  span41.className = "material-symbols-outlined";
+
+  const span42 = document.createElement("span");
+  span42.innerHTML = "image"
+  span42.className = "material-symbols-outlined";
+
+
+  button1.appendChild(span1);
+  button2.appendChild(span2);
+  div1.appendChild(imginput);
+  div1.appendChild(button1);
+  div1.appendChild(button2);
+
+  button21.appendChild(span21);
+  button22.appendChild(span22);
+  div2.appendChild(imginput2);
+  div2.appendChild(button21);
+  div2.appendChild(button22);
+
+  button31.appendChild(span31);
+  button32.appendChild(span32);
+  div3.appendChild(imginput3);
+  div3.appendChild(button31);
+  div3.appendChild(button32);
+
+  button41.appendChild(span41);
+  button42.appendChild(span42);
+  div4.appendChild(imginput4);
+  div4.appendChild(button41);
+  div4.appendChild(button42);
 
   page.appendChild(div1);
   page.appendChild(div2);
   page.appendChild(div3);
   page.appendChild(div4);
+
+  button2.onclick = function(){
+    document.getElementById('image-input').click();
+  }
+
+  button22.onclick = function(){
+    document.getElementById('image-input2').click();
+  }
+
+  button32.onclick = function(){
+    document.getElementById('image-input3').click();
+  }
+
+  imginput.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button2.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+
+  imginput2.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button22.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+
+  imginput3.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button32.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
 }
 
 function constructForm5(page){
   page.innerHTML = ""
   const div1 = document.createElement("div");
   div1.className = "cell-5-1";
-  div1.setAttribute("contenteditable", "true")
-  div1.setAttribute("placeholder","Add Text...")
 
   const div2 = document.createElement("div");
   div2.className = "cell-5-2";
-  div2.setAttribute("contenteditable", "true")
-  div2.setAttribute("placeholder","Add Text...")
 
   const div3 = document.createElement("div");
   div3.className = "cell-5-3";
-  div3.setAttribute("contenteditable", "true")
-  div3.setAttribute("placeholder","Add Text...")
 
   const div4 = document.createElement("div");
   div4.className = "cell-5-4";
-  div4.setAttribute("contenteditable", "true")
-  div4.setAttribute("placeholder","Add Text...")
+
+  const imginput = document.createElement("input");
+  imginput.type = "file";
+  imginput.style ="display: none;"
+  imginput.id = "image-input";
+
+  const button1 = document.createElement("button");
+  button1.className = "text-button";
+  button1.title = "Text";
+  var setFunction = function(){
+    const textBox = button1.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button1.onclick = setFunction;
+
+  const button2 = document.createElement("button");
+  button2.className = "img-button";
+  button2.id = "img-button";
+  button2.title = "Image";
+
+  // span
+  const span1 = document.createElement("span");
+  span1.innerHTML = "text_fields"
+  span1.className = "material-symbols-outlined";
+
+  const span2 = document.createElement("span");
+  span2.innerHTML = "image"
+  span2.className = "material-symbols-outlined";
+
+  const imginput2 = document.createElement("input");
+  imginput2.type = "file";
+  imginput2.style ="display: none;"
+  imginput2.id = "image-input2";
+
+  const button21 = document.createElement("button");
+  button21.className = "text-button";
+  button21.title = "Text";
+  var setFunction = function(){
+    const textBox = button21.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button21.onclick = setFunction;
+
+  const button22 = document.createElement("button");
+  button22.className = "img-button";
+  button22.id = "img-button";
+  button22.title = "Image";
+
+  // span
+  const span21 = document.createElement("span");
+  span21.innerHTML = "text_fields"
+  span21.className = "material-symbols-outlined";
+
+  const span22 = document.createElement("span");
+  span22.innerHTML = "image"
+  span22.className = "material-symbols-outlined";
+
+  const imginput3 = document.createElement("input");
+  imginput3.type = "file";
+  imginput3.style ="display: none;"
+  imginput3.id = "image-input3";
+
+  const button31 = document.createElement("button");
+  button31.className = "text-button";
+  button31.title = "Text";
+  var setFunction = function(){
+    const textBox = button31.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button31.onclick = setFunction;
+
+  const button32 = document.createElement("button");
+  button32.className = "img-button";
+  button32.id = "img-button";
+  button32.title = "Image";
+
+  // span
+  const span31 = document.createElement("span");
+  span31.innerHTML = "text_fields"
+  span31.className = "material-symbols-outlined";
+
+  const span32 = document.createElement("span");
+  span32.innerHTML = "image"
+  span32.className = "material-symbols-outlined";
+
+  const imginput4 = document.createElement("input");
+  imginput4.type = "file";
+  imginput4.style ="display: none;"
+  imginput4.id = "image-input3";
+
+  const button41 = document.createElement("button");
+  button41.className = "text-button";
+  button41.title = "Text";
+  var setFunction = function(){
+    const textBox = button41.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button41.onclick = setFunction;
+
+  const button42 = document.createElement("button");
+  button42.className = "img-button";
+  button42.id = "img-button";
+  button42.title = "Image";
+
+  // span
+  const span41 = document.createElement("span");
+  span41.innerHTML = "text_fields"
+  span41.className = "material-symbols-outlined";
+
+  const span42 = document.createElement("span");
+  span42.innerHTML = "image"
+  span42.className = "material-symbols-outlined";
+
+
+  button1.appendChild(span1);
+  button2.appendChild(span2);
+  div1.appendChild(imginput);
+  div1.appendChild(button1);
+  div1.appendChild(button2);
+
+  button21.appendChild(span21);
+  button22.appendChild(span22);
+  div2.appendChild(imginput2);
+  div2.appendChild(button21);
+  div2.appendChild(button22);
+
+  button31.appendChild(span31);
+  button32.appendChild(span32);
+  div3.appendChild(imginput3);
+  div3.appendChild(button31);
+  div3.appendChild(button32);
+
+  button41.appendChild(span41);
+  button42.appendChild(span42);
+  div4.appendChild(imginput4);
+  div4.appendChild(button41);
+  div4.appendChild(button42);
 
   page.appendChild(div1);
   page.appendChild(div2);
   page.appendChild(div3);
   page.appendChild(div4);
+
+  button2.onclick = function(){
+    document.getElementById('image-input').click();
+  }
+
+  button22.onclick = function(){
+    document.getElementById('image-input2').click();
+  }
+
+  button32.onclick = function(){
+    document.getElementById('image-input3').click();
+  }
+
+  imginput.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button2.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+
+  imginput2.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button22.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+
+  imginput3.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button32.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
 }
 
 function constructForm6(page){
   page.innerHTML = ""
   const div1 = document.createElement("div");
   div1.className = "cell-6-1";
-  div1.setAttribute("contenteditable", "true")
-  div1.setAttribute("placeholder","Add Text...")
 
   const div2 = document.createElement("div");
   div2.className = "cell-6-2";
-  div2.setAttribute("contenteditable", "true")
-  div2.setAttribute("placeholder","Add Text...")
 
   const div3 = document.createElement("div");
   div3.className = "cell-6-3";
-  div3.setAttribute("contenteditable", "true")
-  div3.setAttribute("placeholder","Add Text...")
+
+  const div4 = document.createElement("div");
+  div4.className = "cell-6-4";
+  const imginput = document.createElement("input");
+  imginput.type = "file";
+  imginput.style ="display: none;"
+  imginput.id = "image-input";
+
+  const button1 = document.createElement("button");
+  button1.className = "text-button";
+  button1.title = "Text";
+  var setFunction = function(){
+    const textBox = button1.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button1.onclick = setFunction;
+
+  const button2 = document.createElement("button");
+  button2.className = "img-button";
+  button2.id = "img-button";
+  button2.title = "Image";
+
+  // span
+  const span1 = document.createElement("span");
+  span1.innerHTML = "text_fields"
+  span1.className = "material-symbols-outlined";
+
+  const span2 = document.createElement("span");
+  span2.innerHTML = "image"
+  span2.className = "material-symbols-outlined";
+
+  const imginput2 = document.createElement("input");
+  imginput2.type = "file";
+  imginput2.style ="display: none;"
+  imginput2.id = "image-input2";
+
+  const button21 = document.createElement("button");
+  button21.className = "text-button";
+  button21.title = "Text";
+  var setFunction = function(){
+    const textBox = button21.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button21.onclick = setFunction;
+
+  const button22 = document.createElement("button");
+  button22.className = "img-button";
+  button22.id = "img-button";
+  button22.title = "Image";
+
+  // span
+  const span21 = document.createElement("span");
+  span21.innerHTML = "text_fields"
+  span21.className = "material-symbols-outlined";
+
+  const span22 = document.createElement("span");
+  span22.innerHTML = "image"
+  span22.className = "material-symbols-outlined";
+
+  const imginput3 = document.createElement("input");
+  imginput3.type = "file";
+  imginput3.style ="display: none;"
+  imginput3.id = "image-input3";
+
+  const button31 = document.createElement("button");
+  button31.className = "text-button";
+  button31.title = "Text";
+  var setFunction = function(){
+    const textBox = button31.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button31.onclick = setFunction;
+
+  const button32 = document.createElement("button");
+  button32.className = "img-button";
+  button32.id = "img-button";
+  button32.title = "Image";
+
+  // span
+  const span31 = document.createElement("span");
+  span31.innerHTML = "text_fields"
+  span31.className = "material-symbols-outlined";
+
+  const span32 = document.createElement("span");
+  span32.innerHTML = "image"
+  span32.className = "material-symbols-outlined";
+
+  const imginput4 = document.createElement("input");
+  imginput4.type = "file";
+  imginput4.style ="display: none;"
+  imginput4.id = "image-input3";
+
+  const button41 = document.createElement("button");
+  button41.className = "text-button";
+  button41.title = "Text";
+  var setFunction = function(){
+    const textBox = button41.parentNode;
+    textBox.setAttribute("contenteditable", "true");
+    textBox.setAttribute("placeholder","Add Text...");
+    textBox.className = "text-box"; 
+    textBox.innerHTML = "";
+  }
+  button41.onclick = setFunction;
+
+  const button42 = document.createElement("button");
+  button42.className = "img-button";
+  button42.id = "img-button";
+  button42.title = "Image";
+
+  // span
+  const span41 = document.createElement("span");
+  span41.innerHTML = "text_fields"
+  span41.className = "material-symbols-outlined";
+
+  const span42 = document.createElement("span");
+  span42.innerHTML = "image"
+  span42.className = "material-symbols-outlined";
+
+
+  button1.appendChild(span1);
+  button2.appendChild(span2);
+  div1.appendChild(imginput);
+  div1.appendChild(button1);
+  div1.appendChild(button2);
+
+  button21.appendChild(span21);
+  button22.appendChild(span22);
+  div2.appendChild(imginput2);
+  div2.appendChild(button21);
+  div2.appendChild(button22);
+
+  button31.appendChild(span31);
+  button32.appendChild(span32);
+  div3.appendChild(imginput3);
+  div3.appendChild(button31);
+  div3.appendChild(button32);
+
+  button41.appendChild(span41);
+  button42.appendChild(span42);
+  div4.appendChild(imginput4);
+  div4.appendChild(button41);
+  div4.appendChild(button42);
 
   page.appendChild(div1);
   page.appendChild(div2);
   page.appendChild(div3);
+  page.appendChild(div4);
+
+  button2.onclick = function(){
+    document.getElementById('image-input').click();
+  }
+
+  button22.onclick = function(){
+    document.getElementById('image-input2').click();
+  }
+
+  button32.onclick = function(){
+    document.getElementById('image-input3').click();
+  }
+
+  imginput.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button2.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+
+  imginput2.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button22.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+
+  imginput3.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button32.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
 }
 
 export const changeFormat = function(format){
