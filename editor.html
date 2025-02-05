@@ -118,33 +118,4 @@
         window.changeFormat = changeFormat ;
     </script>
     
-    <script>
-        // Function to trigger file input when the button is clicked
-        function triggerFileInput(page) {
-            var page_number = page;
-            sessionStorage.setItem("pageNum", page_number);
-            document.getElementById('image-input').click(); // Open file dialog
-        }
-        // Function to handle image upload and display
-        document.getElementById('image-input').addEventListener('change', function() {
-            var file = this.files[0]; // Get the selected file
-            if (file) {
-                var reader = new FileReader();
-                reader.onload = function(event) {
-                    // Create a new div and img element to display the uploaded image
-                    var imageContainer = document.getElementById('text_and_img'+sessionStorage.getItem("pageNum"));
-                    // imageContainer.innerHTML = ''; // Clear any existing image
-                    var img = document.createElement('img');
-                    img.id = "image";
-                    img.src = event.target.result; // Set the image source to the uploaded file
-                    imageContainer.innerHTML = "";
-                    imageContainer.appendChild(img); // Append the image to the container
-                };
-                reader.readAsDataURL(file); // Read the file as a data URL
-            } else {
-                alert("Please select an image first.");
-            }
-        });
-    </script>
-    
 </body>
