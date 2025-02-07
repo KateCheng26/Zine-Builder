@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="editor.css" media="screen">
     <link rel="stylesheet" href="format.css" media="screen">
-    <script src="script.js"></script>
+     <script src="script.js"></script>
 </head>
 <body>
     <div class="top-bar">
@@ -49,7 +49,7 @@
         
             <div class="editor">
                 <div class="page-0" id ="2">
-                    
+
                 </div>
                 <div class="tools">
                     <button class = "format-button" onclick="chooseFormat('2');">
@@ -60,19 +60,19 @@
                 </div>
             </div>
         </div>
-        <div class = contentContainer>
+        <div class = contentContainer id = "contentContainer">
             <span class="content" id="myPopup">
-                <anchor class = "format-1" onclick = "closeFormatPopup();"><img id = formatButtonImage src = "images/format1.png"></img></anchor> 
-                <anchor class = "format-2" onclick = "closeFormatPopup();"><img id = formatButtonImage src = "images/format2.png"></img></anchor> 
-                <anchor class = "format-3" onclick = "closeFormatPopup();"><img id = formatButtonImage src = "images/format3.png"></img></anchor> 
-                <anchor class = "format-4" onclick = "closeFormatPopup();"><img id = formatButtonImage src = "images/format4.png"></img></anchor> 
-                <anchor class = "format-5" onclick = "closeFormatPopup();"><img id = formatButtonImage src = "images/format5.png"></img></anchor> 
-                <anchor class = "format-6" onclick = "closeFormatPopup();"><img id = formatButtonImage src = "images/format6.png"></img></anchor> 
+                <anchor class = "format-1" onclick = "closeFormatPopup(); changeFormat('page-1');"><img id = formatButtonImage src = "images/format1.png"></img></anchor> 
+                <anchor class = "format-2" onclick = "closeFormatPopup(); changeFormat('page-2');"><img id = formatButtonImage src = "images/format2.png"></img></anchor> 
+                <anchor class = "format-3" onclick = "closeFormatPopup(); changeFormat('page-3');"><img id = formatButtonImage src = "images/format3.png"></img></anchor> 
+                <anchor class = "format-4" onclick = "closeFormatPopup(); changeFormat('page-4');"><img id = formatButtonImage src = "images/format4.png"></img></anchor> 
+                <anchor class = "format-5" onclick = "closeFormatPopup(); changeFormat('page-5');"><img id = formatButtonImage src = "images/format5.png"></img></anchor> 
+                <anchor class = "format-6" onclick = "closeFormatPopup(); changeFormat('page-6');"><img id = formatButtonImage src = "images/format6.png"></img></anchor> 
             </span>
         </div>
     </div>
     <div class="bottom-bar">
-        <button class = "pages-button" onclick="setTimeout(addPages());">
+        <button class = "pages-button" onclick="addPages();">
             <span class="material-symbols-outlined">
                 add
             </span>
@@ -80,7 +80,7 @@
     </div>
 
     <script type="module">
-        import {saveProject, loadProject, addPages, deleteProject, chooseFormat, scrollBottom, closeFormatPopup, addTextBox, changeFormat} from './script.js';
+        import {saveProject, loadProject, addPages, deleteProject, chooseFormat, scrollBottom, closeFormatPopup, changeFormat} from './script.js';
         window.saveProject = saveProject;
         window.loadProject = loadProject;
         window.addPages = addPages;
@@ -88,8 +88,7 @@
         window.deleteProject = deleteProject;
         window.chooseFormat = chooseFormat;
         window.closeFormatPopup  = closeFormatPopup;
-        window.addTextBox = addTextBox;
-        window.changeFormat = changeFormat ;
+        window.changeFormat = changeFormat;
     </script>
-    
+
 </body>
