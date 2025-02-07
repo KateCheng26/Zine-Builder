@@ -1,7 +1,7 @@
 // Import Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getFirestore, collection, addDoc, setDoc, getDocs, doc, updateDoc, deleteDoc, query, where, getCountFromServer} from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDaacl1g-63bYmdKk0EzPHMLe5CZLU53Sk",
@@ -38,17 +38,17 @@ export const login = function (email, password){
 
 //logout function for logout button on homepage
 export const logout = function (){
-//signOut function from Firebase
-  signOut(auth)
-  .then(() => {
-//successful sign-out, redirect to login page
-    window.location.href = "index.html"
-  }).catch((error) => {
-    //error catch log messages
-    const errorCode = error.code;
-    const errorMessage = error.message;
-  });
-}
+  //signOut function from Firebase
+    signOut(auth)
+    .then(() => {
+  //successful sign-out, redirect to login page
+      window.location.href = "index.html"
+    }).catch((error) => {
+      //error catch log messages
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    });
+  }
 
 //method that makes the Project Name input show up
 export const displayInput = function(){
@@ -183,35 +183,329 @@ async function deleteFromCollectionNames(docId){
   }
 }
 
+
+export const loadProject =  async function(){
+  //get the name of project user is currently loaded into. 
+  //Set by the main menu
+  var project = sessionStorage.getItem('projectName'); 
+  
+  //get all documents from project in firebase wiht "projectName"
+  const phoogdocs = await getDocs(collection(db, project));
+
+  //get a list of all elements whose class starts with "page-"
+  //all page class names will be formatted as: page-format# (ex. page-1)
+  const pages = document.querySelectorAll("[class^=page-]")
+
+  //create an empty list
+  //all documents in firebase that have an attr. of pagenumber will have that value added to this list
+  const allPageNums = []
+      //for each document in firebase associated with "project"
+      phoogdocs.forEach((item) => {
+          //if the document has an attr. page number
+          if (item.data().pageNumber != undefined){
+            //add that value to allPageNums
+              allPageNums.push(String(item.data().pageNumber))
+          }
+      })
+
+  //this loop will add the proper amount of pages
+  //subtract the number of pages already existing from the number of pages exist only within firebase (by default, two pages are constructed)
+  //divide by two because pages are added in pairs
+  //call Add Pages x amount of times
+  for (let i = 0; i < (allPageNums.length - pages.length)/2; i++) {
+    addPages()
+  }
+
+  //for each document in firebase
+  phoogdocs.forEach((item) => {
+      //if the document has pageNumber attr.
+    if (item.data().pageNumber != undefined) {
+      
+
+      //get page by page number of document (pageNumber = 1 pulls page.id => 1)
+      var page = document.getElementById(item.data().pageNumber);
+      //set page classname to the saved format in firebase (ex. format: "page-1")
+      page.className = item.data().format
+
+      //clear page
+      page.innerHTML = ""
+        
+      
+      //call constructForm# depending on what the pages current format is
+      if(page.className == "page-1"){
+        constructForm1(page)
+      }else if(page.className == "page-2") {
+        constructForm2(page)
+      }else if(page.className == "page-3") {
+        constructForm3(page)
+      }else if(page.className == "page-4") {
+        constructForm4(page)
+      }else if(page.className == "page-5") {
+        constructForm5(page)
+      }else if(page.className == "page-6") {
+        constructForm6(page)
+      }
+
+        //create list of all child elements of page (will consist of cell elements)
+      var children = page.children;
+
+        //get content saved to firebase
+        //this is a list saved to firebase so var content is a list
+      var content = item.data().content;
+        //loop through items in content
+      for (let i = 0; i < content.length; i++) {
+          //set the innerHTML of the cell to item in content
+        children[i].innerHTML = content[i];
+      }
+              
+    }
+  },
+);
+
+}
+
+export const addPages = function(){
+   
+  //create elements
+
+  //page-container
+  const pagesContainer = document.createElement("div");
+  pagesContainer.className = "pages-container";
+
+  //editors
+  const editor1 = document.createElement("div");
+  editor1.className = "editor";
+
+  const editor2 = document.createElement("div");
+  editor2.className = "editor";
+
+  //pages
+
+    //amount of pages
+  const pages = document.querySelectorAll("[class^=page-]")
+
+  const page1 = document.createElement("div");
+  page1.className = "page-0";
+  page1.id = pages.length + 1;
+
+  const page2 = document.createElement("div");
+  page2.className = "page-0";
+  page2.id = pages.length + 2;
+
+  // tools
+
+  const tools1 = document.createElement("div");
+  tools1.className = "tools";
+
+  const tools2 = document.createElement("div");
+  tools2.className = "tools";
+
+  //butons
+  const button1 = document.createElement("button");
+  button1.className = "format-button";
+  button1.title = "Formats";
+  button1.onclick = () => {
+    chooseFormat(pages.length+1);
+  };
+
+  const button2 = document.createElement("button");
+  button2.className = "format-button";
+  button2.title = "Formats";
+  button2.onclick = () => {
+    chooseFormat(pages.length+2);
+  };
+
+  const span1 = document.createElement("span");
+  span1.innerHTML = "dashboard"
+  span1.className = "material-symbols-outlined";
+
+  const span2 = document.createElement("span");
+  span2.innerHTML = "dashboard"
+  span2.className = "material-symbols-outlined";
+  //concat
+      //spans to buttons
+  button1.appendChild(span1);
+  button2.appendChild(span2);
+
+      //buttons to tools
+  tools1.appendChild(button1);
+  tools2.appendChild(button2);
+
+      //pages and tools to editor
+  editor1.appendChild(page1);
+  editor1.appendChild(tools1);
+
+  editor2.appendChild(page2);
+  editor2.appendChild(tools2);
+
+      //editors to pages-container
+  pagesContainer.appendChild(editor1);
+  pagesContainer.appendChild(editor2);
+
+      //pages-container to container
+  document.getElementById("container").appendChild(pagesContainer);
+
+
+}
+
+//save document
+export const saveProject =  async function(){
+  //get the name of project user is currently loaded into. 
+  //Set by the main menu
+  var project = sessionStorage.getItem('projectName'); 
+  
+  //get all documents in the project
+  var phoogdocs = await getDocs(collection(db, project));
+  
+  //create an empty list
+  //all documents in firebase that have an attr. of pagenumber will have that value added to this list
+  const allPageNums = []
+      //for each document in firebase associated with "project"
+      phoogdocs.forEach((item) => {
+          //if the document has an attr. page number
+          if (item.data().pageNumber != undefined){
+            //add that value to allPageNums
+              allPageNums.push(String(item.data().pageNumber))
+          }
+      })
+
+  
+  //get a list of all elements whose class starts with "page-"
+  //all page class names will be formatted as: page-format# (ex. page-1)
+  const allPages = document.querySelectorAll("[class^=page-]")
+
+  //for every page element in allPages
+  for (let i = 0; i < allPages.length; i++) {
+      //if allPageNums (a list of page numbers found in firebase) does not have a page with the page number, add a document to firebase
+      //this adds all new pages that have been created to firebase
+      if (!(allPageNums.includes(allPages[i].id))){
+          //add document with the correct pagenumber 
+          await addDoc(collection(db, project),{
+              pageNumber: allPages[i].id
+          });
+      }
+  }
+  
+
+  //get all documents in the project
+  //(this must be called again because pages may have been added that did not exist when "phoogdocs" was originally declared
+  phoogdocs = await getDocs(collection(db, project));
+  
+  //for each document in project
+  phoogdocs.forEach((item) => {
+      //if the document has pageNumber attr.
+      if(item.data().pageNumber != null) {
+        //pull page element with the same page number as doc
+        var page = document.getElementById(item.data().pageNumber);
+        // console.log(page.id)
+
+        //define item to update
+        const updateItem = doc(db, project, item.id);
+        
+        //get format (class name is format)
+        var format_name = page.className;
+        
+        //update format
+        updateDoc(updateItem, {
+          format: format_name
+        });
+
+        // console.log(format_name)
+        //make list of all child elements of page ^^^^
+        var children = page.children;
+
+
+        
+        //list of all child element content
+        var content = []
+
+        //loop through children
+        for(let i = 0; i < children.length; i++){
+          //if innerhtml of given child element is not undefined add its content to content list
+          if (children[i].innerHTML != undefined) {
+            //add content to content list
+            content.push(children[i].innerHTML);
+          } else {
+            //add empty string to content list if content is undefined
+            content.push("");
+          }
+        }
+
+        // console.log(content)
+        //update content attr with content list
+        updateDoc(updateItem, {
+          content: content
+        });
+      }
+  })
+
+}
+  
+  //function choose format to bring up the popup format selector
+  export const chooseFormat = function(pageNumber){
+      //saving the requested page to change
+    sessionStorage.setItem('pageNumber', pageNumber);
+    var popup = document.getElementById("myPopup");
+      //format picker popup shown
+    popup.classList.add("show");
+    var popup = document.getElementById("contentContainer");
+    popup.classList.add("color");
+  }
+  //function to close the popup after the format is chosen
+  export const closeFormatPopup = function(){
+    var popup = document.getElementById("myPopup");
+      //popup hidden
+    popup.classList.remove("show");
+    var popup = document.getElementById("contentContainer");
+    popup.classList.remove("color");
+  }
+
+
+//scroll to the second to last page
+export const scrollBottom = function() {
+  //get pages
+  const pages = document.getElementsByClassName("page-0");
+  //log second to last page
+  // console.log(pages[pages.length - 2].id)
+  //scroll page into view
+  pages[pages.length - 2].scrollIntoView();
+  }
+
+window.addEventListener('beforeunload',
+  function (e) {
+    e.preventDefault();
+    e.returnValue = '';
+});
+
 // all constructForm methods construct a format by clearing a page
 // constructForm1 constucts format 1 and so on for formats 1-6
 //each construct form method is essentially the same with the only differences being amount of content "cells" and class names designated to said cells
 //constructForm# takes a parameter page being the page element in which the format will be constructed
 
+//format for construct form remains mostly the same for each 
+//resetting the given page
+//making the required number of divs
+//making the new text/image buttons and making sure the functions link
+//append all the new stuff
 function constructForm1(page){
-    //clear page
+  //create cell 1
   page.innerHTML = ""
-
-    //create cell 1
   const div1 = document.createElement("div");
   div1.className = "cell-1-1";
-  div1.id = page.id+"-1"
-    
-    //create cell 2
+  //create cell 2
   const div2 = document.createElement("div");
   div2.className = "cell-1-2";
-  div1.id = page.id+"-2"
-  
-    //create cell 3
+  //create cell 3
   const div3 = document.createElement("div");
   div3.className = "cell-1-3";
-  div1.id = page.id+"-3"
 
+  //file picker 1, creates the input and then hides it
   const imginput = document.createElement("input");
   imginput.type = "file";
   imginput.style ="display: none;"
   imginput.id = "image-input";
 
+  //text button 1
   const button1 = document.createElement("button");
   button1.className = "text-button";
   button1.title = "Text";
@@ -224,6 +518,7 @@ function constructForm1(page){
   }
   button1.onclick = setFunction;
 
+  //img button 1
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
@@ -238,11 +533,13 @@ function constructForm1(page){
   span2.innerHTML = "image"
   span2.className = "material-symbols-outlined";
 
+  //file picker 2
   const imginput2 = document.createElement("input");
   imginput2.type = "file";
   imginput2.style ="display: none;"
   imginput2.id = "image-input2";
 
+  //text button 2
   const button21 = document.createElement("button");
   button21.className = "text-button";
   button21.title = "Text";
@@ -255,6 +552,7 @@ function constructForm1(page){
   }
   button21.onclick = setFunction;
 
+  //image button 2
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
@@ -269,11 +567,13 @@ function constructForm1(page){
   span22.innerHTML = "image"
   span22.className = "material-symbols-outlined";
 
+  //file picker 3
   const imginput3 = document.createElement("input");
   imginput3.type = "file";
   imginput3.style ="display: none;"
   imginput3.id = "image-input3";
 
+  //text button 3
   const button31 = document.createElement("button");
   button31.className = "text-button";
   button31.title = "Text";
@@ -286,6 +586,7 @@ function constructForm1(page){
   }
   button31.onclick = setFunction;
 
+  //img button 3
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
@@ -300,7 +601,7 @@ function constructForm1(page){
   span32.innerHTML = "image"
   span32.className = "material-symbols-outlined";
 
-
+  //APPEND
   button1.appendChild(span1);
   button2.appendChild(span2);
   div1.appendChild(imginput);
@@ -323,6 +624,7 @@ function constructForm1(page){
   page.appendChild(div2);
   page.appendChild(div3);
 
+  //linking img button to the hidden file pickers
   button2.onclick = function(){
     document.getElementById('image-input').click();
   }
@@ -335,6 +637,7 @@ function constructForm1(page){
     document.getElementById('image-input3').click();
   }
 
+  //if file picker inputs are clicked, then open up the file dialogue and add the image
   imginput.onchange = function(){
     var file = this.files[0]; // Get the selected file
     if (file) {
@@ -396,42 +699,28 @@ function constructForm1(page){
   }
 }
 
-//format for construct form remains mostly the same for each 
-//resetting the given page
-//making the required number of divs
-//making the new text/image buttons and making sure the functions link
-//append all the new stuff
 function constructForm2(page){
-    //clear page
   page.innerHTML = ""
-      
-    //create cell 1
   const div1 = document.createElement("div");
   div1.className = "cell-2-1";
-  
-    //create cell 2
+
   const div2 = document.createElement("div");
   div2.className = "cell-2-2";
-  
-    //create cell 3
+
   const div3 = document.createElement("div");
   div3.className = "cell-2-3";
-  
-    //create cell 4
+
   const div4 = document.createElement("div");
   div4.className = "cell-2-4";
 
-//file picker 1, creates the input and then hides it
   const imginput = document.createElement("input");
   imginput.type = "file";
   imginput.style ="display: none;"
   imginput.id = "image-input";
-    
-//text button 1
+
   const button1 = document.createElement("button");
   button1.className = "text-button";
   button1.title = "Text";
-    //making the div the button is inside content editable
   var setFunction = function(){
     const textBox = button1.parentNode;
     textBox.setAttribute("contenteditable", "true");
@@ -441,7 +730,6 @@ function constructForm2(page){
   }
   button1.onclick = setFunction;
 
-    //img button 1
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
@@ -456,13 +744,11 @@ function constructForm2(page){
   span2.innerHTML = "image"
   span2.className = "material-symbols-outlined";
 
-//file picker 2
   const imginput2 = document.createElement("input");
   imginput2.type = "file";
   imginput2.style ="display: none;"
   imginput2.id = "image-input2";
 
-//text button 2
   const button21 = document.createElement("button");
   button21.className = "text-button";
   button21.title = "Text";
@@ -475,7 +761,6 @@ function constructForm2(page){
   }
   button21.onclick = setFunction;
 
-//image button 2
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
@@ -490,13 +775,11 @@ function constructForm2(page){
   span22.innerHTML = "image"
   span22.className = "material-symbols-outlined";
 
-//file picker 3
   const imginput3 = document.createElement("input");
   imginput3.type = "file";
   imginput3.style ="display: none;"
   imginput3.id = "image-input3";
 
-//text button 3
   const button31 = document.createElement("button");
   button31.className = "text-button";
   button31.title = "Text";
@@ -509,7 +792,6 @@ function constructForm2(page){
   }
   button31.onclick = setFunction;
 
-//img button 3
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
@@ -524,13 +806,11 @@ function constructForm2(page){
   span32.innerHTML = "image"
   span32.className = "material-symbols-outlined";
 
-//file picker 4
   const imginput4 = document.createElement("input");
   imginput4.type = "file";
   imginput4.style ="display: none;"
   imginput4.id = "image-input3";
 
-//text button 4
   const button41 = document.createElement("button");
   button41.className = "text-button";
   button41.title = "Text";
@@ -543,7 +823,6 @@ function constructForm2(page){
   }
   button41.onclick = setFunction;
 
- //img button 4   
   const button42 = document.createElement("button");
   button42.className = "img-button";
   button42.id = "img-button";
@@ -558,7 +837,7 @@ function constructForm2(page){
   span42.innerHTML = "image"
   span42.className = "material-symbols-outlined";
 
-//APPEND
+
   button1.appendChild(span1);
   button2.appendChild(span2);
   div1.appendChild(imginput);
@@ -588,7 +867,6 @@ function constructForm2(page){
   page.appendChild(div3);
   page.appendChild(div4);
 
-//linking img button to the hidenn file pickers
   button2.onclick = function(){
     document.getElementById('image-input').click();
   }
@@ -601,7 +879,6 @@ function constructForm2(page){
     document.getElementById('image-input3').click();
   }
 
-//if file picker inputs are clicked, then open up the file dialogue and add the image
   imginput.onchange = function(){
     var file = this.files[0]; // Get the selected file
     if (file) {
@@ -664,32 +941,24 @@ function constructForm2(page){
 }
 
 function constructForm3(page){
-    //clear page
   page.innerHTML = ""
-      
-    //create cell 1
   const div1 = document.createElement("div");
   div1.className = "cell-3-1";
-  
-    //create cell 2
+
   const div2 = document.createElement("div");
   div2.className = "cell-3-2";
-  
-    //create cell 3
+
   const div3 = document.createElement("div");
   div3.className = "cell-3-3";
-  
-    //create cell 4
+
   const div4 = document.createElement("div");
   div4.className = "cell-3-4";
 
-    //new image input for file picking
   const imginput = document.createElement("input");
   imginput.type = "file";
   imginput.style ="display: none;"
   imginput.id = "image-input";
 
-    //new text button
   const button1 = document.createElement("button");
   button1.className = "text-button";
   button1.title = "Text";
@@ -702,7 +971,6 @@ function constructForm3(page){
   }
   button1.onclick = setFunction;
 
-    //new img button
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
@@ -717,13 +985,11 @@ function constructForm3(page){
   span2.innerHTML = "image"
   span2.className = "material-symbols-outlined";
 
-    //new file picker 2
   const imginput2 = document.createElement("input");
   imginput2.type = "file";
   imginput2.style ="display: none;"
   imginput2.id = "image-input2";
 
-    //new text button 2
   const button21 = document.createElement("button");
   button21.className = "text-button";
   button21.title = "Text";
@@ -736,7 +1002,6 @@ function constructForm3(page){
   }
   button21.onclick = setFunction;
 
-    //new img button 2
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
@@ -751,13 +1016,11 @@ function constructForm3(page){
   span22.innerHTML = "image"
   span22.className = "material-symbols-outlined";
 
-    //new file picker 3
   const imginput3 = document.createElement("input");
   imginput3.type = "file";
   imginput3.style ="display: none;"
   imginput3.id = "image-input3";
 
-    //new text button 3
   const button31 = document.createElement("button");
   button31.className = "text-button";
   button31.title = "Text";
@@ -770,7 +1033,6 @@ function constructForm3(page){
   }
   button31.onclick = setFunction;
 
-    //new img button 3
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
@@ -785,13 +1047,11 @@ function constructForm3(page){
   span32.innerHTML = "image"
   span32.className = "material-symbols-outlined";
 
-    //new file picker 4
   const imginput4 = document.createElement("input");
   imginput4.type = "file";
   imginput4.style ="display: none;"
   imginput4.id = "image-input3";
 
-    //new text button 4
   const button41 = document.createElement("button");
   button41.className = "text-button";
   button41.title = "Text";
@@ -804,7 +1064,6 @@ function constructForm3(page){
   }
   button41.onclick = setFunction;
 
-    //new img button 4
   const button42 = document.createElement("button");
   button42.className = "img-button";
   button42.id = "img-button";
@@ -819,7 +1078,7 @@ function constructForm3(page){
   span42.innerHTML = "image"
   span42.className = "material-symbols-outlined";
 
-//append new spans/buttons/divs
+
   button1.appendChild(span1);
   button2.appendChild(span2);
   div1.appendChild(imginput);
@@ -923,22 +1182,16 @@ function constructForm3(page){
 }
 
 function constructForm4(page){
-    //clear page
   page.innerHTML = ""
-      
-    //create cell 1
   const div1 = document.createElement("div");
   div1.className = "cell-4-1";
-  
-    //create cell 2
+
   const div2 = document.createElement("div");
   div2.className = "cell-4-2";
-  
-    //create cell 3
+
   const div3 = document.createElement("div");
   div3.className = "cell-4-3";
-  
-    //create cell 4
+
   const div4 = document.createElement("div");
   div4.className = "cell-4-4";
 
@@ -1170,22 +1423,16 @@ function constructForm4(page){
 }
 
 function constructForm5(page){
-    //clear page
   page.innerHTML = ""
-      
-    //create cell 1
   const div1 = document.createElement("div");
   div1.className = "cell-5-1";
-  
-    //create cell 2
+
   const div2 = document.createElement("div");
   div2.className = "cell-5-2";
-  
-    //create cell 3
+
   const div3 = document.createElement("div");
   div3.className = "cell-5-3";
-  
-    //create cell 4
+
   const div4 = document.createElement("div");
   div4.className = "cell-5-4";
 
@@ -1417,22 +1664,16 @@ function constructForm5(page){
 }
 
 function constructForm6(page){
-    //clear page
   page.innerHTML = ""
-      
-    //create cell 1
   const div1 = document.createElement("div");
   div1.className = "cell-6-1";
-  
-    //create cell 2
+
   const div2 = document.createElement("div");
   div2.className = "cell-6-2";
-  
-    //create cell 3
+
   const div3 = document.createElement("div");
   div3.className = "cell-6-3";
-  
-    //create cell 4
+
   const div4 = document.createElement("div");
   div4.className = "cell-6-4";
   const imginput = document.createElement("input");
@@ -1601,7 +1842,7 @@ function constructForm6(page){
     document.getElementById('image-input3').click();
   }
 
-    button42.onclick = function(){
+  button42.onclick = function(){
     document.getElementById('image-input4').click();
   }
 
@@ -1665,13 +1906,13 @@ function constructForm6(page){
     }
   }
 
-    imginput4.onchange = function(){
+  imginput4.onchange = function(){
     var file = this.files[0]; // Get the selected file
     if (file) {
         var reader = new FileReader();
         reader.onload = function(event) {
             // Create a new div and img element to display the uploaded image
-            var imageContainer = button2.parentNode;
+            var imageContainer = button42.parentNode;
             // imageContainer.innerHTML = ''; // Clear any existing image
             var img = document.createElement('img');
             img.id = "image";
@@ -1686,18 +1927,11 @@ function constructForm6(page){
   }
 }
 
-// changeFormat changes the format of a certain page
+
 export const changeFormat = function(format){
-    //get the current page number that has been saved in session storage
-    //because all "format buttons" (each page has its own format button) open the same window, when a button is pressed, the id(page number) of page that the button is associated with will be saved to session storage so that the proper page is changed
   var pageNumber = sessionStorage.getItem('pageNumber'); 
-    //get page element associated with page number saved in session storage
   var page = document.getElementById(pageNumber);
-    //set page's class name to be the new format
-    //page class names are associated with their current format (ex. class = page-1 has format 1)
   page.className = format;
-    //depending on what the current class of the page is, call construct format
-    //ex. if class = page-1 call construct form 1 and so on for all formats
   if(page.className == "page-1"){
     constructForm1(page)
   }else if(page.className == "page-2") {
@@ -1711,380 +1945,4 @@ export const changeFormat = function(format){
   }else if(page.className == "page-6") {
     constructForm6(page)
   }
-}
-
-//this method loads a project from firebase
-export const loadProject =  async function(){
-    //get the name of project user is currently loaded into. 
-    //Set by the main menu
-    var project = sessionStorage.getItem('projectName'); 
-    
-    //get all documents from project in firebase wiht "projectName"
-    const phoogdocs = await getDocs(collection(db, project));
-
-    //get a list of all elements whose class starts with "page-"
-    //all page class names will be formatted as: page-format# (ex. page-1)
-    const pages = document.querySelectorAll("[class^=page-]")
-
-    //create an empty list
-    //all documents in firebase that have an attr. of pagenumber will have that value added to this list
-    const allPageNums = []
-        //for each document in firebase associated with "project"
-        phoogdocs.forEach((item) => {
-            //if the document has an attr. page number
-            if (item.data().pageNumber != undefined){
-              //add that value to allPageNums
-                allPageNums.push(String(item.data().pageNumber))
-            }
-        })
-
-    //this loop will add the proper amount of pages
-    //subtract the number of pages already existing from the number of pages exist only within firebase (by default, two pages are constructed)
-    //divide by two because pages are added in pairs
-    //call Add Pages x amount of times
-    for (let i = 0; i < (allPageNums.length - pages.length)/2; i++) {
-      addPages()
-    }
-
-    //for each document in firebase
-    phoogdocs.forEach((item) => {
-        //if the document has pageNumber attr.
-      if (item.data().pageNumber != undefined) {
-        
-
-        //get page by page number of document (pageNumber = 1 pulls page.id => 1)
-        var page = document.getElementById(item.data().pageNumber);
-        //set page classname to the saved format in firebase (ex. format: "page-1")
-        page.className = item.data().format
-
-        //clear page
-        page.innerHTML = ""
-          
-        
-        //call constructForm# depending on what the pages current format is
-        if(page.className == "page-1"){
-          constructForm1(page)
-        }else if(page.className == "page-2") {
-          constructForm2(page)
-        }else if(page.className == "page-3") {
-          constructForm3(page)
-        }else if(page.className == "page-4") {
-          constructForm4(page)
-        }else if(page.className == "page-5") {
-          constructForm5(page)
-        }else if(page.className == "page-6") {
-          constructForm6(page)
-        }
-
-          //create list of all child elements of page (will consist of cell elements)
-        var children = page.children;
-
-          //get content saved to firebase
-          //this is a list saved to firebase so var content is a list
-        var content = item.data().content;
-          //loop through items in content
-        for (let i = 0; i < content.length; i++) {
-            //set the innerHTML of the cell to item in content
-          children[i].innerHTML = content[i];
-        }
-                
-      }
-    },
-  );
-  
-}
-
-
-export const addPages = function(){
-   
-  //create elements
-
-  //page-container
-  const pagesContainer = document.createElement("div");
-  pagesContainer.className = "pages-container";
-
-  //editors
-  const editor1 = document.createElement("div");
-  editor1.className = "editor";
-
-  const editor2 = document.createElement("div");
-  editor2.className = "editor";
-
-  //pages
-
-    //amount of pages
-  const pages = document.querySelectorAll("[class^=page-]")
-
-  const page1 = document.createElement("div");
-  page1.className = "page-0";
-  page1.id = pages.length + 1;
-
-  const page2 = document.createElement("div");
-  page2.className = "page-0";
-  page2.id = pages.length + 2;
-
-  // tools
-
-  const tools1 = document.createElement("div");
-  tools1.className = "tools";
-
-  const tools2 = document.createElement("div");
-  tools2.className = "tools";
-
-  const textImgDiv = document.createElement("div");
-  textImgDiv.id = "text_and_img"+(pages.length+2);
-
-  const textImgDiv2 = document.createElement("div");
-  textImgDiv.id = "text_and_img"+(pages.length+1);
-
-  //butons
-  const button1 = document.createElement("button");
-  button1.className = "format-button";
-  button1.title = "Formats";
-  button1.onclick = () => {
-    chooseFormat();
-  };
-
-  const imginput = document.createElement("input")
-  imginput.type = "file";
-  imginput.style ="display: none;"
-  imginput.id = "image-input";
-
-  
-  const imginput2 = document.createElement("input")
-  imginput2.type = "file";
-  imginput2.style ="display: none;"
-  imginput2.id = "image-input";
-
-  const button2 = document.createElement("button");
-  button2.className = "format-button";
-  button2.title = "Formats";
-  button2.onclick = () => {
-    chooseFormat();
-  };
-  
-  const button3 = document.createElement("button");
-  button3.className = "text-button";
-  button3.title = "Text";
-  var setFunction = addTextBox.bind(this,pages.length + 1);
-  button3.onclick = setFunction;
-
-  const button4 = document.createElement("button");
-  button4.className = "img-button";
-  button4.title = "Image";
-  var setFunction = triggerFileInput.bind(this,pages.length + 1);
-  button4.onclick = setFunction;
-
-  const button5 = document.createElement("button");
-  button5.className = "text-button";
-  button5.title = "Text";
-  var setFunction = addTextBox.bind(this,pages.length + 2);
-  button5.onclick = setFunction;
-
-  const button6 = document.createElement("button");
-  button6.className = "img-button";
-  button6.title = "Image";
-  var setFunction = triggerFileInput.bind(this,pages.length + 1);
-  button6.onclick = setFunction;
-
-
-  // span
-  const span1 = document.createElement("span");
-  span1.innerHTML = "dashboard"
-  span1.className = "material-symbols-outlined";
-
-  const span2 = document.createElement("span");
-  span2.innerHTML = "dashboard"
-  span2.className = "material-symbols-outlined";
-
-  const span3 = document.createElement("span");
-  span3.innerHTML = "text_fields"
-  span3.className = "material-symbols-outlined";
-
-  const span4 = document.createElement("span");
-  span4.innerHTML = "image"
-  span4.className = "material-symbols-outlined";
-
-  const span5 = document.createElement("span");
-  span5.innerHTML = "text_fields"
-  span5.className = "material-symbols-outlined";
-
-  const span6 = document.createElement("span");
-  span6.innerHTML = "image"
-  span6.className = "material-symbols-outlined";
-  //concat
-      //spans to buttons
-  button1.appendChild(span1);
-  button2.appendChild(span2);
-  button3.appendChild(span3);
-  button4.appendChild(span4);
-  button5.appendChild(span5);
-  button6.appendChild(span6);
-
-      //buttons to tools
-  tools1.appendChild(button1);
-  tools2.appendChild(button2);
-  textImgDiv.appendChild(button3);
-  textImgDiv.appendChild(button4);
-  textImgDiv2.appendChild(button5);
-  textImgDiv2.appendChild(button6);
-
-  textImgDiv.appendChild(imginput);
-  textImgDiv2.appendChild(imginput2);
-
-  page1.appendChild(textImgDiv);
-  page2.appendChild(textImgDiv2);
-
-      //pages and tools to editor
-  editor1.appendChild(page1);
-  editor1.appendChild(tools1);
-
-  editor2.appendChild(page2);
-  editor2.appendChild(tools2);
-
-      //editors to pages-container
-  pagesContainer.appendChild(editor1);
-  pagesContainer.appendChild(editor2);
-
-      //pages-container to container
-  document.getElementById("container").appendChild(pagesContainer);
-
-
-}
-
-//scroll to the second to last page
-export const scrollBottom = function() {
-  //get pages
-  const pages = document.getElementsByClassName("page-0");
-  //log second to last page
-  console.log(pages[pages.length - 2].id)
-  //scroll page into view
-  pages[pages.length - 2].scrollIntoView();
-  }
-
-
-
-//save document saves all pages information to firebase
-export const saveProject =  async function(){\
-    //get the name of project user is currently loaded into. 
-    //Set by the main menu
-    var project = sessionStorage.getItem('projectName'); 
-    
-    //get all documents in the project
-    var phoogdocs = await getDocs(collection(db, project));
-    
-    //create an empty list
-    //all documents in firebase that have an attr. of pagenumber will have that value added to this list
-    const allPageNums = []
-        //for each document in firebase associated with "project"
-        phoogdocs.forEach((item) => {
-            //if the document has an attr. page number
-            if (item.data().pageNumber != undefined){
-              //add that value to allPageNums
-                allPageNums.push(String(item.data().pageNumber))
-            }
-        })
-
-    
-    //get a list of all elements whose class starts with "page-"
-    //all page class names will be formatted as: page-format# (ex. page-1)
-    const allPages = document.querySelectorAll("[class^=page-]")
-
-    //for every page element in allPages
-    for (let i = 0; i < allPages.length; i++) {
-        //if allPageNums (a list of page numbers found in firebase) does not have a page with the page number, add a document to firebase
-        //this adds all new pages that have been created to firebase
-        if (!(allPageNums.includes(allPages[i].id))){
-            //add document with the correct pagenumber 
-            await addDoc(collection(db, project),{
-                pageNumber: allPages[i].id
-            });
-        }
-    }
-    
-
-    //get all documents in the project
-    //(this must be called again because pages may have been added that did not exist when "phoogdocs" was originally declared
-    phoogdocs = await getDocs(collection(db, project));
-    
-    //for each document in project
-    phoogdocs.forEach((item) => {
-        //if the document has pageNumber attr.
-        if(item.data().pageNumber != null) {
-          //pull page element with the same page number as doc
-          var page = document.getElementById(item.data().pageNumber);
-          console.log(page.id)
-
-          //define item to update
-          const updateItem = doc(db, project, item.id);
-          
-          //get format (class name is format)
-          var format_name = page.className;
-          
-          //update format
-          updateDoc(updateItem, {
-            format: format_name
-          });
-
-          console.log(format_name)
-          //make list of all child elements of page ^^^^
-          var children = page.children;
-
-
-          
-          //list of all child element content
-          var content = []
-
-          //loop through children
-          for(let i = 0; i < children.length; i++){
-            //if innerhtml of given child element is not undefined add its content to content list
-            if (children[i].innerHTML != undefined) {
-              //add content to content list
-              content.push(children[i].innerHTML);
-            } else {
-              //add empty string to content list if content is undefined
-              content.push("");
-            }
-          }
-
-          console.log(content)
-          //update content attr with content list
-          updateDoc(updateItem, {
-            content: content
-          });
-        }
-    })
-
-}
-
-//add text box (called when text button is clicked)
-export const addTextBox = function(page) {
-//set variable equal to the div for the corresponding text button
-  const textBox = document.getElementById("text_and_img"+page); //error?
-
-//making everything editable and pretty
-  textBox.setAttribute("contenteditable", "true")
-  textBox.setAttribute("placeholder","Add Text...")
-  textBox.className = "text-box"; 
-  
-  textBox.innerHTML = "";
-}
-
-//function choose format to bring up the popup format selector
-export const chooseFormat = function(pageNumber){
-    //saving the requested page to change
-  sessionStorage.setItem('pageNumber', pageNumber);
-  var popup = document.getElementById("content");
-    //format picker popup shown
-  popup.classList.add("show");
-  var popup = document.getElementById("contentContainer");
-  popup.classList.add("color");
-}
-//function to close the popup after the format is chosen
-export const closeFormatPopup = function(){
-  var popup = document.getElementById("content");
-    //popup hidden
-  popup.classList.remove("show");
-  var popup = document.getElementById("contentContainer");
-  popup.classList.remove("color");
 }
