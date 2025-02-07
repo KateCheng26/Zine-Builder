@@ -809,7 +809,7 @@ function constructForm2(page){
   const imginput4 = document.createElement("input");
   imginput4.type = "file";
   imginput4.style ="display: none;"
-  imginput4.id = "image-input3";
+  imginput4.id = "image-input4";
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
@@ -879,6 +879,10 @@ function constructForm2(page){
     document.getElementById('image-input3').click();
   }
 
+  button42.onclick = function(){
+    document.getElementById('image-input4').click();
+  }
+
   imginput.onchange = function(){
     var file = this.files[0]; // Get the selected file
     if (file) {
@@ -926,6 +930,25 @@ function constructForm2(page){
         reader.onload = function(event) {
             // Create a new div and img element to display the uploaded image
             var imageContainer = button32.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+  imginput4.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button42.parentNode;
             // imageContainer.innerHTML = ''; // Clear any existing image
             var img = document.createElement('img');
             img.id = "image";
@@ -1050,7 +1073,7 @@ function constructForm3(page){
   const imginput4 = document.createElement("input");
   imginput4.type = "file";
   imginput4.style ="display: none;"
-  imginput4.id = "image-input3";
+  imginput4.id = "image-input4";
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
@@ -1120,6 +1143,10 @@ function constructForm3(page){
     document.getElementById('image-input3').click();
   }
 
+  button42.onclick = function(){
+    document.getElementById('image-input4').click();
+  }
+
   imginput.onchange = function(){
     var file = this.files[0]; // Get the selected file
     if (file) {
@@ -1167,6 +1194,25 @@ function constructForm3(page){
         reader.onload = function(event) {
             // Create a new div and img element to display the uploaded image
             var imageContainer = button32.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+  imginput4.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button42.parentNode;
             // imageContainer.innerHTML = ''; // Clear any existing image
             var img = document.createElement('img');
             img.id = "image";
@@ -1291,7 +1337,7 @@ function constructForm4(page){
   const imginput4 = document.createElement("input");
   imginput4.type = "file";
   imginput4.style ="display: none;"
-  imginput4.id = "image-input3";
+  imginput4.id = "image-input4";
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
@@ -1360,6 +1406,9 @@ function constructForm4(page){
   button32.onclick = function(){
     document.getElementById('image-input3').click();
   }
+  button42.onclick = function(){
+    document.getElementById('image-input4').click();
+  }
 
   imginput.onchange = function(){
     var file = this.files[0]; // Get the selected file
@@ -1408,6 +1457,25 @@ function constructForm4(page){
         reader.onload = function(event) {
             // Create a new div and img element to display the uploaded image
             var imageContainer = button32.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+  imginput4.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button42.parentNode;
             // imageContainer.innerHTML = ''; // Clear any existing image
             var img = document.createElement('img');
             img.id = "image";
@@ -1532,7 +1600,7 @@ function constructForm5(page){
   const imginput4 = document.createElement("input");
   imginput4.type = "file";
   imginput4.style ="display: none;"
-  imginput4.id = "image-input3";
+  imginput4.id = "image-input4";
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
@@ -1601,6 +1669,9 @@ function constructForm5(page){
   button32.onclick = function(){
     document.getElementById('image-input3').click();
   }
+  button42.onclick = function(){
+    document.getElementById('image-input4').click();
+  }
 
   imginput.onchange = function(){
     var file = this.files[0]; // Get the selected file
@@ -1661,6 +1732,26 @@ function constructForm5(page){
         alert("Please select an image first.");
     }
   }
+  imginput4.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button42.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+
 }
 
 function constructForm6(page){
@@ -1676,6 +1767,7 @@ function constructForm6(page){
 
   const div4 = document.createElement("div");
   div4.className = "cell-6-4";
+
   const imginput = document.createElement("input");
   imginput.type = "file";
   imginput.style ="display: none;"
@@ -1772,7 +1864,7 @@ function constructForm6(page){
   const imginput4 = document.createElement("input");
   imginput4.type = "file";
   imginput4.style ="display: none;"
-  imginput4.id = "image-input3";
+  imginput4.id = "image-input4";
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
