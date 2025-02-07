@@ -55,10 +55,6 @@ html {
 }
 
 
-
-
-
-
 /*toolbar*/
 
 
@@ -87,7 +83,7 @@ button {
 }
 
 /*content editing buttons*/
-.format-button, .pages-button{
+.format-button, .pages-button, .text-button, .img-button{
     margin-inline: .25rem;
     padding: 5px;
     width: 3rem;
@@ -133,31 +129,42 @@ button {
 
 }
 
-.format-button:active, .pages-button:active, .menubutton:active{
+.format-button:active, .pages-button:active, .menubutton:active, .text-button:active, .img-button:active{
 
     background-color: rgb(136, 136, 136);
     transition: .2s ease;
 
 }
 
-[class^="format-option-"] {
-    padding: none;
-    width: 100%;
-    height: 100%;
-}
+/* Popup container - can be anything you want */
+.format-button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
   
-#formatButtonImage {
-    margin:1vw;
-    width:12vw;
-    aspect-ratio: 5.5/8.5;;
-}
+  /* The actual popup */
+.format-button .format-text {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+  }
 
-#formatButtonImage:hover {
-    cursor:pointer;
-    transform:scale(1.1,1.1);
-}
-
-.contentContainer{
+  
+  .contentContainer{
     pointer-events:none;
     position:fixed;
     width:100%;
@@ -189,6 +196,10 @@ button {
 } 
 
 
+.color {
+    background-color: #00000070;
+}
+
 .format-button {
     position: relative;
     display: inline-block;
@@ -200,11 +211,6 @@ button {
 .show {
     visibility: visible;
   }
-
-.color {
-    background-color: #00000070;
-}
-  
   
 
 /*button that creates new pages*/
@@ -223,32 +229,6 @@ button {
     text-align: center;
 }
 
-
-/*Box for text*/
-.text-box {
-
-    background-color: white;
-    width: 88%;
-    margin: 3%;
-    padding: 3%;
-    overflow: hidden;
-    outline: none;
-    border-radius: 5px;
-    border: 1px dotted white;
-    transition: all .4s ease;
-    
-}
-
-
-.text-box:hover {
-    border: 1px dotted rgb(255, 88, 88);
-    
-}
-
-.text-box:focus {
-    border: 1px solid rgb(255, 0, 0);
-}
-
 /*
 this adds placeholder text to the text boxes
 .placeholder cannot be used normally because it is a content editable div
@@ -256,12 +236,22 @@ this adds placeholder text to the text boxes
 [contenteditable=true]:empty:not(:focus):before{
     content: attr(placeholder);
     pointer-events: none;
-    display: block;
     opacity: 0.5;
     font-style: italic;
     font-family: Arial, Helvetica, sans-serif;
     font-size: smaller;
   }
+
+#formatButtonImage {
+    margin:1vw;
+    width:12vw;
+    aspect-ratio: 5.5/8.5;;
+}
+
+#formatButtonImage:hover {
+    cursor:pointer;
+    transform:scale(1.1,1.1);
+}
 
 
 /*
@@ -293,4 +283,27 @@ changes layout
     padding-bottom: 1rem;
 }
 
+}
+
+#image{
+    object-fit: cover;   
+    width: 100%;
+    height:100%
+}
+
+.text-box {
+    width:inherit;
+    height:inherit;
+    overflow: hidden;
+    outline: none;
+    transition: all .4s ease;
+}
+
+.text-box:hover {
+    border: 2px dotted #612733;
+    
+}
+
+.text-box:focus {
+    border: 2px solid #793140;
 }
