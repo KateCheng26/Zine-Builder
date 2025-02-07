@@ -179,16 +179,26 @@ async function deleteFromCollectionNames(docId){
   }
 }
 
+// all constructForm methods construct a format by clearing a page
+// constructForm1 constucts format 1 and so on for formats 1-6
+//each construct form method is essentially the same with the only differences being amount of content "cells" and class names designated to said cells
+//constructForm# takes a parameter page being the page element in which the format will be constructed
+
 function constructForm1(page){
+    //clear page
   page.innerHTML = ""
+
+    //create cell 1
   const div1 = document.createElement("div");
   div1.className = "cell-1-1";
   div1.id = page.id+"-1"
-
+    
+    //create cell 2
   const div2 = document.createElement("div");
   div2.className = "cell-1-2";
   div1.id = page.id+"-2"
-
+  
+    //create cell 3
   const div3 = document.createElement("div");
   div3.className = "cell-1-3";
   div1.id = page.id+"-3"
@@ -382,17 +392,24 @@ function constructForm1(page){
   }
 }
 
+
 function constructForm2(page){
+    //clear page
   page.innerHTML = ""
+      
+    //create cell 1
   const div1 = document.createElement("div");
   div1.className = "cell-2-1";
-
+  
+    //create cell 2
   const div2 = document.createElement("div");
   div2.className = "cell-2-2";
-
+  
+    //create cell 3
   const div3 = document.createElement("div");
   div3.className = "cell-2-3";
-
+  
+    //create cell 4
   const div4 = document.createElement("div");
   div4.className = "cell-2-4";
 
@@ -624,16 +641,22 @@ function constructForm2(page){
 }
 
 function constructForm3(page){
+    //clear page
   page.innerHTML = ""
+      
+    //create cell 1
   const div1 = document.createElement("div");
   div1.className = "cell-3-1";
-
+  
+    //create cell 2
   const div2 = document.createElement("div");
   div2.className = "cell-3-2";
-
+  
+    //create cell 3
   const div3 = document.createElement("div");
   div3.className = "cell-3-3";
-
+  
+    //create cell 4
   const div4 = document.createElement("div");
   div4.className = "cell-3-4";
 
@@ -865,16 +888,22 @@ function constructForm3(page){
 }
 
 function constructForm4(page){
+    //clear page
   page.innerHTML = ""
+      
+    //create cell 1
   const div1 = document.createElement("div");
   div1.className = "cell-4-1";
-
+  
+    //create cell 2
   const div2 = document.createElement("div");
   div2.className = "cell-4-2";
-
+  
+    //create cell 3
   const div3 = document.createElement("div");
   div3.className = "cell-4-3";
-
+  
+    //create cell 4
   const div4 = document.createElement("div");
   div4.className = "cell-4-4";
 
@@ -1106,16 +1135,22 @@ function constructForm4(page){
 }
 
 function constructForm5(page){
+    //clear page
   page.innerHTML = ""
+      
+    //create cell 1
   const div1 = document.createElement("div");
   div1.className = "cell-5-1";
-
+  
+    //create cell 2
   const div2 = document.createElement("div");
   div2.className = "cell-5-2";
-
+  
+    //create cell 3
   const div3 = document.createElement("div");
   div3.className = "cell-5-3";
-
+  
+    //create cell 4
   const div4 = document.createElement("div");
   div4.className = "cell-5-4";
 
@@ -1347,16 +1382,22 @@ function constructForm5(page){
 }
 
 function constructForm6(page){
+    //clear page
   page.innerHTML = ""
+      
+    //create cell 1
   const div1 = document.createElement("div");
   div1.className = "cell-6-1";
-
+  
+    //create cell 2
   const div2 = document.createElement("div");
   div2.className = "cell-6-2";
-
+  
+    //create cell 3
   const div3 = document.createElement("div");
   div3.className = "cell-6-3";
-
+  
+    //create cell 4
   const div4 = document.createElement("div");
   div4.className = "cell-6-4";
   const imginput = document.createElement("input");
@@ -1586,10 +1627,18 @@ function constructForm6(page){
   }
 }
 
+// changeFormat changes the format of a certain page
 export const changeFormat = function(format){
+    //get the current page number that has been saved in session storage
+    //because all "format buttons" (each page has its own format button) open the same window, when a button is pressed, the id(page number) of page that the button is associated with will be saved to session storage so that the proper page is changed
   var pageNumber = sessionStorage.getItem('pageNumber'); 
+    //get page element associated with page number saved in session storage
   var page = document.getElementById(pageNumber);
+    //set page's class name to be the new format
+    //page class names are associated with their current format (ex. class = page-1 has format 1)
   page.className = format;
+    //depending on what the current class of the page is, call construct format
+    //ex. if class = page-1 call construct form 1 and so on for all formats
   if(page.className == "page-1"){
     constructForm1(page)
   }else if(page.className == "page-2") {
@@ -1605,43 +1654,55 @@ export const changeFormat = function(format){
   }
 }
 
-//load the projectt
-export const loadProject =  async function(project){
-    //get all documents
-    const phoogdocs = await getDocs(collection(db, project));
+//this method loads a project from firebase
+export const loadProject =  async function(){
+    //get the name of project user is currently loaded into. 
+    //Set by the main menu
+    var project = sessionStorage.getItem('projectName'); 
     
+    //get all documents from project in firebase wiht "projectName"
+    const phoogdocs = await getDocs(collection(db, project));
+
+    //get a list of all elements whose class starts with "page-"
+    //all page class names will be formatted as: page-format# (ex. page-1)
     const pages = document.querySelectorAll("[class^=page-]")
-    //create list of page numbers from firebase documents
+
+    //create an empty list
+    //all documents in firebase that have an attr. of pagenumber will have that value added to this list
     const allPageNums = []
-        //for each doc
+        //for each document in firebase associated with "project"
         phoogdocs.forEach((item) => {
-            //if page number is not undefined
+            //if the document has an attr. page number
             if (item.data().pageNumber != undefined){
-              //add num to list
+              //add that value to allPageNums
                 allPageNums.push(String(item.data().pageNumber))
             }
         })
 
-    // //subtract two from the amount of pages and divide by 2
-    // //this is the proper amount of times to call add page because add page adds 2 pages
-    // //-2 because by default, there are 2 pages already created
+    //this loop will add the proper amount of pages
+    //subtract the number of pages already existing from the number of pages exist only within firebase (by default, two pages are constructed)
+    //divide by two because pages are added in pairs
+    //call Add Pages x amount of times
     for (let i = 0; i < (allPageNums.length - pages.length)/2; i++) {
-      addEmptyPages()
+      addPages()
     }
 
-    //for each doc
+    //for each document in firebase
     phoogdocs.forEach((item) => {
+        //if the document has pageNumber attr.
       if (item.data().pageNumber != undefined) {
         
 
-        //get page by page number of document pageNumber = 1 pulls page.id => 1
+        //get page by page number of document (pageNumber = 1 pulls page.id => 1)
         var page = document.getElementById(item.data().pageNumber);
+        //set page classname to the saved format in firebase (ex. format: "page-1")
         page.className = item.data().format
 
         //clear page
         page.innerHTML = ""
-        var children = page.children;
-
+          
+        
+        //call constructForm# depending on what the pages current format is
         if(page.className == "page-1"){
           constructForm1(page)
         }else if(page.className == "page-2") {
@@ -1655,10 +1716,16 @@ export const loadProject =  async function(project){
         }else if(page.className == "page-6") {
           constructForm6(page)
         }
-        
-        
+
+          //create list of all child elements of page (will consist of cell elements)
+        var children = page.children;
+
+          //get content saved to firebase
+          //this is a list saved to firebase so var content is a list
         var content = item.data().content;
+          //loop through items in content
         for (let i = 0; i < content.length; i++) {
+            //set the innerHTML of the cell to item in content
           children[i].innerHTML = content[i];
         }
                 
@@ -1838,35 +1905,38 @@ export const scrollBottom = function() {
 
 
 
-//save document
-export const saveProject =  async function(project){
-    //add all pages
-    console.log("started process")
+//save document saves all pages information to firebase
+export const saveProject =  async function(){\
+    //get the name of project user is currently loaded into. 
+    //Set by the main menu
+    var project = sessionStorage.getItem('projectName'); 
     
-    //get all docs in the project
+    //get all documents in the project
     var phoogdocs = await getDocs(collection(db, project));
-    console.log("found docs\n")
-
-    //Get all page numbers from all docs
+    
+    //create an empty list
+    //all documents in firebase that have an attr. of pagenumber will have that value added to this list
     const allPageNums = []
-    phoogdocs.forEach((item) => {
-        if (item.data().pageNumber != undefined){
-            allPageNums.push(String(item.data().pageNumber))
-        }
-    })
-    console.log("Got page nums:")
-    console.log(allPageNums)
+        //for each document in firebase associated with "project"
+        phoogdocs.forEach((item) => {
+            //if the document has an attr. page number
+            if (item.data().pageNumber != undefined){
+              //add that value to allPageNums
+                allPageNums.push(String(item.data().pageNumber))
+            }
+        })
 
-    //get all pages
-
+    
+    //get a list of all elements whose class starts with "page-"
+    //all page class names will be formatted as: page-format# (ex. page-1)
     const allPages = document.querySelectorAll("[class^=page-]")
-    for (let i = 0; i < allPages.length; i++) {
-      console.log(allPages[i].id)
-    }
 
-
+    //for every page element in allPages
     for (let i = 0; i < allPages.length; i++) {
+        //if allPageNums (a list of page numbers found in firebase) does not have a page with the page number, add a document to firebase
+        //this adds all new pages that have been created to firebase
         if (!(allPageNums.includes(allPages[i].id))){
+            //add document with the correct pagenumber 
             await addDoc(collection(db, project),{
                 pageNumber: allPages[i].id
             });
@@ -1874,11 +1944,13 @@ export const saveProject =  async function(project){
     }
     
 
+    //get all documents in the project
+    //(this must be called again because pages may have been added that did not exist when "phoogdocs" was originally declared
     phoogdocs = await getDocs(collection(db, project));
     
-    //for each doc
+    //for each document in project
     phoogdocs.forEach((item) => {
-        //log id and page number (project name doc is undefined for page number)
+        //if the document has pageNumber attr.
         if(item.data().pageNumber != null) {
           //pull page element with the same page number as doc
           var page = document.getElementById(item.data().pageNumber);
