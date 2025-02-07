@@ -1601,6 +1601,10 @@ function constructForm6(page){
     document.getElementById('image-input3').click();
   }
 
+    button42.onclick = function(){
+    document.getElementById('image-input4').click();
+  }
+
   imginput.onchange = function(){
     var file = this.files[0]; // Get the selected file
     if (file) {
@@ -1648,6 +1652,26 @@ function constructForm6(page){
         reader.onload = function(event) {
             // Create a new div and img element to display the uploaded image
             var imageContainer = button32.parentNode;
+            // imageContainer.innerHTML = ''; // Clear any existing image
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = event.target.result; // Set the image source to the uploaded file
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img); // Append the image to the container
+        };
+        reader.readAsDataURL(file); // Read the file as a data URL
+    } else {
+        alert("Please select an image first.");
+    }
+  }
+
+    imginput4.onchange = function(){
+    var file = this.files[0]; // Get the selected file
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            // Create a new div and img element to display the uploaded image
+            var imageContainer = button2.parentNode;
             // imageContainer.innerHTML = ''; // Clear any existing image
             var img = document.createElement('img');
             img.id = "image";
