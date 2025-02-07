@@ -36,11 +36,15 @@ export const login = function (email, password){
   });
 }
 
+//logout function for logout button on homepage
 export const logout = function (){
+//signOut function from Firebase
   signOut(auth)
   .then(() => {
+//successful sign-out, redirect to login page
     window.location.href = "index.html"
   }).catch((error) => {
+    //error catch log messages
     const errorCode = error.code;
     const errorMessage = error.message;
   });
@@ -392,7 +396,11 @@ function constructForm1(page){
   }
 }
 
-
+//format for construct form remains mostly the same for each 
+//resetting the given page
+//making the required number of divs
+//making the new text/image buttons and making sure the functions link
+//append all the new stuff
 function constructForm2(page){
     //clear page
   page.innerHTML = ""
@@ -413,14 +421,17 @@ function constructForm2(page){
   const div4 = document.createElement("div");
   div4.className = "cell-2-4";
 
+//file picker 1, creates the input and then hides it
   const imginput = document.createElement("input");
   imginput.type = "file";
   imginput.style ="display: none;"
   imginput.id = "image-input";
-
+    
+//text button 1
   const button1 = document.createElement("button");
   button1.className = "text-button";
   button1.title = "Text";
+    //making the div the button is inside content editable
   var setFunction = function(){
     const textBox = button1.parentNode;
     textBox.setAttribute("contenteditable", "true");
@@ -430,6 +441,7 @@ function constructForm2(page){
   }
   button1.onclick = setFunction;
 
+    //img button 1
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
@@ -444,11 +456,13 @@ function constructForm2(page){
   span2.innerHTML = "image"
   span2.className = "material-symbols-outlined";
 
+//file picker 2
   const imginput2 = document.createElement("input");
   imginput2.type = "file";
   imginput2.style ="display: none;"
   imginput2.id = "image-input2";
 
+//text button 2
   const button21 = document.createElement("button");
   button21.className = "text-button";
   button21.title = "Text";
@@ -461,6 +475,7 @@ function constructForm2(page){
   }
   button21.onclick = setFunction;
 
+//image button 2
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
@@ -475,11 +490,13 @@ function constructForm2(page){
   span22.innerHTML = "image"
   span22.className = "material-symbols-outlined";
 
+//file picker 3
   const imginput3 = document.createElement("input");
   imginput3.type = "file";
   imginput3.style ="display: none;"
   imginput3.id = "image-input3";
 
+//text button 3
   const button31 = document.createElement("button");
   button31.className = "text-button";
   button31.title = "Text";
@@ -492,6 +509,7 @@ function constructForm2(page){
   }
   button31.onclick = setFunction;
 
+//img button 3
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
@@ -506,11 +524,13 @@ function constructForm2(page){
   span32.innerHTML = "image"
   span32.className = "material-symbols-outlined";
 
+//file picker 4
   const imginput4 = document.createElement("input");
   imginput4.type = "file";
   imginput4.style ="display: none;"
   imginput4.id = "image-input3";
 
+//text button 4
   const button41 = document.createElement("button");
   button41.className = "text-button";
   button41.title = "Text";
@@ -523,6 +543,7 @@ function constructForm2(page){
   }
   button41.onclick = setFunction;
 
+ //img button 4   
   const button42 = document.createElement("button");
   button42.className = "img-button";
   button42.id = "img-button";
@@ -537,7 +558,7 @@ function constructForm2(page){
   span42.innerHTML = "image"
   span42.className = "material-symbols-outlined";
 
-
+//APPEND
   button1.appendChild(span1);
   button2.appendChild(span2);
   div1.appendChild(imginput);
@@ -567,6 +588,7 @@ function constructForm2(page){
   page.appendChild(div3);
   page.appendChild(div4);
 
+//linking img button to the hidenn file pickers
   button2.onclick = function(){
     document.getElementById('image-input').click();
   }
@@ -579,6 +601,7 @@ function constructForm2(page){
     document.getElementById('image-input3').click();
   }
 
+//if file picker inputs are clicked, then open up the file dialogue and add the image
   imginput.onchange = function(){
     var file = this.files[0]; // Get the selected file
     if (file) {
@@ -660,11 +683,13 @@ function constructForm3(page){
   const div4 = document.createElement("div");
   div4.className = "cell-3-4";
 
+    //new image input for file picking
   const imginput = document.createElement("input");
   imginput.type = "file";
   imginput.style ="display: none;"
   imginput.id = "image-input";
 
+    //new text button
   const button1 = document.createElement("button");
   button1.className = "text-button";
   button1.title = "Text";
@@ -677,6 +702,7 @@ function constructForm3(page){
   }
   button1.onclick = setFunction;
 
+    //new img button
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
@@ -691,11 +717,13 @@ function constructForm3(page){
   span2.innerHTML = "image"
   span2.className = "material-symbols-outlined";
 
+    //new file picker 2
   const imginput2 = document.createElement("input");
   imginput2.type = "file";
   imginput2.style ="display: none;"
   imginput2.id = "image-input2";
 
+    //new text button 2
   const button21 = document.createElement("button");
   button21.className = "text-button";
   button21.title = "Text";
@@ -708,6 +736,7 @@ function constructForm3(page){
   }
   button21.onclick = setFunction;
 
+    //new img button 2
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
@@ -722,11 +751,13 @@ function constructForm3(page){
   span22.innerHTML = "image"
   span22.className = "material-symbols-outlined";
 
+    //new file picker 3
   const imginput3 = document.createElement("input");
   imginput3.type = "file";
   imginput3.style ="display: none;"
   imginput3.id = "image-input3";
 
+    //new text button 3
   const button31 = document.createElement("button");
   button31.className = "text-button";
   button31.title = "Text";
@@ -739,6 +770,7 @@ function constructForm3(page){
   }
   button31.onclick = setFunction;
 
+    //new img button 3
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
@@ -753,11 +785,13 @@ function constructForm3(page){
   span32.innerHTML = "image"
   span32.className = "material-symbols-outlined";
 
+    //new file picker 4
   const imginput4 = document.createElement("input");
   imginput4.type = "file";
   imginput4.style ="display: none;"
   imginput4.id = "image-input3";
 
+    //new text button 4
   const button41 = document.createElement("button");
   button41.className = "text-button";
   button41.title = "Text";
@@ -770,6 +804,7 @@ function constructForm3(page){
   }
   button41.onclick = setFunction;
 
+    //new img button 4
   const button42 = document.createElement("button");
   button42.className = "img-button";
   button42.id = "img-button";
@@ -784,7 +819,7 @@ function constructForm3(page){
   span42.innerHTML = "image"
   span42.className = "material-symbols-outlined";
 
-
+//append new spans/buttons/divs
   button1.appendChild(span1);
   button2.appendChild(span2);
   div1.appendChild(imginput);
@@ -1998,9 +2033,12 @@ export const saveProject =  async function(){\
 
 }
 
+//add text box (called when text button is clicked)
 export const addTextBox = function(page) {
-  const textBox = document.getElementById("text_and_img"+page);
+//set variable equal to the div for the corresponding text button
+  const textBox = document.getElementById("text_and_img"+page); //error?
 
+//making everything editable and pretty
   textBox.setAttribute("contenteditable", "true")
   textBox.setAttribute("placeholder","Add Text...")
   textBox.className = "text-box"; 
@@ -2008,15 +2046,20 @@ export const addTextBox = function(page) {
   textBox.innerHTML = "";
 }
 
+//function choose format to bring up the popup format selector
 export const chooseFormat = function(pageNumber){
+    //saving the requested page to change
   sessionStorage.setItem('pageNumber', pageNumber);
   var popup = document.getElementById("content");
+    //format picker popup shown
   popup.classList.add("show");
   var popup = document.getElementById("contentContainer");
   popup.classList.add("color");
 }
+//function to close the popup after the format is chosen
 export const closeFormatPopup = function(){
   var popup = document.getElementById("content");
+    //popup hidden
   popup.classList.remove("show");
   var popup = document.getElementById("contentContainer");
   popup.classList.remove("color");
