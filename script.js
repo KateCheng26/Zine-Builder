@@ -2038,3 +2038,11 @@ export const changeFormat = function(format){
     constructForm6(page)
   }
 }
+
+export const setProjectName = function(){
+  var projectName = document.getElementById("project-title");
+  console.log(projectName)
+  let project = sessionStorage.getItem("projectName");
+
+  projectName.innerHTML = project;
+}
