@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="format.css" media="screen">
      <script src="script.js"></script>
 </head>
-<body>
+<body onload="loadProject(); setProjectName();">
     <div class="top-bar">
-        <button onclick="loadProject();">load project</button>
+        <div class = "project-title" id="project-title" contenteditable="true">
         <div class = menu>
             <button id="home" class = "menubutton" onclick = "window.location.href = 'homepage.html'" title="Home">
                 <span class="material-symbols-outlined">
