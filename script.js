@@ -471,11 +471,13 @@ export const scrollBottom = function() {
   pages[pages.length - 2].scrollIntoView();
   }
 
-window.addEventListener('beforeunload',
+if (window.location.href === "editor.html"){
+  window.addEventListener('beforeunload',
   function (e) {
     e.preventDefault();
     e.returnValue = '';
-});
+  });
+}
 
 // all constructForm methods construct a format by clearing a page
 // constructForm1 constucts format 1 and so on for formats 1-6
