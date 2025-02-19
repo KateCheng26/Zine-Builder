@@ -245,7 +245,7 @@ this adds placeholder text to the text boxes
 #formatButtonImage {
     margin:1vw;
     width:12vw;
-    aspect-ratio: 5.5/8.5;;
+    aspect-ratio: 5.5/8.5;
 }
 
 #formatButtonImage:hover {
@@ -282,7 +282,6 @@ changes layout
     height: auto;
     padding-bottom: 1rem;
 }
-
 }
 
 #image{
@@ -323,12 +322,41 @@ changes layout
     background-color: #f1f1f1;
     margin-top: 10px;
     font-family: Arial, Helvetica, sans-serif;
+    font-weight:700;
     font-size: xx-large;
-	font-weight: 700;
 }
 
 .project-title:focus, .project-title:active{
     max-width: 100vw;
     overflow: hidden;
     text-overflow: clip;
+}
+
+@media print{
+    .tools, button, .top-bar, .contentContainer, a{
+        display:none;
+    }
+    
+    [class^="page-"]{
+        height:8.5in;
+        width:5.5in;
+        margin: 0px;
+        page-break-inside:avoid;
+        flex:50%;
+        aspect-ratio:5.5/8.5;
+    }
+    
+    .pagesContainer{
+        display: flex;
+        flex-direction:row;
+        width:100%;
+        height:100%;
+        page-break-after: always;
+        overflow:hidden;
+    }
+
+    @page{
+        size: landscape;
+        margin:0;
+    }
 }
