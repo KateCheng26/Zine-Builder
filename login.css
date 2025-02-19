@@ -18,8 +18,9 @@ button {
     background-color: #793140;
     color: white;
     padding: 14px 20px;
+    font-weight: 700;
     margin: 8px 0;
-    border: none;
+    border: 0.15vw solid rgb(69, 69, 69);
     cursor: pointer;
     width: 100%;
 }
