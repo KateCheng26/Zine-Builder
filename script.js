@@ -243,34 +243,45 @@ export const loadProject =  async function(){
       // Restore saved content
       var children = page.children;
       var content = item.data().content;
-      
+
       for (let i = 0; i < content.length; i++) {
-        children[i].innerHTML = content[i]; // Restore HTML content
+        children[i].innerHTML = content[i]; 
+
+        // If the content looks like plain text (no image), make it editable
+        if (!children[i].querySelector("img")) {
+          makeEditable(children[i]);
+        }
       }
-  
-      // Reapply event listeners for buttons inside the restored content
+
+      // Reapply button event listeners
       reapplyButtonListeners(page);
     }
   });
 }
 
+function makeEditable(element) {
+  element.setAttribute("contenteditable", "true");
+  element.setAttribute("placeholder", "Add Text...");
+  element.classList.add("text-box");
+}
+
+
 function reapplyButtonListeners(page) {
-  // Reattach click events to text buttons
+  // Reattach text button events
   page.querySelectorAll(".text-button").forEach(button => {
     button.onclick = function() {
       const textBox = button.parentNode;
-      textBox.setAttribute("contenteditable", "true");
-      textBox.setAttribute("placeholder", "Add Text...");
-      textBox.className = "text-box";
-      textBox.innerHTML = "";
+      makeEditable(textBox); // Ensure the text area is editable
+      textBox.innerHTML = ""; // Clear previous content
     };
   });
 
-  // Reattach click events to image buttons
+  // Reattach image button events
   page.querySelectorAll(".img-button").forEach((button, index) => {
-    const inputId = `image-input${index + 1}`;
+    const inputId = `image-input-${page.id}-${index}`;
     let imgInput = page.querySelector(`#${inputId}`);
 
+    // Create image input if it doesn't exist
     if (!imgInput) {
       imgInput = document.createElement("input");
       imgInput.type = "file";
@@ -279,19 +290,21 @@ function reapplyButtonListeners(page) {
       button.parentNode.appendChild(imgInput);
     }
 
+    // Handle image click event
     button.onclick = function() {
       imgInput.click();
     };
 
+    // Handle image selection and display
     imgInput.onchange = function() {
       var file = this.files[0];
       if (file) {
         var reader = new FileReader();
         reader.onload = function(event) {
           var imageContainer = button.parentNode;
+          imageContainer.innerHTML = ""; // Clear content
           var img = document.createElement("img");
           img.src = event.target.result;
-          imageContainer.innerHTML = "";
           imageContainer.appendChild(img);
         };
         reader.readAsDataURL(file);
