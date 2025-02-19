@@ -218,51 +218,90 @@ export const loadProject =  async function(){
 
   //for each document in firebase
   phoogdocs.forEach((item) => {
-      //if the document has pageNumber attr.
     if (item.data().pageNumber != undefined) {
-      
-
-      //get page by page number of document (pageNumber = 1 pulls page.id => 1)
       var page = document.getElementById(item.data().pageNumber);
-      //set page classname to the saved format in firebase (ex. format: "page-1")
-      page.className = item.data().format
-
-      //clear page
-      page.innerHTML = ""
-        
-      
-      //call constructForm# depending on what the pages current format is
-      if(page.className == "page-1"){
-        constructForm1(page)
-      }else if(page.className == "page-2") {
-        constructForm2(page)
-      }else if(page.className == "page-3") {
-        constructForm3(page)
-      }else if(page.className == "page-4") {
-        constructForm4(page)
-      }else if(page.className == "page-5") {
-        constructForm5(page)
-      }else if(page.className == "page-6") {
-        constructForm6(page)
+      page.className = item.data().format;
+  
+      // Clear the page and reconstruct its layout
+      page.innerHTML = "";
+  
+      // Call the correct constructFormX function
+      if (page.className == "page-1") {
+        constructForm1(page);
+      } else if (page.className == "page-2") {
+        constructForm2(page);
+      } else if (page.className == "page-3") {
+        constructForm3(page);
+      } else if (page.className == "page-4") {
+        constructForm4(page);
+      } else if (page.className == "page-5") {
+        constructForm5(page);
+      } else if (page.className == "page-6") {
+        constructForm6(page);
       }
-
-        //create list of all child elements of page (will consist of cell elements)
+  
+      // Restore saved content
       var children = page.children;
-
-        //get content saved to firebase
-        //this is a list saved to firebase so var content is a list
       var content = item.data().content;
-        //loop through items in content
+      
       for (let i = 0; i < content.length; i++) {
-          //set the innerHTML of the cell to item in content
-        children[i].innerHTML = content[i];
+        children[i].innerHTML = content[i]; // Restore HTML content
       }
-              
+  
+      // Reapply event listeners for buttons inside the restored content
+      reapplyButtonListeners(page);
     }
-  },
-);
-
+  });
 }
+
+function reapplyButtonListeners(page) {
+  // Reattach click events to text buttons
+  page.querySelectorAll(".text-button").forEach(button => {
+    button.onclick = function() {
+      const textBox = button.parentNode;
+      textBox.setAttribute("contenteditable", "true");
+      textBox.setAttribute("placeholder", "Add Text...");
+      textBox.className = "text-box";
+      textBox.innerHTML = "";
+    };
+  });
+
+  // Reattach click events to image buttons
+  page.querySelectorAll(".img-button").forEach((button, index) => {
+    const inputId = `image-input${index + 1}`;
+    let imgInput = page.querySelector(`#${inputId}`);
+
+    if (!imgInput) {
+      imgInput = document.createElement("input");
+      imgInput.type = "file";
+      imgInput.style.display = "none";
+      imgInput.id = inputId;
+      button.parentNode.appendChild(imgInput);
+    }
+
+    button.onclick = function() {
+      imgInput.click();
+    };
+
+    imgInput.onchange = function() {
+      var file = this.files[0];
+      if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+          var imageContainer = button.parentNode;
+          var img = document.createElement("img");
+          img.src = event.target.result;
+          imageContainer.innerHTML = "";
+          imageContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert("Please select an image first.");
+      }
+    };
+  });
+}
+
 
 export const addPages = function(){
    
@@ -2043,8 +2082,64 @@ export const changeFormat = function(format){
 
 export const setProjectName = function(){
   var projectName = document.getElementById("project-title");
-  console.log(projectName)
   let project = sessionStorage.getItem("projectName");
-
+  // console.log(project);
   projectName.innerHTML = project;
 }
+
+// export const printProject = () => {
+//   const printFrame = document.createElement('iframe');
+//   printFrame.style.display = 'none';
+//   printFrame.src = 'editor.html';
+//   document.body.appendChild(printFrame);
+
+//   printFrame.onload = () => {
+//     printFrame.contentWindow.focus();
+//     printFrame.contentWindow.print();
+//   };
+// };
+
+export const printProject = () => {
+  const printFrame = document.createElement('iframe');
+  printFrame.style.display = 'none';
+  document.body.appendChild(printFrame);
+
+  const frameDoc = printFrame.contentDocument || printFrame.contentWindow.document;
+
+  // Copy the editor content (assuming it has an ID of "CONTAINER")
+  const editorContent = document.getElementById('container').cloneNode(true);
+
+  const styles = Array.from(document.styleSheets)
+    .map(sheet => {
+      try {
+        return Array.from(sheet.cssRules).map(rule => rule.cssText).join("\n");
+      } catch (e) {
+        return ""; // Some stylesheets may be restricted due to CORS
+      }
+    })
+    .join("\n");
+  
+   // Write the copied content into the iframe
+  frameDoc.open();
+  frameDoc.write(`
+    <html>
+      <head>
+        <title>Print</title>
+        <style>${styles}</style>
+      </head>
+      <body></body>
+    </html>
+`);
+  frameDoc.close();
+
+  setTimeout(() => {
+    frameDoc.body.appendChild(editorContent);
+
+    // Ensure content is rendered before printing
+    setTimeout(() => {
+      printFrame.contentWindow.focus();
+      printFrame.contentWindow.print();
+      document.body.removeChild(printFrame); // Clean up
+    }, 500);
+  }, 100);
+};
