@@ -248,7 +248,7 @@ export const loadProject =  async function(){
         children[i].innerHTML = content[i]; 
 
         // If the content looks like plain text (no image), make it editable
-        if (!children[i].querySelector("img")) {
+        if (!children[i].querySelector("img")&&!children[i].querySelector("button")) {
           makeEditable(children[i]);
         }
       }
@@ -2091,6 +2091,8 @@ export const changeFormat = function(format){
   }else if(page.className == "page-6") {
     constructForm6(page)
   }
+  // saveProject();
+  // loadProject();
 }
 
 export const setProjectName = function(){
