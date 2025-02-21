@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zine Editor</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="editor.css" media="screen">
     <link rel="stylesheet" href="format.css" media="screen">
      <script src="script.js"></script>
 </head>
-<body>
+<body onload="loadProject(); setProjectName();">
     <div class="top-bar">
         <div class = "project-title" id="project-title" contenteditable="true"></div>
         <div class = menu>
@@ -24,7 +23,7 @@
                     save
                 </span>
             </button>
-            <button id="print" class = "menubutton" onclick ="printProject();" title="Print Project">
+            <button id="print" class = "menubutton" onclick="location.href='print.html'">
                 <span class="material-symbols-outlined">
                     print
                 </span>
@@ -86,7 +85,7 @@
     </div>
 
     <script type="module">
-        import {saveProject, loadProject, addPages, deleteProject, chooseFormat, scrollBottom, closeFormatPopup, changeFormat, setProjectName, printProject} from './script.js';
+        import {saveProject, loadProject, addPages, deleteProject, chooseFormat, scrollBottom, closeFormatPopup, changeFormat, setProjectName} from './script.js';
         window.saveProject = saveProject;
         window.loadProject = loadProject;
         window.addPages = addPages;
@@ -96,19 +95,6 @@
         window.closeFormatPopup  = closeFormatPopup;
         window.changeFormat = changeFormat;
         window.setProjectName = setProjectName;
-        window.printProject = printProject;
     </script>
 
-    <script>
-        window.addEventListener('beforeunload',
-        function (e) {
-            e.preventDefault();
-            e.returnValue = true;
-        });
-
-        window.onload = function(){
-            loadProject();
-            setProjectName();
-        }
-    </script>
 </body>
