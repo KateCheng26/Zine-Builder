@@ -304,6 +304,7 @@ function reapplyButtonListeners(page) {
           var imageContainer = button.parentNode;
           imageContainer.innerHTML = ""; // Clear content
           var img = document.createElement("img");
+          img.id = "image";
           img.src = event.target.result;
           imageContainer.appendChild(img);
         };
@@ -563,14 +564,6 @@ function constructForm1(page){
   const button1 = document.createElement("button");
   button1.className = "text-button";
   button1.title = "Text";
-  var setFunction = function(){
-    const textBox = button1.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button1.onclick = setFunction;
 
   //img button 1
   const button2 = document.createElement("button");
@@ -597,14 +590,6 @@ function constructForm1(page){
   const button21 = document.createElement("button");
   button21.className = "text-button";
   button21.title = "Text";
-  var setFunction = function(){
-    const textBox = button21.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button21.onclick = setFunction;
 
   //image button 2
   const button22 = document.createElement("button");
@@ -631,14 +616,7 @@ function constructForm1(page){
   const button31 = document.createElement("button");
   button31.className = "text-button";
   button31.title = "Text";
-  var setFunction = function(){
-    const textBox = button31.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button31.onclick = setFunction;
+
 
   //img button 3
   const button32 = document.createElement("button");
@@ -678,79 +656,10 @@ function constructForm1(page){
   page.appendChild(div2);
   page.appendChild(div3);
 
-  //linking img button to the hidden file pickers
-  button2.onclick = function(){
-    document.getElementById('image-input').click();
-  }
 
-  button22.onclick = function(){
-    document.getElementById('image-input2').click();
-  }
+  reapplyButtonListeners(page);
 
-  button32.onclick = function(){
-    document.getElementById('image-input3').click();
-  }
 
-  //if file picker inputs are clicked, then open up the file dialogue and add the image
-  imginput.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button2.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-
-  imginput2.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button22.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-
-  imginput3.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button32.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
 }
 
 function constructForm2(page){
@@ -775,14 +684,6 @@ function constructForm2(page){
   const button1 = document.createElement("button");
   button1.className = "text-button";
   button1.title = "Text";
-  var setFunction = function(){
-    const textBox = button1.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button1.onclick = setFunction;
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
@@ -806,14 +707,6 @@ function constructForm2(page){
   const button21 = document.createElement("button");
   button21.className = "text-button";
   button21.title = "Text";
-  var setFunction = function(){
-    const textBox = button21.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button21.onclick = setFunction;
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
@@ -837,14 +730,6 @@ function constructForm2(page){
   const button31 = document.createElement("button");
   button31.className = "text-button";
   button31.title = "Text";
-  var setFunction = function(){
-    const textBox = button31.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button31.onclick = setFunction;
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
@@ -868,14 +753,6 @@ function constructForm2(page){
   const button41 = document.createElement("button");
   button41.className = "text-button";
   button41.title = "Text";
-  var setFunction = function(){
-    const textBox = button41.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button41.onclick = setFunction;
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
@@ -921,100 +798,8 @@ function constructForm2(page){
   page.appendChild(div3);
   page.appendChild(div4);
 
-  button2.onclick = function(){
-    document.getElementById('image-input').click();
-  }
+  reapplyButtonListeners(page);
 
-  button22.onclick = function(){
-    document.getElementById('image-input2').click();
-  }
-
-  button32.onclick = function(){
-    document.getElementById('image-input3').click();
-  }
-
-  button42.onclick = function(){
-    document.getElementById('image-input4').click();
-  }
-
-  imginput.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button2.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-
-  imginput2.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button22.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-
-  imginput3.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button32.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-  imginput4.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button42.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
 }
 
 function constructForm3(page){
@@ -1039,14 +824,6 @@ function constructForm3(page){
   const button1 = document.createElement("button");
   button1.className = "text-button";
   button1.title = "Text";
-  var setFunction = function(){
-    const textBox = button1.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button1.onclick = setFunction;
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
@@ -1070,14 +847,6 @@ function constructForm3(page){
   const button21 = document.createElement("button");
   button21.className = "text-button";
   button21.title = "Text";
-  var setFunction = function(){
-    const textBox = button21.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button21.onclick = setFunction;
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
@@ -1101,14 +870,6 @@ function constructForm3(page){
   const button31 = document.createElement("button");
   button31.className = "text-button";
   button31.title = "Text";
-  var setFunction = function(){
-    const textBox = button31.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button31.onclick = setFunction;
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
@@ -1132,14 +893,6 @@ function constructForm3(page){
   const button41 = document.createElement("button");
   button41.className = "text-button";
   button41.title = "Text";
-  var setFunction = function(){
-    const textBox = button41.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button41.onclick = setFunction;
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
@@ -1185,100 +938,8 @@ function constructForm3(page){
   page.appendChild(div3);
   page.appendChild(div4);
 
-  button2.onclick = function(){
-    document.getElementById('image-input').click();
-  }
+  reapplyButtonListeners(page);
 
-  button22.onclick = function(){
-    document.getElementById('image-input2').click();
-  }
-
-  button32.onclick = function(){
-    document.getElementById('image-input3').click();
-  }
-
-  button42.onclick = function(){
-    document.getElementById('image-input4').click();
-  }
-
-  imginput.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button2.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-
-  imginput2.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button22.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-
-  imginput3.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button32.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-  imginput4.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button42.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
 }
 
 function constructForm4(page){
@@ -1303,14 +964,6 @@ function constructForm4(page){
   const button1 = document.createElement("button");
   button1.className = "text-button";
   button1.title = "Text";
-  var setFunction = function(){
-    const textBox = button1.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button1.onclick = setFunction;
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
@@ -1334,14 +987,6 @@ function constructForm4(page){
   const button21 = document.createElement("button");
   button21.className = "text-button";
   button21.title = "Text";
-  var setFunction = function(){
-    const textBox = button21.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button21.onclick = setFunction;
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
@@ -1365,14 +1010,6 @@ function constructForm4(page){
   const button31 = document.createElement("button");
   button31.className = "text-button";
   button31.title = "Text";
-  var setFunction = function(){
-    const textBox = button31.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button31.onclick = setFunction;
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
@@ -1396,14 +1033,6 @@ function constructForm4(page){
   const button41 = document.createElement("button");
   button41.className = "text-button";
   button41.title = "Text";
-  var setFunction = function(){
-    const textBox = button41.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button41.onclick = setFunction;
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
@@ -1449,99 +1078,8 @@ function constructForm4(page){
   page.appendChild(div3);
   page.appendChild(div4);
 
-  button2.onclick = function(){
-    document.getElementById('image-input').click();
-  }
+  reapplyButtonListeners(page);
 
-  button22.onclick = function(){
-    document.getElementById('image-input2').click();
-  }
-
-  button32.onclick = function(){
-    document.getElementById('image-input3').click();
-  }
-  button42.onclick = function(){
-    document.getElementById('image-input4').click();
-  }
-
-  imginput.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button2.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-
-  imginput2.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button22.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-
-  imginput3.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button32.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-  imginput4.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button42.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
 }
 
 function constructForm5(page){
@@ -1566,14 +1104,6 @@ function constructForm5(page){
   const button1 = document.createElement("button");
   button1.className = "text-button";
   button1.title = "Text";
-  var setFunction = function(){
-    const textBox = button1.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button1.onclick = setFunction;
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
@@ -1597,14 +1127,6 @@ function constructForm5(page){
   const button21 = document.createElement("button");
   button21.className = "text-button";
   button21.title = "Text";
-  var setFunction = function(){
-    const textBox = button21.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button21.onclick = setFunction;
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
@@ -1628,14 +1150,6 @@ function constructForm5(page){
   const button31 = document.createElement("button");
   button31.className = "text-button";
   button31.title = "Text";
-  var setFunction = function(){
-    const textBox = button31.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button31.onclick = setFunction;
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
@@ -1659,14 +1173,6 @@ function constructForm5(page){
   const button41 = document.createElement("button");
   button41.className = "text-button";
   button41.title = "Text";
-  var setFunction = function(){
-    const textBox = button41.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button41.onclick = setFunction;
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
@@ -1712,99 +1218,7 @@ function constructForm5(page){
   page.appendChild(div3);
   page.appendChild(div4);
 
-  button2.onclick = function(){
-    document.getElementById('image-input').click();
-  }
-
-  button22.onclick = function(){
-    document.getElementById('image-input2').click();
-  }
-
-  button32.onclick = function(){
-    document.getElementById('image-input3').click();
-  }
-  button42.onclick = function(){
-    document.getElementById('image-input4').click();
-  }
-
-  imginput.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button2.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-
-  imginput2.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button22.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-
-  imginput3.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button32.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-  imginput4.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button42.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
+  reapplyButtonListeners(page);
 
 }
 
@@ -1830,14 +1244,6 @@ function constructForm6(page){
   const button1 = document.createElement("button");
   button1.className = "text-button";
   button1.title = "Text";
-  var setFunction = function(){
-    const textBox = button1.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button1.onclick = setFunction;
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
@@ -1861,14 +1267,6 @@ function constructForm6(page){
   const button21 = document.createElement("button");
   button21.className = "text-button";
   button21.title = "Text";
-  var setFunction = function(){
-    const textBox = button21.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button21.onclick = setFunction;
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
@@ -1892,14 +1290,6 @@ function constructForm6(page){
   const button31 = document.createElement("button");
   button31.className = "text-button";
   button31.title = "Text";
-  var setFunction = function(){
-    const textBox = button31.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button31.onclick = setFunction;
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
@@ -1923,14 +1313,6 @@ function constructForm6(page){
   const button41 = document.createElement("button");
   button41.className = "text-button";
   button41.title = "Text";
-  var setFunction = function(){
-    const textBox = button41.parentNode;
-    textBox.setAttribute("contenteditable", "true");
-    textBox.setAttribute("placeholder","Add Text...");
-    textBox.classList.add("text-box");
-    textBox.innerHTML = "";
-  }
-  button41.onclick = setFunction;
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
@@ -1976,101 +1358,8 @@ function constructForm6(page){
   page.appendChild(div3);
   page.appendChild(div4);
 
-  button2.onclick = function(){
-    document.getElementById('image-input').click();
-  }
+  reapplyButtonListeners(page);
 
-  button22.onclick = function(){
-    document.getElementById('image-input2').click();
-  }
-
-  button32.onclick = function(){
-    document.getElementById('image-input3').click();
-  }
-
-  button42.onclick = function(){
-    document.getElementById('image-input4').click();
-  }
-
-  imginput.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button2.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-
-  imginput2.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button22.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-
-  imginput3.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button32.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
-
-  imginput4.onchange = function(){
-    var file = this.files[0]; // Get the selected file
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            // Create a new div and img element to display the uploaded image
-            var imageContainer = button42.parentNode;
-            // imageContainer.innerHTML = ''; // Clear any existing image
-            var img = document.createElement('img');
-            img.id = "image";
-            img.src = event.target.result; // Set the image source to the uploaded file
-            imageContainer.innerHTML = "";
-            imageContainer.appendChild(img); // Append the image to the container
-        };
-        reader.readAsDataURL(file); // Read the file as a data URL
-    } else {
-        alert("Please select an image first.");
-    }
-  }
 }
 
 
@@ -2297,4 +1586,3 @@ export const loadProjectPrint =  async function(){
 );
 
 }
-
