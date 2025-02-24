@@ -567,7 +567,7 @@ function constructForm1(page){
     const textBox = button1.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button1.onclick = setFunction;
@@ -601,7 +601,7 @@ function constructForm1(page){
     const textBox = button21.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button21.onclick = setFunction;
@@ -635,7 +635,7 @@ function constructForm1(page){
     const textBox = button31.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button31.onclick = setFunction;
@@ -779,7 +779,7 @@ function constructForm2(page){
     const textBox = button1.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button1.onclick = setFunction;
@@ -810,7 +810,7 @@ function constructForm2(page){
     const textBox = button21.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button21.onclick = setFunction;
@@ -841,7 +841,7 @@ function constructForm2(page){
     const textBox = button31.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button31.onclick = setFunction;
@@ -872,7 +872,7 @@ function constructForm2(page){
     const textBox = button41.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button41.onclick = setFunction;
@@ -1043,7 +1043,7 @@ function constructForm3(page){
     const textBox = button1.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button1.onclick = setFunction;
@@ -1074,7 +1074,7 @@ function constructForm3(page){
     const textBox = button21.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button21.onclick = setFunction;
@@ -1105,7 +1105,7 @@ function constructForm3(page){
     const textBox = button31.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button31.onclick = setFunction;
@@ -1136,7 +1136,7 @@ function constructForm3(page){
     const textBox = button41.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button41.onclick = setFunction;
@@ -1307,7 +1307,7 @@ function constructForm4(page){
     const textBox = button1.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button1.onclick = setFunction;
@@ -1338,7 +1338,7 @@ function constructForm4(page){
     const textBox = button21.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button21.onclick = setFunction;
@@ -1369,7 +1369,7 @@ function constructForm4(page){
     const textBox = button31.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button31.onclick = setFunction;
@@ -1400,7 +1400,7 @@ function constructForm4(page){
     const textBox = button41.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button41.onclick = setFunction;
@@ -1570,7 +1570,7 @@ function constructForm5(page){
     const textBox = button1.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button1.onclick = setFunction;
@@ -1601,7 +1601,7 @@ function constructForm5(page){
     const textBox = button21.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button21.onclick = setFunction;
@@ -1632,7 +1632,7 @@ function constructForm5(page){
     const textBox = button31.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button31.onclick = setFunction;
@@ -1663,7 +1663,7 @@ function constructForm5(page){
     const textBox = button41.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button41.onclick = setFunction;
@@ -1834,7 +1834,7 @@ function constructForm6(page){
     const textBox = button1.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button1.onclick = setFunction;
@@ -1865,7 +1865,7 @@ function constructForm6(page){
     const textBox = button21.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button21.onclick = setFunction;
@@ -1896,7 +1896,7 @@ function constructForm6(page){
     const textBox = button31.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button31.onclick = setFunction;
@@ -1927,7 +1927,7 @@ function constructForm6(page){
     const textBox = button41.parentNode;
     textBox.setAttribute("contenteditable", "true");
     textBox.setAttribute("placeholder","Add Text...");
-    textBox.className = "text-box"; 
+    textBox.classList.add("text-box");
     textBox.innerHTML = "";
   }
   button41.onclick = setFunction;
