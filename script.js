@@ -149,6 +149,7 @@ export const checkLogin = async function(){
 }
 
 export const deleteProject = async function(){
+    alert("Are you sure you want to delete this project?");
   const projName = sessionStorage.getItem('projectName');
   const docsInCollection = await getDocs(collection(db, projName));
   for (const docSnapshot of docsInCollection.docs) {
