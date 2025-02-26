@@ -149,7 +149,7 @@ export const checkLogin = async function(){
 }
 
 export const deleteProject = async function(){
-    alert("Are you sure you want to delete this project?");
+  alert("Are you sure you want to delete this project?");
   const projName = sessionStorage.getItem('projectName');
   const docsInCollection = await getDocs(collection(db, projName));
   for (const docSnapshot of docsInCollection.docs) {
@@ -195,26 +195,26 @@ export const loadProject =  async function(){
 
   //get a list of all elements whose class starts with "page-"
   //all page class names will be formatted as: page-format# (ex. page-1)
-  const pages = document.querySelectorAll("[class^=page-]")
+  const pages = document.querySelectorAll("[class^=page-]");
 
   //create an empty list
   //all documents in firebase that have an attr. of pagenumber will have that value added to this list
-  const allPageNums = []
+  const allPageNums = [];
       //for each document in firebase associated with "project"
-      phoogdocs.forEach((item) => {
-          //if the document has an attr. page number
-          if (item.data().pageNumber != undefined){
-            //add that value to allPageNums
-              allPageNums.push(String(item.data().pageNumber))
-          }
-      })
+  phoogdocs.forEach((item) => {
+      //if the document has an attr. page number
+      if (item.data().pageNumber != undefined){
+        //add that value to allPageNums
+          allPageNums.push(String(item.data().pageNumber));
+      }
+  })
 
   //this loop will add the proper amount of pages
   //subtract the number of pages already existing from the number of pages exist only within firebase (by default, two pages are constructed)
   //divide by two because pages are added in pairs
   //call Add Pages x amount of times
   for (let i = 0; i < (allPageNums.length - pages.length)/2; i++) {
-    addPages()
+    addPages();
   }
 
   //for each document in firebase
@@ -304,10 +304,66 @@ function reapplyButtonListeners(page) {
         reader.onload = function(event) {
           var imageContainer = button.parentNode;
           imageContainer.innerHTML = ""; // Clear content
+          imageContainer.style.display = "flex";
+          imageContainer.style.justifyContent = "center";
+          imageContainer.style.alignItems = "center";
           var img = document.createElement("img");
           img.id = "image";
           img.src = event.target.result;
+
+          var imgDelete = document.createElement("button");
+          var imgDeleteSpan = document.createElement("span");
+          imgDeleteSpan.innerHTML = "delete";
+          imgDeleteSpan.className = "material-symbols-outlined";
+          imgDelete.id = "imageDelete";
+          imgDelete.style.visibility = "hidden";
+          imgDelete.onclick = function(){
+            imageContainer.innerHTML = "";
+            imageContainer.style.display = "block";
+
+            const imginput = document.createElement("input");
+            imginput.type = "file";
+            imginput.style ="display: none;"
+            imginput.id = "image-input";
+
+            const button1 = document.createElement("button");
+            button1.className = "text-button";
+            button1.title = "Text";
+
+            const button2 = document.createElement("button");
+            button2.className = "img-button";
+            button2.id = "img-button";
+            button2.title = "Image";
+
+            const span1 = document.createElement("span");
+            span1.innerHTML = "text_fields"
+            span1.className = "material-symbols-outlined";
+
+            const span2 = document.createElement("span");
+            span2.innerHTML = "image"
+            span2.className = "material-symbols-outlined";
+
+          button1.appendChild(span1);
+          button2.appendChild(span2);
+          imageContainer.appendChild(button1);
+          imageContainer.appendChild(button2);
+          imageContainer.appendChild(imginput);
+
+          reapplyButtonListeners(page);
+          };
+
+          imgDelete.appendChild(imgDeleteSpan);
           imageContainer.appendChild(img);
+          imageContainer.appendChild(imgDelete);
+          
+          imageContainer.addEventListener("mouseover", function () {
+            imgDelete.style.visibility = "visible";
+          });
+
+          imageContainer.addEventListener("mouseout", function () {
+            imgDelete.style.visibility = "hidden";
+          });
+
         };
         reader.readAsDataURL(file);
       } else {
@@ -316,6 +372,7 @@ function reapplyButtonListeners(page) {
     };
   });
 }
+
 
 
 export const addPages = function(){
@@ -479,7 +536,7 @@ export const saveProject =  async function(){
           if (children[i].innerHTML != undefined) {
             //add content to content list
             content.push(children[i].innerHTML);
-          } else {
+          }else {
             //add empty string to content list if content is undefined
             content.push("");
           }
@@ -525,13 +582,11 @@ export const scrollBottom = function() {
   pages[pages.length - 2].scrollIntoView();
   }
 
-if (window.location.href === "editor.html"){
-  window.addEventListener('beforeunload',
-  function (e) {
-    e.preventDefault();
-    e.returnValue = '';
-  });
-}
+  if (window.location.pathname.includes("editor.html")) {
+    window.addEventListener('beforeunload', function (e) {
+      e.returnValue = 'Are you sure you want to leave?';
+    });
+  }
 
 // all constructForm methods construct a format by clearing a page
 // constructForm1 constucts format 1 and so on for formats 1-6
@@ -1381,8 +1436,6 @@ export const changeFormat = function(format){
   }else if(page.className == "page-6") {
     constructForm6(page)
   }
-  // saveProject();
-  // loadProject();
 }
 
 export const setProjectName = function(){
