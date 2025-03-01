@@ -388,7 +388,46 @@ function reapplyButtonListeners(page) {
   });
 }
 
+document.addEventListener('keydown', ({key}) => {
+  const activeDiv = document.activeElement.closest('[contenteditable]');
+  var page = activeDiv.parentNode;
+  if (!activeDiv) return;
+  if ((key === "Backspace" || key === "Delete")&&(activeDiv.textContent.trim().length == 0)) {
+    activeDiv.innerHTML = "";
+    activeDiv.setAttribute("contenteditable", "false");
+    activeDiv.classList.remove("text-box");
+      const imginput = document.createElement("input");
+      imginput.type = "file";
+      imginput.style ="display: none;"
+      imginput.id = "image-input";
 
+      const button1 = document.createElement("button");
+      button1.className = "text-button";
+      button1.title = "Text";
+
+      const button2 = document.createElement("button");
+      button2.className = "img-button";
+      button2.id = "img-button";
+      button2.title = "Image";
+
+      const span1 = document.createElement("span");
+      span1.innerHTML = "text_fields"
+      span1.className = "material-symbols-outlined";
+
+      const span2 = document.createElement("span");
+      span2.innerHTML = "image"
+      span2.className = "material-symbols-outlined";
+
+    button1.appendChild(span1);
+    button2.appendChild(span2);
+    activeDiv.appendChild(button1);
+    activeDiv.appendChild(button2);
+    activeDiv.appendChild(imginput);
+
+    reapplyButtonListeners(page);  
+    
+  }
+});
 
 export const addPages = function(){
    
