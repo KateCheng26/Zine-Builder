@@ -1,6 +1,6 @@
 // Import Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-import { getFirestore, collection, addDoc, setDoc, getDocs, doc, updateDoc, deleteDoc, query, where, getCountFromServer} from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, setDoc, getDoc, getDocs, doc, updateDoc, deleteDoc, query, where, getCountFromServer} from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -88,10 +88,10 @@ export const newProject = async function(){
       });
       //adds 2 page documents
       await addDoc(collection(db, collectionName),{
-          pageNumber: 1
+          pageNumber: "1"
       });
       await addDoc(collection(db, collectionName),{
-          pageNumber: 2
+          pageNumber: "2"
       });
       //adds the name of the collection to a seperate collection of names in order to loop through it later
       await addDoc(collection(db, "collection-names"),{
@@ -240,6 +240,7 @@ export const loadProject =  async function(){
       } else if (page.className == "page-6") {
         constructForm6(page);
       }
+
   
       // Restore saved content
       var children = page.children;
@@ -256,7 +257,21 @@ export const loadProject =  async function(){
 
       // Reapply button event listeners
       reapplyButtonListeners(page);
+      //Make page numbers
+      makePageNums(page);
     }
+  });
+  
+}
+
+async function makePageNums(page){
+  const r = query(collection(db, sessionStorage.getItem("projectName")), where("pageNumber", "==", page.id));
+  const querySnapshot = await getDocs(r);
+  querySnapshot.forEach((doc) => {
+    const pageNum = document.createElement("p");
+    pageNum.className = "pageNum";
+    pageNum.innerHTML = doc.data().pageNumber;
+    page.appendChild(pageNum);
   });
 }
 
@@ -536,9 +551,8 @@ export const saveProject =  async function(){
           if (children[i].innerHTML != undefined) {
             //add content to content list
             content.push(children[i].innerHTML);
-          }else {
-            //add empty string to content list if content is undefined
-            content.push("");
+          }  else {
+           content.push("");
           }
         }
 
