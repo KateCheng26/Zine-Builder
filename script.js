@@ -343,12 +343,12 @@ function reapplyButtonListeners(page) {
 
             const button1 = document.createElement("button");
             button1.className = "text-button";
-            button1.title = "Text";
+            // button1.title = "Text";
 
             const button2 = document.createElement("button");
             button2.className = "img-button";
             button2.id = "img-button";
-            button2.title = "Image";
+            // button2.title = "Image";
 
             const span1 = document.createElement("span");
             span1.innerHTML = "text_fields"
@@ -403,12 +403,12 @@ document.addEventListener('keydown', ({key}) => {
 
       const button1 = document.createElement("button");
       button1.className = "text-button";
-      button1.title = "Text";
+      // button1.title = "Text";
 
       const button2 = document.createElement("button");
       button2.className = "img-button";
       button2.id = "img-button";
-      button2.title = "Image";
+      // button2.title = "Image";
 
       const span1 = document.createElement("span");
       span1.innerHTML = "text_fields"
@@ -672,13 +672,13 @@ function constructForm1(page){
   //text button 1
   const button1 = document.createElement("button");
   button1.className = "text-button";
-  button1.title = "Text";
+  // button1.title = "Text";
 
   //img button 1
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
-  button2.title = "Image";
+  // button2.title = "Image";
 
   // span
   const span1 = document.createElement("span");
@@ -698,13 +698,13 @@ function constructForm1(page){
   //text button 2
   const button21 = document.createElement("button");
   button21.className = "text-button";
-  button21.title = "Text";
+  // button21.title = "Text";
 
   //image button 2
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
-  button22.title = "Image";
+  // button22.title = "Image";
 
   // span
   const span21 = document.createElement("span");
@@ -724,14 +724,14 @@ function constructForm1(page){
   //text button 3
   const button31 = document.createElement("button");
   button31.className = "text-button";
-  button31.title = "Text";
+  // button31.title = "Text";
 
 
   //img button 3
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
-  button32.title = "Image";
+  // button32.title = "Image";
 
   // span
   const span31 = document.createElement("span");
@@ -792,12 +792,12 @@ function constructForm2(page){
 
   const button1 = document.createElement("button");
   button1.className = "text-button";
-  button1.title = "Text";
+  // button1.title = "Text";
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
-  button2.title = "Image";
+  // button2.title = "Image";
 
   // span
   const span1 = document.createElement("span");
@@ -815,12 +815,12 @@ function constructForm2(page){
 
   const button21 = document.createElement("button");
   button21.className = "text-button";
-  button21.title = "Text";
+  // button21.title = "Text";
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
-  button22.title = "Image";
+  // button22.title = "Image";
 
   // span
   const span21 = document.createElement("span");
@@ -838,12 +838,12 @@ function constructForm2(page){
 
   const button31 = document.createElement("button");
   button31.className = "text-button";
-  button31.title = "Text";
+  // button31.title = "Text";
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
-  button32.title = "Image";
+  // button32.title = "Image";
 
   // span
   const span31 = document.createElement("span");
@@ -861,12 +861,12 @@ function constructForm2(page){
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
-  button41.title = "Text";
+  // button41.title = "Text";
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
   button42.id = "img-button";
-  button42.title = "Image";
+  // button42.title = "Image";
 
   // span
   const span41 = document.createElement("span");
@@ -932,12 +932,12 @@ function constructForm3(page){
 
   const button1 = document.createElement("button");
   button1.className = "text-button";
-  button1.title = "Text";
+  // button1.title = "Text";
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
-  button2.title = "Image";
+  // button2.title = "Image";
 
   // span
   const span1 = document.createElement("span");
@@ -955,12 +955,12 @@ function constructForm3(page){
 
   const button21 = document.createElement("button");
   button21.className = "text-button";
-  button21.title = "Text";
+  // button21.title = "Text";
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
-  button22.title = "Image";
+  // button22.title = "Image";
 
   // span
   const span21 = document.createElement("span");
@@ -978,12 +978,12 @@ function constructForm3(page){
 
   const button31 = document.createElement("button");
   button31.className = "text-button";
-  button31.title = "Text";
+  // button31.title = "Text";
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
-  button32.title = "Image";
+  // button32.title = "Image";
 
   // span
   const span31 = document.createElement("span");
@@ -1001,12 +1001,12 @@ function constructForm3(page){
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
-  button41.title = "Text";
+  // button41.title = "Text";
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
   button42.id = "img-button";
-  button42.title = "Image";
+  // button42.title = "Image";
 
   // span
   const span41 = document.createElement("span");
@@ -1072,12 +1072,12 @@ function constructForm4(page){
 
   const button1 = document.createElement("button");
   button1.className = "text-button";
-  button1.title = "Text";
+  // button1.title = "Text";
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
-  button2.title = "Image";
+  // button2.title = "Image";
 
   // span
   const span1 = document.createElement("span");
@@ -1095,12 +1095,12 @@ function constructForm4(page){
 
   const button21 = document.createElement("button");
   button21.className = "text-button";
-  button21.title = "Text";
+  // button21.title = "Text";
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
-  button22.title = "Image";
+  // button22.title = "Image";
 
   // span
   const span21 = document.createElement("span");
@@ -1118,12 +1118,12 @@ function constructForm4(page){
 
   const button31 = document.createElement("button");
   button31.className = "text-button";
-  button31.title = "Text";
+  // button31.title = "Text";
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
-  button32.title = "Image";
+  // button32.title = "Image";
 
   // span
   const span31 = document.createElement("span");
@@ -1141,12 +1141,12 @@ function constructForm4(page){
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
-  button41.title = "Text";
+  // button41.title = "Text";
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
   button42.id = "img-button";
-  button42.title = "Image";
+  // button42.title = "Image";
 
   // span
   const span41 = document.createElement("span");
@@ -1212,12 +1212,12 @@ function constructForm5(page){
 
   const button1 = document.createElement("button");
   button1.className = "text-button";
-  button1.title = "Text";
+  // button1.title = "Text";
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
-  button2.title = "Image";
+  // button2.title = "Image";
 
   // span
   const span1 = document.createElement("span");
@@ -1235,12 +1235,12 @@ function constructForm5(page){
 
   const button21 = document.createElement("button");
   button21.className = "text-button";
-  button21.title = "Text";
+  // button21.title = "Text";
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
-  button22.title = "Image";
+  // button22.title = "Image";
 
   // span
   const span21 = document.createElement("span");
@@ -1258,12 +1258,12 @@ function constructForm5(page){
 
   const button31 = document.createElement("button");
   button31.className = "text-button";
-  button31.title = "Text";
+  // button31.title = "Text";
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
-  button32.title = "Image";
+  // button32.title = "Image";
 
   // span
   const span31 = document.createElement("span");
@@ -1281,12 +1281,12 @@ function constructForm5(page){
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
-  button41.title = "Text";
+  // button41.title = "Text";
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
   button42.id = "img-button";
-  button42.title = "Image";
+  // button42.title = "Image";
 
   // span
   const span41 = document.createElement("span");
@@ -1352,12 +1352,12 @@ function constructForm6(page){
 
   const button1 = document.createElement("button");
   button1.className = "text-button";
-  button1.title = "Text";
+  // button1.title = "Text";
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
-  button2.title = "Image";
+  // button2.title = "Image";
 
   // span
   const span1 = document.createElement("span");
@@ -1375,12 +1375,12 @@ function constructForm6(page){
 
   const button21 = document.createElement("button");
   button21.className = "text-button";
-  button21.title = "Text";
+  // button21.title = "Text";
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
-  button22.title = "Image";
+  // button22.title = "Image";
 
   // span
   const span21 = document.createElement("span");
@@ -1398,12 +1398,12 @@ function constructForm6(page){
 
   const button31 = document.createElement("button");
   button31.className = "text-button";
-  button31.title = "Text";
+  // button31.title = "Text";
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
-  button32.title = "Image";
+  // button32.title = "Image";
 
   // span
   const span31 = document.createElement("span");
@@ -1421,12 +1421,12 @@ function constructForm6(page){
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
-  button41.title = "Text";
+  // button41.title = "Text";
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
   button42.id = "img-button";
-  button42.title = "Image";
+  // button42.title = "Image";
 
   // span
   const span41 = document.createElement("span");
