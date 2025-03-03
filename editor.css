@@ -379,7 +379,7 @@ changes layout
         height: 100%;
     }
     
-    .text-button, .image-button {
+    .text-button, .image-button, span {
         display:none;
     }
 
