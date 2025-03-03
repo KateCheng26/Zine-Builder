@@ -383,9 +383,9 @@ changes layout
         display:none;
     }
 
-    .text-button[title], .image-button[title]{
+/*     .text-button[title], .image-button[title]{
 	    display:none;
-    }
+    } */
 
     /* set of two pages */
     .pages-container {
