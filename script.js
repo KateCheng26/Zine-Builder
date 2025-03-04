@@ -185,94 +185,97 @@ async function deleteFromCollectionNames(docId){
 }
 
 
-export const loadProject =  async function(){
-  //get the name of project user is currently loaded into. 
-  //Set by the main menu
-  var project = sessionStorage.getItem('projectName'); 
-  
-  //get all documents from project in firebase wiht "projectName"
+export const loadProject = async function () {
+  var project = sessionStorage.getItem("projectName");
   const phoogdocs = await getDocs(collection(db, project));
-
-  //get a list of all elements whose class starts with "page-"
-  //all page class names will be formatted as: page-format# (ex. page-1)
   const pages = document.querySelectorAll("[class^=page-]");
 
-  //create an empty list
-  //all documents in firebase that have an attr. of pagenumber will have that value added to this list
   const allPageNums = [];
-      //for each document in firebase associated with "project"
   phoogdocs.forEach((item) => {
-      //if the document has an attr. page number
-      if (item.data().pageNumber != undefined){
-        //add that value to allPageNums
-          allPageNums.push(String(item.data().pageNumber));
-      }
-  })
-
-  //this loop will add the proper amount of pages
-  //subtract the number of pages already existing from the number of pages exist only within firebase (by default, two pages are constructed)
-  //divide by two because pages are added in pairs
-  //call Add Pages x amount of times
-  for (let i = 0; i < (allPageNums.length - pages.length)/2; i++) {
+    if (item.data().pageNumber !== undefined) {
+      allPageNums.push(String(item.data().pageNumber));
+    }
+  });
+  // Ensure enough pages exist
+  let pagesToAdd = Math.max(0, Math.ceil((allPageNums.length - pages.length) / 2));
+  for (let i = 0; i < pagesToAdd; i++) {
     addPages();
   }
 
-  //for each document in firebase
+  // Assign content and ensure page numbers
   phoogdocs.forEach((item) => {
-    if (item.data().pageNumber != undefined) {
-      var page = document.getElementById(item.data().pageNumber);
-      page.className = item.data().format;
-  
-      // Clear the page and reconstruct its layout
-      page.innerHTML = "";
-  
-      // Call the correct constructFormX function
-      if (page.className == "page-1") {
-        constructForm1(page);
-      } else if (page.className == "page-2") {
-        constructForm2(page);
-      } else if (page.className == "page-3") {
-        constructForm3(page);
-      } else if (page.className == "page-4") {
-        constructForm4(page);
-      } else if (page.className == "page-5") {
-        constructForm5(page);
-      } else if (page.className == "page-6") {
-        constructForm6(page);
+    if (item.data().pageNumber !== undefined) {
+      var page = document.getElementById(String(item.data().pageNumber));
+      if (!page) {
+        console.warn(`Page ${item.data().pageNumber} not found.`);
+        return;
+      }
+      if(!item.data().format){
+        page.className = "page-0"
+      }
+      else{
+        page.className = item.data().format;
+        page.innerHTML = "";
+
+        switch (page.className) {
+          case "page-1":
+            constructForm1(page);
+            break;
+          case "page-2":
+            constructForm2(page);
+            break;
+          case "page-3":
+            constructForm3(page);
+            break;
+          case "page-4":
+            constructForm4(page);
+            break;
+          case "page-5":
+            constructForm5(page);
+            break;
+          case "page-6":
+            constructForm6(page);
+            break;
+        }
       }
 
-  
-      // Restore saved content
-      var children = page.children;
       var content = item.data().content;
-
+      var children = page.children;
       for (let i = 0; i < content.length; i++) {
-        children[i].innerHTML = content[i]; 
+        children[i].innerHTML = content[i];
 
-        // If the content looks like plain text (no image), make it editable
-        if (!children[i].querySelector("img")&&!children[i].querySelector("button")) {
+        if (!children[i].querySelector("img") && !children[i].querySelector("button")) {
           makeEditable(children[i]);
         }
       }
 
-      // Reapply button event listeners
       reapplyButtonListeners(page);
-      //Make page numbers
       makePageNums(page);
     }
   });
-  
-}
 
-async function makePageNums(page){
-  const r = query(collection(db, sessionStorage.getItem("projectName")), where("pageNumber", "==", page.id));
-  const querySnapshot = await getDocs(r);
-  querySnapshot.forEach((doc) => {
-    const pageNum = document.createElement("p");
-    pageNum.className = "pageNum";
-    pageNum.innerHTML = doc.data().pageNumber;
-    page.appendChild(pageNum);
+  //make sure every page has a page number
+  document.querySelectorAll("[class^=page-]").forEach((page) => {
+    makePageNums(page);
   });
+};
+
+
+async function makePageNums(page) {
+  const r = query(
+    collection(db, sessionStorage.getItem("projectName")),
+    where("pageNumber", "==", String(page.id)) // Ensure comparison works
+  );
+  const querySnapshot = await getDocs(r);
+  // Prevent duplicate page numbers
+  if (!page.querySelector(".pageNum")) {
+    querySnapshot.forEach((doc) => {
+      const pageNum = document.createElement("p");
+      pageNum.className = "pageNum";
+      pageNum.innerHTML = doc.data().pageNumber;
+      page.appendChild(pageNum);
+    });
+  }
 }
 
 function makeEditable(element) {
@@ -285,7 +288,7 @@ function makeEditable(element) {
 function reapplyButtonListeners(page) {
   // Reattach text button events
   page.querySelectorAll(".text-button").forEach(button => {
-    button.onclick = function() {
+    button.onclick = function () {
       const textBox = button.parentNode;
       makeEditable(textBox); // Ensure the text area is editable
       textBox.innerHTML = ""; // Clear previous content
@@ -307,21 +310,22 @@ function reapplyButtonListeners(page) {
     }
 
     // Handle image click event
-    button.onclick = function() {
+    button.onclick = function () {
       imgInput.click();
     };
 
     // Handle image selection and display
-    imgInput.onchange = function() {
+    imgInput.onchange = function () {
       var file = this.files[0];
       if (file) {
         var reader = new FileReader();
-        reader.onload = function(event) {
+        reader.onload = function (event) {
           var imageContainer = button.parentNode;
           imageContainer.innerHTML = ""; // Clear content
           imageContainer.style.display = "flex";
           imageContainer.style.justifyContent = "center";
           imageContainer.style.alignItems = "center";
+
           var img = document.createElement("img");
           img.id = "image";
           img.src = event.target.result;
@@ -332,45 +336,15 @@ function reapplyButtonListeners(page) {
           imgDeleteSpan.className = "material-symbols-outlined";
           imgDelete.id = "imageDelete";
           imgDelete.style.visibility = "hidden";
-          imgDelete.onclick = function(){
-            imageContainer.innerHTML = "";
-            imageContainer.style.display = "block";
 
-            const imginput = document.createElement("input");
-            imginput.type = "file";
-            imginput.style ="display: none;"
-            imginput.id = "image-input";
-
-            const button1 = document.createElement("button");
-            button1.className = "text-button";
-            // button1.title = "Text";
-
-            const button2 = document.createElement("button");
-            button2.className = "img-button";
-            button2.id = "img-button";
-            // button2.title = "Image";
-
-            const span1 = document.createElement("span");
-            span1.innerHTML = "text_fields"
-            span1.className = "material-symbols-outlined";
-
-            const span2 = document.createElement("span");
-            span2.innerHTML = "image"
-            span2.className = "material-symbols-outlined";
-
-          button1.appendChild(span1);
-          button2.appendChild(span2);
-          imageContainer.appendChild(button1);
-          imageContainer.appendChild(button2);
-          imageContainer.appendChild(imginput);
-
-          reapplyButtonListeners(page);
+          imgDelete.onclick = function () {
+            handleImageDelete(imageContainer, page);
           };
 
           imgDelete.appendChild(imgDeleteSpan);
           imageContainer.appendChild(img);
           imageContainer.appendChild(imgDelete);
-          
+
           imageContainer.addEventListener("mouseover", function () {
             imgDelete.style.visibility = "visible";
           });
@@ -378,7 +352,6 @@ function reapplyButtonListeners(page) {
           imageContainer.addEventListener("mouseout", function () {
             imgDelete.style.visibility = "hidden";
           });
-
         };
         reader.readAsDataURL(file);
       } else {
@@ -387,6 +360,42 @@ function reapplyButtonListeners(page) {
     };
   });
 }
+
+function handleImageDelete(imageContainer, page) {
+  imageContainer.innerHTML = "";
+  imageContainer.style.display = "block";
+
+  const imginput = document.createElement("input");
+  imginput.type = "file";
+  imginput.style.display = "none";
+  imginput.id = "image-input";
+
+  const button1 = document.createElement("button");
+  button1.className = "text-button";
+  button1.title = "Text";
+
+  const button2 = document.createElement("button");
+  button2.className = "img-button";
+  button2.id = "img-button";
+  button2.title = "Image";
+
+  const span1 = document.createElement("span");
+  span1.innerHTML = "text_fields";
+  span1.className = "material-symbols-outlined";
+
+  const span2 = document.createElement("span");
+  span2.innerHTML = "image";
+  span2.className = "material-symbols-outlined";
+
+  button1.appendChild(span1);
+  button2.appendChild(span2);
+  imageContainer.appendChild(button1);
+  imageContainer.appendChild(button2);
+  imageContainer.appendChild(imginput);
+
+  reapplyButtonListeners(page);
+}
+
 
 document.addEventListener('keydown', ({key}) => {
   const activeDiv = document.activeElement.closest('[contenteditable]');
@@ -403,12 +412,12 @@ document.addEventListener('keydown', ({key}) => {
 
       const button1 = document.createElement("button");
       button1.className = "text-button";
-      // button1.title = "Text";
+      button1.title = "Text";
 
       const button2 = document.createElement("button");
       button2.className = "img-button";
       button2.id = "img-button";
-      // button2.title = "Image";
+      button2.title = "Image";
 
       const span1 = document.createElement("span");
       span1.innerHTML = "text_fields"
@@ -429,89 +438,85 @@ document.addEventListener('keydown', ({key}) => {
   }
 });
 
-export const addPages = function(){
-   
-  //create elements
 
-  //page-container
+export const addPages = function () {
+  // Create elements
   const pagesContainer = document.createElement("div");
   pagesContainer.className = "pages-container";
 
-  //editors
   const editor1 = document.createElement("div");
   editor1.className = "editor";
-
   const editor2 = document.createElement("div");
   editor2.className = "editor";
 
-  //pages
-
-    //amount of pages
-  const pages = document.querySelectorAll("[class^=page-]")
+  // Get the current number of pages to set correct IDs
+  const pages = document.querySelectorAll("[class^=page-]");
+  const nextPageNum = pages.length + 1;
 
   const page1 = document.createElement("div");
   page1.className = "page-0";
-  page1.id = pages.length + 1;
+  page1.id = String(pages.length + 1);
 
   const page2 = document.createElement("div");
   page2.className = "page-0";
-  page2.id = pages.length + 2;
+  page2.id = String(pages.length + 2);
 
-  // tools
-
+  // Tools
   const tools1 = document.createElement("div");
   tools1.className = "tools";
-
   const tools2 = document.createElement("div");
   tools2.className = "tools";
 
-  //butons
+  // Buttons
   const button1 = document.createElement("button");
   button1.className = "format-button";
   button1.title = "Formats";
   button1.onclick = () => {
-    chooseFormat(pages.length+1);
+    chooseFormat(nextPageNum);
   };
 
   const button2 = document.createElement("button");
   button2.className = "format-button";
   button2.title = "Formats";
   button2.onclick = () => {
-    chooseFormat(pages.length+2);
+    chooseFormat(nextPageNum + 1);
   };
 
   const span1 = document.createElement("span");
-  span1.innerHTML = "dashboard"
+  span1.innerHTML = "dashboard";
   span1.className = "material-symbols-outlined";
 
   const span2 = document.createElement("span");
-  span2.innerHTML = "dashboard"
+  span2.innerHTML = "dashboard";
   span2.className = "material-symbols-outlined";
-  //concat
-      //spans to buttons
+
+  // Assemble elements
   button1.appendChild(span1);
   button2.appendChild(span2);
 
-      //buttons to tools
   tools1.appendChild(button1);
   tools2.appendChild(button2);
 
-      //pages and tools to editor
   editor1.appendChild(page1);
   editor1.appendChild(tools1);
 
   editor2.appendChild(page2);
   editor2.appendChild(tools2);
 
-      //editors to pages-container
+  console.log("Created Page 1:", page1, "Class:", page1.className);
+  console.log("Created Page 2:", page2, "Class:", page2.className);
+  console.log("Total pages:", document.querySelectorAll("[class^=page-]").length);
+
+
   pagesContainer.appendChild(editor1);
   pagesContainer.appendChild(editor2);
 
-      //pages-container to container
   document.getElementById("container").appendChild(pagesContainer);
 
-
-}
+  // Call makePageNums immediately after adding the pages
+  makePageNums(page1);
+  makePageNums(page2);
+};
 
 //save document
 export const saveProject =  async function(){
@@ -672,13 +677,13 @@ function constructForm1(page){
   //text button 1
   const button1 = document.createElement("button");
   button1.className = "text-button";
-  // button1.title = "Text";
+  button1.title = "Text";
 
   //img button 1
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
-  // button2.title = "Image";
+  button2.title = "Image";
 
   // span
   const span1 = document.createElement("span");
@@ -698,13 +703,13 @@ function constructForm1(page){
   //text button 2
   const button21 = document.createElement("button");
   button21.className = "text-button";
-  // button21.title = "Text";
+  button21.title = "Text";
 
   //image button 2
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
-  // button22.title = "Image";
+  button22.title = "Image";
 
   // span
   const span21 = document.createElement("span");
@@ -724,14 +729,14 @@ function constructForm1(page){
   //text button 3
   const button31 = document.createElement("button");
   button31.className = "text-button";
-  // button31.title = "Text";
+  button31.title = "Text";
 
 
   //img button 3
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
-  // button32.title = "Image";
+  button32.title = "Image";
 
   // span
   const span31 = document.createElement("span");
@@ -792,12 +797,12 @@ function constructForm2(page){
 
   const button1 = document.createElement("button");
   button1.className = "text-button";
-  // button1.title = "Text";
+  button1.title = "Text";
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
-  // button2.title = "Image";
+  button2.title = "Image";
 
   // span
   const span1 = document.createElement("span");
@@ -815,12 +820,12 @@ function constructForm2(page){
 
   const button21 = document.createElement("button");
   button21.className = "text-button";
-  // button21.title = "Text";
+  button21.title = "Text";
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
-  // button22.title = "Image";
+  button22.title = "Image";
 
   // span
   const span21 = document.createElement("span");
@@ -838,12 +843,12 @@ function constructForm2(page){
 
   const button31 = document.createElement("button");
   button31.className = "text-button";
-  // button31.title = "Text";
+  button31.title = "Text";
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
-  // button32.title = "Image";
+  button32.title = "Image";
 
   // span
   const span31 = document.createElement("span");
@@ -861,12 +866,12 @@ function constructForm2(page){
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
-  // button41.title = "Text";
+  button41.title = "Text";
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
   button42.id = "img-button";
-  // button42.title = "Image";
+  button42.title = "Image";
 
   // span
   const span41 = document.createElement("span");
@@ -932,12 +937,12 @@ function constructForm3(page){
 
   const button1 = document.createElement("button");
   button1.className = "text-button";
-  // button1.title = "Text";
+  button1.title = "Text";
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
-  // button2.title = "Image";
+  button2.title = "Image";
 
   // span
   const span1 = document.createElement("span");
@@ -955,12 +960,12 @@ function constructForm3(page){
 
   const button21 = document.createElement("button");
   button21.className = "text-button";
-  // button21.title = "Text";
+  button21.title = "Text";
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
-  // button22.title = "Image";
+  button22.title = "Image";
 
   // span
   const span21 = document.createElement("span");
@@ -978,12 +983,12 @@ function constructForm3(page){
 
   const button31 = document.createElement("button");
   button31.className = "text-button";
-  // button31.title = "Text";
+  button31.title = "Text";
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
-  // button32.title = "Image";
+  button32.title = "Image";
 
   // span
   const span31 = document.createElement("span");
@@ -1001,12 +1006,12 @@ function constructForm3(page){
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
-  // button41.title = "Text";
+  button41.title = "Text";
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
   button42.id = "img-button";
-  // button42.title = "Image";
+  button42.title = "Image";
 
   // span
   const span41 = document.createElement("span");
@@ -1072,12 +1077,12 @@ function constructForm4(page){
 
   const button1 = document.createElement("button");
   button1.className = "text-button";
-  // button1.title = "Text";
+  button1.title = "Text";
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
-  // button2.title = "Image";
+  button2.title = "Image";
 
   // span
   const span1 = document.createElement("span");
@@ -1095,12 +1100,12 @@ function constructForm4(page){
 
   const button21 = document.createElement("button");
   button21.className = "text-button";
-  // button21.title = "Text";
+  button21.title = "Text";
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
-  // button22.title = "Image";
+  button22.title = "Image";
 
   // span
   const span21 = document.createElement("span");
@@ -1118,12 +1123,12 @@ function constructForm4(page){
 
   const button31 = document.createElement("button");
   button31.className = "text-button";
-  // button31.title = "Text";
+  button31.title = "Text";
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
-  // button32.title = "Image";
+  button32.title = "Image";
 
   // span
   const span31 = document.createElement("span");
@@ -1141,12 +1146,12 @@ function constructForm4(page){
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
-  // button41.title = "Text";
+  button41.title = "Text";
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
   button42.id = "img-button";
-  // button42.title = "Image";
+  button42.title = "Image";
 
   // span
   const span41 = document.createElement("span");
@@ -1212,12 +1217,12 @@ function constructForm5(page){
 
   const button1 = document.createElement("button");
   button1.className = "text-button";
-  // button1.title = "Text";
+  button1.title = "Text";
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
-  // button2.title = "Image";
+  button2.title = "Image";
 
   // span
   const span1 = document.createElement("span");
@@ -1235,12 +1240,12 @@ function constructForm5(page){
 
   const button21 = document.createElement("button");
   button21.className = "text-button";
-  // button21.title = "Text";
+  button21.title = "Text";
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
-  // button22.title = "Image";
+  button22.title = "Image";
 
   // span
   const span21 = document.createElement("span");
@@ -1258,12 +1263,12 @@ function constructForm5(page){
 
   const button31 = document.createElement("button");
   button31.className = "text-button";
-  // button31.title = "Text";
+  button31.title = "Text";
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
-  // button32.title = "Image";
+  button32.title = "Image";
 
   // span
   const span31 = document.createElement("span");
@@ -1281,12 +1286,12 @@ function constructForm5(page){
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
-  // button41.title = "Text";
+  button41.title = "Text";
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
   button42.id = "img-button";
-  // button42.title = "Image";
+  button42.title = "Image";
 
   // span
   const span41 = document.createElement("span");
@@ -1352,12 +1357,12 @@ function constructForm6(page){
 
   const button1 = document.createElement("button");
   button1.className = "text-button";
-  // button1.title = "Text";
+  button1.title = "Text";
 
   const button2 = document.createElement("button");
   button2.className = "img-button";
   button2.id = "img-button";
-  // button2.title = "Image";
+  button2.title = "Image";
 
   // span
   const span1 = document.createElement("span");
@@ -1375,12 +1380,12 @@ function constructForm6(page){
 
   const button21 = document.createElement("button");
   button21.className = "text-button";
-  // button21.title = "Text";
+  button21.title = "Text";
 
   const button22 = document.createElement("button");
   button22.className = "img-button";
   button22.id = "img-button";
-  // button22.title = "Image";
+  button22.title = "Image";
 
   // span
   const span21 = document.createElement("span");
@@ -1398,12 +1403,12 @@ function constructForm6(page){
 
   const button31 = document.createElement("button");
   button31.className = "text-button";
-  // button31.title = "Text";
+  button31.title = "Text";
 
   const button32 = document.createElement("button");
   button32.className = "img-button";
   button32.id = "img-button";
-  // button32.title = "Image";
+  button32.title = "Image";
 
   // span
   const span31 = document.createElement("span");
@@ -1421,12 +1426,12 @@ function constructForm6(page){
 
   const button41 = document.createElement("button");
   button41.className = "text-button";
-  // button41.title = "Text";
+  button41.title = "Text";
 
   const button42 = document.createElement("button");
   button42.className = "img-button";
   button42.id = "img-button";
-  // button42.title = "Image";
+  button42.title = "Image";
 
   // span
   const span41 = document.createElement("span");
@@ -1497,18 +1502,6 @@ export const setProjectName = function(){
   // console.log(project);
   projectName.innerHTML = project;
 }
-
-// export const printProject = () => {
-//   const printFrame = document.createElement('iframe');
-//   printFrame.style.display = 'none';
-//   printFrame.src = 'editor.html';
-//   document.body.appendChild(printFrame);
-
-//   printFrame.onload = () => {
-//     printFrame.contentWindow.focus();
-//     printFrame.contentWindow.print();
-//   };
-// };
 
 export const printProject = () => {
   const printFrame = document.createElement('iframe');
@@ -1687,7 +1680,8 @@ export const loadProjectPrint =  async function(){
           //set the innerHTML of the cell to item in content
         children[i].innerHTML = content[i];
       }
-              
+       
+      makePageNums(page);
     }
   },
 );
