@@ -214,8 +214,9 @@ export const loadProject =  async function(){
   //subtract the number of pages already existing from the number of pages exist only within firebase (by default, two pages are constructed)
   //divide by two because pages are added in pairs
   //call Add Pages x amount of times
-  for (let i = 0; i < (allPageNums.length - pages.length)/2; i++) {
-    addPages()
+  let pagesToAdd = Math.max(0, Math.ceil((allPageNums.length - pages.length) / 2));
+  for (let i = 0; i < pagesToAdd; i++) {
+    addPages();
   }
 
   //for each document in firebase
@@ -234,19 +235,26 @@ export const loadProject =  async function(){
         
       
       //call constructForm# depending on what the pages current format is
-      if(page.className == "page-1"){
-        constructForm1(page)
-      }else if(page.className == "page-2") {
-        constructForm2(page)
-      }else if(page.className == "page-3") {
-        constructForm3(page)
-      }else if(page.className == "page-4") {
-        constructForm4(page)
-      }else if(page.className == "page-5") {
-        constructForm5(page)
-      }else if(page.className == "page-6") {
-        constructForm6(page)
-      }
+      switch (page.className) {
+          case "page-1":
+            constructForm1(page);
+            break;
+          case "page-2":
+            constructForm2(page);
+            break;
+          case "page-3":
+            constructForm3(page);
+            break;
+          case "page-4":
+            constructForm4(page);
+            break;
+          case "page-5":
+            constructForm5(page);
+            break;
+          case "page-6":
+            constructForm6(page);
+            break;
+        }
   
 
         //create list of all child elements of page (will consist of cell elements)
@@ -264,11 +272,10 @@ export const loadProject =  async function(){
           makeEditable(children[i]);
         }
       }
-              
+       reapplyButtonListeners(page);
+      makePageNums(page);       
     }
-  },
-);
-
+  });
 }
 
   //make sure every page has a page number
