@@ -10,6 +10,17 @@
      <script src="script.js"></script>
 </head>
 <body onload="loadProjectPrint();">
+    <style>
+        .img-button, .text-button {
+            display: none;
+        }
+        [class^="cell-"] {
+            background-color: white;
+        }
+        [class^="text-box"] {
+            background-color: white;
+        }
+    </style>
     <div class="top-bar">
         <div class = menu>
             <button id="home" class = "menubutton" onclick = "window.location.href = 'homepage.html'" title="Home">
