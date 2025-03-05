@@ -185,74 +185,91 @@ async function deleteFromCollectionNames(docId){
 }
 
 
-export const loadProject = async function () {
-  var project = sessionStorage.getItem("projectName");
+
+export const loadProject =  async function(){
+  //get the name of project user is currently loaded into. 
+  //Set by the main menu
+  var project = sessionStorage.getItem('projectName'); 
+  
+  //get all documents from project in firebase wiht "projectName"
   const phoogdocs = await getDocs(collection(db, project));
+
+  //get a list of all elements whose class starts with "page-"
+  //all page class names will be formatted as: page-format# (ex. page-1)
   const pages = document.querySelectorAll("[class^=page-]");
 
+  //create an empty list
+  //all documents in firebase that have an attr. of pagenumber will have that value added to this list
   const allPageNums = [];
-  phoogdocs.forEach((item) => {
-    if (item.data().pageNumber !== undefined) {
-      allPageNums.push(String(item.data().pageNumber));
-    }
-  });
-  // Ensure enough pages exist
-  let pagesToAdd = Math.max(0, Math.ceil((allPageNums.length - pages.length) / 2));
-  for (let i = 0; i < pagesToAdd; i++) {
-    addPages();
+      //for each document in firebase associated with "project"
+      phoogdocs.forEach((item) => {
+          //if the document has an attr. page number
+          if (item.data().pageNumber != undefined){
+            //add that value to allPageNums
+              allPageNums.push(String(item.data().pageNumber));
+          }
+      })
+
+  //this loop will add the proper amount of pages
+  //subtract the number of pages already existing from the number of pages exist only within firebase (by default, two pages are constructed)
+  //divide by two because pages are added in pairs
+  //call Add Pages x amount of times
+  for (let i = 0; i < (allPageNums.length - pages.length)/2; i++) {
+    addPages()
   }
 
-  // Assign content and ensure page numbers
+  //for each document in firebase
   phoogdocs.forEach((item) => {
-    if (item.data().pageNumber !== undefined) {
-      var page = document.getElementById(String(item.data().pageNumber));
-      if (!page) {
-        console.warn(`Page ${item.data().pageNumber} not found.`);
-        return;
-      }
-      if(!item.data().format){
-        page.className = "page-0"
-      }
-      else{
-        page.className = item.data().format;
-        page.innerHTML = "";
+      //if the document has pageNumber attr.
+    if (item.data().pageNumber != undefined) {
+      
 
-        switch (page.className) {
-          case "page-1":
-            constructForm1(page);
-            break;
-          case "page-2":
-            constructForm2(page);
-            break;
-          case "page-3":
-            constructForm3(page);
-            break;
-          case "page-4":
-            constructForm4(page);
-            break;
-          case "page-5":
-            constructForm5(page);
-            break;
-          case "page-6":
-            constructForm6(page);
-            break;
-        }
-      }
+      //get page by page number of document (pageNumber = 1 pulls page.id => 1)
+      var page = document.getElementById(item.data().pageNumber);
+      //set page classname to the saved format in firebase (ex. format: "page-1")
+      page.className = item.data().format
 
-      var content = item.data().content;
+      // //clear page
+      // page.innerHTML = ""
+        
+      
+      //call constructForm# depending on what the pages current format is
+      if(page.className == "page-1"){
+        constructForm1(page)
+      }else if(page.className == "page-2") {
+        constructForm2(page)
+      }else if(page.className == "page-3") {
+        constructForm3(page)
+      }else if(page.className == "page-4") {
+        constructForm4(page)
+      }else if(page.className == "page-5") {
+        constructForm5(page)
+      }else if(page.className == "page-6") {
+        constructForm6(page)
+      }
+  
+
+        //create list of all child elements of page (will consist of cell elements)
       var children = page.children;
+
+        //get content saved to firebase
+        //this is a list saved to firebase so var content is a list
+      var content = item.data().content;
+        //loop through items in content
       for (let i = 0; i < content.length; i++) {
+          //set the innerHTML of the cell to item in content
         children[i].innerHTML = content[i];
 
-        if (!children[i].querySelector("img") && !children[i].querySelector("button")) {
+        if (!children[i].querySelector("img")&&!children[i].querySelector("button")) {
           makeEditable(children[i]);
         }
       }
-
-      reapplyButtonListeners(page);
-      makePageNums(page);
+              
     }
-  });
+  },
+);
+
+}
 
   //make sure every page has a page number
   document.querySelectorAll("[class^=page-]").forEach((page) => {
@@ -439,6 +456,85 @@ document.addEventListener('keydown', ({key}) => {
 });
 
 
+export const deletePageSection = async function(pages){
+  var containers = document.querySelectorAll("[class^=pages-container]")
+  var project = sessionStorage.getItem('projectName');
+
+  var allPageNums = []
+
+  if(containers.length > 1) {
+
+    var pageSection = document.getElementById(pages);
+
+    var page1 = (parseInt(pages)*2)-1;
+    var page2 = parseInt(pages)*2;
+
+    allPageNums.push(page1,page2)
+    console.log(allPageNums)
+
+    pageSection.remove()
+
+        
+    for (let i = 0; i < allPageNums.length; i++) {
+      console.log("deleting " + allPageNums[i])
+      var r = db.collection(project).where('pageNumber', '==', String(allPageNums[i])).get()
+
+      console.log(r)      
+      querySnapshot.forEach((item) => {
+        console.log()
+        deleteDoc(doc(db, project, item.id));
+      });
+      // for (const docSnapshot of docsInCollection.docs) {
+        console.log("page deleted")
+      }
+    
+    
+
+    //fix section numbers
+    containers = document.querySelectorAll("[class^=pages-container]")
+    for(let i = 0; i < containers.length; i++){
+      containers[i].id = i + 1 + "container";
+    }
+    
+    //fix page numbers
+    var page = document.querySelectorAll("[class^=page-]")
+    for(let i = 0; i < page.length; i++){
+      page[i].id = i + 1;
+    }
+
+    var phoogdocs = await getDocs(collection(db, project));
+    allPageNums = []
+    //for each document in firebase associated with "project"
+    phoogdocs.forEach((item) => {
+        //if the document has an attr. page number
+        if (item.data().pageNumber != undefined){
+          //add that value to allPageNums
+            allPageNums.push(String(item.data().pageNumber))
+        }
+    })
+
+    if(item.data().pageNumber != null) {
+      var page = document.getElementById(item.data().pageNumber);
+    allPageNums.sort();
+    for(let i = 0; i < allPageNums.length; i++){
+      var updateItem = doc(db, project, allPageNums[i]);
+
+      var new_num = i + 1;
+
+      updateDoc(updateItem, {
+        pageNumber: new_num
+      });
+
+    }
+
+
+
+    console.log("completed")
+  }
+  }
+}
+
+
 export const addPages = function () {
   // Create elements
   const pagesContainer = document.createElement("div");
@@ -519,6 +615,8 @@ export const addPages = function () {
 };
 
 //save document
+
+//save document
 export const saveProject =  async function(){
   //get the name of project user is currently loaded into. 
   //Set by the main menu
@@ -544,6 +642,12 @@ export const saveProject =  async function(){
   //all page class names will be formatted as: page-format# (ex. page-1)
   const allPages = document.querySelectorAll("[class^=page-]")
 
+  var allPagesIDS = [];
+  for(let i = 0; i < allPages.length; i++) {
+    allPagesIDS.push(allPages[i].id)
+  }
+
+  //add pages
   //for every page element in allPages
   for (let i = 0; i < allPages.length; i++) {
       //if allPageNums (a list of page numbers found in firebase) does not have a page with the page number, add a document to firebase
@@ -555,7 +659,10 @@ export const saveProject =  async function(){
           });
       }
   }
-  
+
+  //remove pages from firebase that no longer exist
+
+
 
   //get all documents in the project
   //(this must be called again because pages may have been added that did not exist when "phoogdocs" was originally declared
@@ -581,7 +688,7 @@ export const saveProject =  async function(){
         });
 
         // console.log(format_name)
-        //make list of all child elements of page ^^^^
+        //x list of all child elements of page ^^^^
         var children = page.children;
 
 
@@ -595,8 +702,9 @@ export const saveProject =  async function(){
           if (children[i].innerHTML != undefined) {
             //add content to content list
             content.push(children[i].innerHTML);
-          }  else {
-           content.push("");
+          } else {
+            //add empty string to content list if content is undefined
+            content.push("");
           }
         }
 
