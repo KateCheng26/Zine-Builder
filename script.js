@@ -185,261 +185,6 @@ async function deleteFromCollectionNames(docId){
 }
 
 
-export const loadProject = async function () {
-  var project = sessionStorage.getItem("projectName");
-
-  const phoogdocs = await getDocs(collection(db, project));
-  const pages = document.querySelectorAll("[class^=page-]");
-
-  const allPageNums = [];
-  phoogdocs.forEach((item) => {
-    if (item.data().pageNumber !== undefined) {
-      allPageNums.push(String(item.data().pageNumber));
-    }
-  });
-  // Ensure enough pages exist
-  let pagesToAdd = Math.max(0, Math.ceil((allPageNums.length - pages.length) / 2));
-  for (let i = 0; i < pagesToAdd; i++) {
-    addPages();
-  }
-
-  // Assign content and ensure page numbers
-  phoogdocs.forEach((item) => {
-    if (item.data().pageNumber !== undefined) {
-      var page = document.getElementById(String(item.data().pageNumber));
-      if (!page) {
-        console.warn(`Page ${item.data().pageNumber} not found.`);
-        return;
-      }
-      if(!item.data().format){
-        page.className = "page-0"
-      }
-      else{
-        page.className = item.data().format;
-        page.innerHTML = "";
-
-        switch (page.className) {
-          case "page-1":
-            constructForm1(page);
-            break;
-          case "page-2":
-            constructForm2(page);
-            break;
-          case "page-3":
-            constructForm3(page);
-            break;
-          case "page-4":
-            constructForm4(page);
-            break;
-          case "page-5":
-            constructForm5(page);
-            break;
-          case "page-6":
-            constructForm6(page);
-            break;
-        }
-      }
-
-      var content = item.data().content;
-      var children = page.children;
-      for (let i = 0; i < content.length; i++) {
-        children[i].innerHTML = content[i];
-
-        if (!children[i].querySelector("img") && !children[i].querySelector("button")) {
-          makeEditable(children[i]);
-        }
-      }
-
-      reapplyButtonListeners(page);
-      makePageNums(page);
-    }
-  });
-
-  //make sure every page has a page number
-  document.querySelectorAll("[class^=page-]").forEach((page) => {
-    makePageNums(page);
-  });
-};
-
-
-async function makePageNums(page) {
-  const r = query(
-    collection(db, sessionStorage.getItem("projectName")),
-    where("pageNumber", "==", String(page.id)) // Ensure comparison works
-  );
-  const querySnapshot = await getDocs(r);
-  // Prevent duplicate page numbers
-  if (!page.querySelector(".pageNum")) {
-    querySnapshot.forEach((doc) => {
-      const pageNum = document.createElement("p");
-      pageNum.className = "pageNum";
-      pageNum.innerHTML = doc.data().pageNumber;
-      page.appendChild(pageNum);
-    });
-  }
-}
-
-function makeEditable(element) {
-  element.setAttribute("contenteditable", "true");
-  element.setAttribute("placeholder", "Add Text...");
-  element.classList.add("text-box");
-}
-
-
-function reapplyButtonListeners(page) {
-  // Reattach text button events
-  page.querySelectorAll(".text-button").forEach(button => {
-    button.onclick = function () {
-      const textBox = button.parentNode;
-      makeEditable(textBox); // Ensure the text area is editable
-      textBox.innerHTML = ""; // Clear previous content
-    };
-  });
-
-  // Reattach image button events
-  page.querySelectorAll(".img-button").forEach((button, index) => {
-    const inputId = `image-input-${page.id}-${index}`;
-    let imgInput = page.querySelector(`#${inputId}`);
-
-    // Create image input if it doesn't exist
-    if (!imgInput) {
-      imgInput = document.createElement("input");
-      imgInput.type = "file";
-      imgInput.style.display = "none";
-      imgInput.id = inputId;
-      button.parentNode.appendChild(imgInput);
-    }
-
-    // Handle image click event
-    button.onclick = function () {
-      imgInput.click();
-    };
-
-    // Handle image selection and display
-    imgInput.onchange = function () {
-      var file = this.files[0];
-      if (file) {
-        var reader = new FileReader();
-        reader.onload = function (event) {
-          var imageContainer = button.parentNode;
-          imageContainer.innerHTML = ""; // Clear content
-          imageContainer.style.display = "flex";
-          imageContainer.style.justifyContent = "center";
-          imageContainer.style.alignItems = "center";
-
-          var img = document.createElement("img");
-          img.id = "image";
-          img.src = event.target.result;
-
-          var imgDelete = document.createElement("button");
-          var imgDeleteSpan = document.createElement("span");
-          imgDeleteSpan.innerHTML = "delete";
-          imgDeleteSpan.className = "material-symbols-outlined";
-          imgDelete.id = "imageDelete";
-          imgDelete.style.visibility = "hidden";
-
-          imgDelete.onclick = function () {
-            handleImageDelete(imageContainer, page);
-          };
-
-          imgDelete.appendChild(imgDeleteSpan);
-          imageContainer.appendChild(img);
-          imageContainer.appendChild(imgDelete);
-
-          imageContainer.addEventListener("mouseover", function () {
-            imgDelete.style.visibility = "visible";
-          });
-
-          imageContainer.addEventListener("mouseout", function () {
-            imgDelete.style.visibility = "hidden";
-          });
-        };
-        reader.readAsDataURL(file);
-      } else {
-        alert("Please select an image first.");
-      }
-    };
-  });
-}
-
-function handleImageDelete(imageContainer, page) {
-  imageContainer.innerHTML = "";
-  imageContainer.style.display = "block";
-
-  const imginput = document.createElement("input");
-  imginput.type = "file";
-  imginput.style.display = "none";
-  imginput.id = "image-input";
-
-  const button1 = document.createElement("button");
-  button1.className = "text-button";
-  button1.title = "Text";
-
-  const button2 = document.createElement("button");
-  button2.className = "img-button";
-  button2.id = "img-button";
-  button2.title = "Image";
-
-  const span1 = document.createElement("span");
-  span1.innerHTML = "text_fields";
-  span1.className = "material-symbols-outlined";
-
-  const span2 = document.createElement("span");
-  span2.innerHTML = "image";
-  span2.className = "material-symbols-outlined";
-
-  button1.appendChild(span1);
-  button2.appendChild(span2);
-  imageContainer.appendChild(button1);
-  imageContainer.appendChild(button2);
-  imageContainer.appendChild(imginput);
-
-  reapplyButtonListeners(page);
-}
-
-
-document.addEventListener('keydown', ({key}) => {
-  const activeDiv = document.activeElement.closest('[contenteditable]');
-  var page = activeDiv.parentNode;
-  if (!activeDiv) return;
-  if ((key === "Backspace" || key === "Delete")&&(activeDiv.textContent.trim().length == 0)) {
-    activeDiv.innerHTML = "";
-    activeDiv.setAttribute("contenteditable", "false");
-    activeDiv.classList.remove("text-box");
-      const imginput = document.createElement("input");
-      imginput.type = "file";
-      imginput.style ="display: none;"
-      imginput.id = "image-input";
-
-      const button1 = document.createElement("button");
-      button1.className = "text-button";
-      button1.title = "Text";
-
-      const button2 = document.createElement("button");
-      button2.className = "img-button";
-      button2.id = "img-button";
-      button2.title = "Image";
-
-      const span1 = document.createElement("span");
-      span1.innerHTML = "text_fields"
-      span1.className = "material-symbols-outlined";
-
-      const span2 = document.createElement("span");
-      span2.innerHTML = "image"
-      span2.className = "material-symbols-outlined";
-
-    button1.appendChild(span1);
-    button2.appendChild(span2);
-    activeDiv.appendChild(button1);
-    activeDiv.appendChild(button2);
-    activeDiv.appendChild(imginput);
-
-    reapplyButtonListeners(page);  
-    
-  }
-});
-
-
 export const addPages = function () {
   // Create elements
   const pagesContainer = document.createElement("div");
@@ -473,14 +218,14 @@ export const addPages = function () {
   button1.className = "format-button";
   button1.title = "Formats";
   button1.onclick = () => {
-    chooseFormat(nextPageNum);
+    chooseFormat(String(nextPageNum));
   };
 
   const button2 = document.createElement("button");
   button2.className = "format-button";
   button2.title = "Formats";
   button2.onclick = () => {
-    chooseFormat(nextPageNum + 1);
+    chooseFormat(String(nextPageNum + 1));
   };
 
   const span1 = document.createElement("span");
@@ -515,133 +260,7 @@ export const addPages = function () {
   makePageNums(page2);
 };
 
-//save document
-export const saveProject =  async function(){
-  //get the name of project user is currently loaded into. 
-  //Set by the main menu
-  var project = sessionStorage.getItem('projectName'); 
-  
-  //get all documents in the project
-  var phoogdocs = await getDocs(collection(db, project));
-  
-  //create an empty list
-  //all documents in firebase that have an attr. of pagenumber will have that value added to this list
-  const allPageNums = []
-      //for each document in firebase associated with "project"
-      phoogdocs.forEach((item) => {
-          //if the document has an attr. page number
-          if (item.data().pageNumber != undefined){
-            //add that value to allPageNums
-              allPageNums.push(String(item.data().pageNumber))
-          }
-      })
 
-  
-  //get a list of all elements whose class starts with "page-"
-  //all page class names will be formatted as: page-format# (ex. page-1)
-  const allPages = document.querySelectorAll("[class^=page-]")
-
-  //for every page element in allPages
-  for (let i = 0; i < allPages.length; i++) {
-      //if allPageNums (a list of page numbers found in firebase) does not have a page with the page number, add a document to firebase
-      //this adds all new pages that have been created to firebase
-      if (!(allPageNums.includes(allPages[i].id))){
-          //add document with the correct pagenumber 
-          await addDoc(collection(db, project),{
-              pageNumber: allPages[i].id
-          });
-      }
-  }
-  
-
-  //get all documents in the project
-  //(this must be called again because pages may have been added that did not exist when "phoogdocs" was originally declared
-  phoogdocs = await getDocs(collection(db, project));
-  
-  //for each document in project
-  phoogdocs.forEach((item) => {
-      //if the document has pageNumber attr.
-      if(item.data().pageNumber != null) {
-        //pull page element with the same page number as doc
-        var page = document.getElementById(item.data().pageNumber);
-        // console.log(page.id)
-
-        //define item to update
-        const updateItem = doc(db, project, item.id);
-        
-        //get format (class name is format)
-        var format_name = page.className;
-        
-        //update format
-        updateDoc(updateItem, {
-          format: format_name
-        });
-
-        // console.log(format_name)
-        //make list of all child elements of page ^^^^
-        var children = page.children;
-
-
-        
-        //list of all child element content
-        var content = []
-
-        //loop through children
-        for(let i = 0; i < children.length; i++){
-          //if innerhtml of given child element is not undefined add its content to content list
-          if (children[i].innerHTML != undefined) {
-            //add content to content list
-            content.push(children[i].innerHTML);
-          }  else {
-           content.push("");
-          }
-        }
-
-        // console.log(content)
-        //update content attr with content list
-        updateDoc(updateItem, {
-          content: content
-        });
-      }
-  })
-
-}
-  
-  //function choose format to bring up the popup format selector
-  export const chooseFormat = function(pageNumber){
-      //saving the requested page to change
-    sessionStorage.setItem('pageNumber', pageNumber);
-    var popup = document.getElementById("myPopup");
-      //format picker popup shown
-    popup.classList.add("show");
-    var popup = document.getElementById("contentContainer");
-    popup.classList.add("color");
-  }
-  //function to close the popup after the format is chosen
-  export const closeFormatPopup = function(){
-    var popup = document.getElementById("myPopup");
-      //popup hidden
-    popup.classList.remove("show");
-    var popup = document.getElementById("contentContainer");
-    popup.classList.remove("color");
-  }
-
-
-//scroll to the second to last page
-export const scrollBottom = function() {
-  //get pages
-  const pages = document.getElementsByClassName("page-0");
-  //log second to last page
-  // console.log(pages[pages.length - 2].id)
-  //scroll page into view
-  pages[pages.length - 2].scrollIntoView();
-  }
-
-  if (window.location.pathname.includes("editor.html")) {
-    window.addEventListener('beforeunload', function (e) {
-      e.returnValue = 'Are you sure you want to leave?';
-    });
-  }
 
 // all constructForm methods construct a format by clearing a page
 // constructForm1 constucts format 1 and so on for formats 1-6
@@ -653,6 +272,7 @@ export const scrollBottom = function() {
 //making the required number of divs
 //making the new text/image buttons and making sure the functions link
 //append all the new stuff
+
 function constructForm1(page){
   //create cell 1
   page.innerHTML = ""
@@ -1474,6 +1094,394 @@ function constructForm6(page){
 }
 
 
+
+export const loadProject = async function () {
+  var project = sessionStorage.getItem("projectName");
+  const allDocs = await getDocs(collection(db, project));
+
+  console.log("Total documents fetched:"+ allDocs.size);
+  allDocs.forEach((doc) => console.log(doc.id+ "   "+ doc.data().pageNumber));
+
+  const pages = document.querySelectorAll("[class^=page-]");
+
+  const allPageNums = [];
+  allDocs.forEach((doc) => {
+    if (doc.data().pageNumber !== undefined) {
+      allPageNums.push(String(doc.data().pageNumber));
+    }
+  });
+  // Ensure enough pages exist
+  let pagesToAdd = Math.max(0, Math.ceil((allPageNums.length - pages.length) / 2));
+  for (let i = 0; i < pagesToAdd; i++) {
+    addPages();
+  }
+  // Assign content and ensure page numbers
+  allDocs.forEach((doc) => {
+    console.log(doc.data().pageNumber)
+    if (doc.data().pageNumber !== undefined) {
+      var page = document.getElementById(String(doc.data().pageNumber));
+
+      if (!page) {
+        console.warn(`Page ${doc.data().pageNumber} not found.`);
+        return;
+      }
+      if(!doc.data().format){
+        page.className = "page-0"
+      }
+      else{
+        page.className = doc.data().format;
+        page.innerHTML = "";
+
+        switch (page.className) {
+          case "page-1":
+            constructForm1(page);
+            break;
+          case "page-2":
+            constructForm2(page);
+            break;
+          case "page-3":
+            constructForm3(page);
+            break;
+          case "page-4":
+            constructForm4(page);
+            break;
+          case "page-5":
+            constructForm5(page);
+            break;
+          case "page-6":
+            constructForm6(page);
+            break;
+        }
+      }
+      var content = doc.data().content;
+      var children = page.children;
+
+      for (let i = 0; i < content.length-1; i++) {
+        children[i].innerHTML = content[i];
+        if (!children[i].querySelector("img") && !children[i].querySelector("button")) {
+          makeEditable(children[i]);
+        }
+      }
+
+      reapplyButtonListeners(page);
+      makePageNums(page);
+    }
+  });
+
+  //make sure every page has a page number
+  document.querySelectorAll("[class^=page-]").forEach((page) => {
+    makePageNums(page);
+  });
+}
+
+
+async function makePageNums(page) {
+  const r = query(
+    collection(db, sessionStorage.getItem("projectName")),
+    where("pageNumber", "==", String(page.id)) // Ensure comparison works
+  );
+  const querySnapshot = await getDocs(r);
+  // Prevent duplicate page numbers
+  if (!page.querySelector(".pageNum")) {
+    querySnapshot.forEach((doc) => {
+      const pageNum = document.createElement("p");
+      pageNum.className = "pageNum";
+      pageNum.innerHTML = doc.data().pageNumber;
+      page.appendChild(pageNum);
+    });
+  }
+}
+
+function makeEditable(element) {
+  element.setAttribute("contenteditable", "true");
+  element.setAttribute("placeholder", "Add Text...");
+  element.classList.add("text-box");
+}
+
+
+function reapplyButtonListeners(page) {
+  // Reattach text button events
+  page.querySelectorAll(".text-button").forEach(button => {
+    button.onclick = function () {
+      const textBox = button.parentNode;
+      makeEditable(textBox); // Ensure the text area is editable
+      textBox.innerHTML = ""; // Clear previous content
+    };
+  });
+
+  // Reattach image button events
+  page.querySelectorAll(".img-button").forEach((button, index) => {
+    const inputId = `image-input-${page.id}-${index}`;
+    let imgInput = page.querySelector(`#${inputId}`);
+
+    // Create image input if it doesn't exist
+    if (!imgInput) {
+      imgInput = document.createElement("input");
+      imgInput.type = "file";
+      imgInput.style.display = "none";
+      imgInput.id = inputId;
+      button.parentNode.appendChild(imgInput);
+    }
+
+    // Handle image click event
+    button.onclick = function () {
+      imgInput.click();
+    };
+
+    // Handle image selection and display
+    imgInput.onchange = function () {
+      var file = this.files[0];
+      if (file) {
+        var reader = new FileReader();
+        reader.onload = function (event) {
+          var imageContainer = button.parentNode;
+          imageContainer.innerHTML = ""; // Clear content
+          imageContainer.style.display = "flex";
+          imageContainer.style.justifyContent = "center";
+          imageContainer.style.alignItems = "center";
+
+          var img = document.createElement("img");
+          img.id = "image";
+          img.src = event.target.result;
+
+          var imgDelete = document.createElement("button");
+          var imgDeleteSpan = document.createElement("span");
+          imgDeleteSpan.innerHTML = "delete";
+          imgDeleteSpan.className = "material-symbols-outlined";
+          imgDelete.id = "imageDelete";
+          imgDelete.style.visibility = "hidden";
+
+          imgDelete.onclick = function () {
+            handleImageDelete(imageContainer, page);
+          };
+
+          imgDelete.appendChild(imgDeleteSpan);
+          imageContainer.appendChild(img);
+          imageContainer.appendChild(imgDelete);
+
+          imageContainer.addEventListener("mouseover", function () {
+            imgDelete.style.visibility = "visible";
+          });
+
+          imageContainer.addEventListener("mouseout", function () {
+            imgDelete.style.visibility = "hidden";
+          });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert("Please select an image first.");
+      }
+    };
+  });
+}
+
+function handleImageDelete(imageContainer, page) {
+  imageContainer.innerHTML = "";
+  imageContainer.style.display = "block";
+
+  const imginput = document.createElement("input");
+  imginput.type = "file";
+  imginput.style.display = "none";
+  imginput.id = "image-input";
+
+  const button1 = document.createElement("button");
+  button1.className = "text-button";
+  button1.title = "Text";
+
+  const button2 = document.createElement("button");
+  button2.className = "img-button";
+  button2.id = "img-button";
+  button2.title = "Image";
+
+  const span1 = document.createElement("span");
+  span1.innerHTML = "text_fields";
+  span1.className = "material-symbols-outlined";
+
+  const span2 = document.createElement("span");
+  span2.innerHTML = "image";
+  span2.className = "material-symbols-outlined";
+
+  button1.appendChild(span1);
+  button2.appendChild(span2);
+  imageContainer.appendChild(button1);
+  imageContainer.appendChild(button2);
+  imageContainer.appendChild(imginput);
+
+  reapplyButtonListeners(page);
+}
+
+
+document.addEventListener('keydown', ({key}) => {
+  const activeDiv = document.activeElement.closest('[contenteditable]');
+  var page = activeDiv.parentNode;
+  if (!activeDiv) return;
+  if ((key === "Backspace" || key === "Delete")&&(activeDiv.textContent.trim().length == 0)) {
+    activeDiv.innerHTML = "";
+    activeDiv.setAttribute("contenteditable", "false");
+    activeDiv.classList.remove("text-box");
+      const imginput = document.createElement("input");
+      imginput.type = "file";
+      imginput.style ="display: none;"
+      imginput.id = "image-input";
+
+      const button1 = document.createElement("button");
+      button1.className = "text-button";
+      button1.title = "Text";
+
+      const button2 = document.createElement("button");
+      button2.className = "img-button";
+      button2.id = "img-button";
+      button2.title = "Image";
+
+      const span1 = document.createElement("span");
+      span1.innerHTML = "text_fields"
+      span1.className = "material-symbols-outlined";
+
+      const span2 = document.createElement("span");
+      span2.innerHTML = "image"
+      span2.className = "material-symbols-outlined";
+
+    button1.appendChild(span1);
+    button2.appendChild(span2);
+    activeDiv.appendChild(button1);
+    activeDiv.appendChild(button2);
+    activeDiv.appendChild(imginput);
+
+    reapplyButtonListeners(page);  
+    
+  }
+});
+
+
+//save document
+export const saveProject =  async function(){
+  //get the name of project user is currently loaded into. 
+  //Set by the main menu
+  var project = sessionStorage.getItem('projectName'); 
+  
+  //get all documents in the project
+  var allDocs = await getDocs(collection(db, project));
+  
+  //create an empty list
+  //all documents in firebase that have an attr. of pagenumber will have that value added to this list
+  const allPageNums = []
+      //for each document in firebase associated with "project"
+      allDocs.forEach((item) => {
+          //if the document has an attr. page number
+          if (item.data().pageNumber != undefined){
+            //add that value to allPageNums
+              allPageNums.push(String(item.data().pageNumber))
+          }
+      })
+
+  
+  //get a list of all elements whose class starts with "page-"
+  //all page class names will be formatted as: page-format# (ex. page-1)
+  const allPages = document.querySelectorAll("[class^=page-]")
+
+  //for every page element in allPages
+  for (let i = 0; i < allPages.length; i++) {
+      //if allPageNums (a list of page numbers found in firebase) does not have a page with the page number, add a document to firebase
+      //this adds all new pages that have been created to firebase
+      if (!(allPageNums.includes(allPages[i].id))){
+          //add document with the correct pagenumber 
+          await addDoc(collection(db, project),{
+              pageNumber: allPages[i].id
+          });
+      }
+  }
+  
+
+  //get all documents in the project
+  //(this must be called again because pages may have been added that did not exist when "phoogdocs" was originally declared
+  allDocs = await getDocs(collection(db, project));
+  
+  //for each document in project
+  allDocs.forEach((item) => {
+      //if the document has pageNumber attr.
+      if(item.data().pageNumber != null) {
+        //pull page element with the same page number as doc
+        var page = document.getElementById(item.data().pageNumber);
+        // console.log(page.id)
+
+        //define item to update
+        const updateItem = doc(db, project, item.id);
+        
+        //get format (class name is format)
+        var format_name = page.className;
+        
+        //update format
+        updateDoc(updateItem, {
+          format: format_name
+        });
+
+        // console.log(format_name)
+        //make list of all child elements of page ^^^^
+        var children = page.children;
+
+
+        
+        //list of all child element content
+        var content = []
+
+        //loop through children
+        for(let i = 0; i < children.length; i++){
+          //if innerhtml of given child element is not undefined add its content to content list
+          if (children[i].innerHTML != undefined) {
+            //add content to content list
+            content.push(children[i].innerHTML);
+          }  else {
+           content.push("");
+          }
+        }
+
+        // console.log(content)
+        //update content attr with content list
+        updateDoc(updateItem, {
+          content: content
+        });
+      }
+  })
+
+}
+  
+  //function choose format to bring up the popup format selector
+  export const chooseFormat = function(pageNumber){
+      //saving the requested page to change
+    sessionStorage.setItem('pageNumber', pageNumber);
+    var popup = document.getElementById("myPopup");
+      //format picker popup shown
+    popup.classList.add("show");
+    var popup = document.getElementById("contentContainer");
+    popup.classList.add("color");
+  }
+  //function to close the popup after the format is chosen
+  export const closeFormatPopup = function(){
+    var popup = document.getElementById("myPopup");
+      //popup hidden
+    popup.classList.remove("show");
+    var popup = document.getElementById("contentContainer");
+    popup.classList.remove("color");
+  }
+
+
+//scroll to the second to last page
+export const scrollBottom = function() {
+  //get pages
+  const pages = document.getElementsByClassName("page-0");
+  //log second to last page
+  // console.log(pages[pages.length - 2].id)
+  //scroll page into view
+  pages[pages.length - 2].scrollIntoView();
+  }
+
+  if (window.location.pathname.includes("editor.html")) {
+    window.addEventListener('beforeunload', function (e) {
+      e.returnValue = 'Are you sure you want to leave?';
+    });
+  }
+
+
 export const changeFormat = function(format){
   var pageNumber = sessionStorage.getItem('pageNumber'); 
   var page = document.getElementById(pageNumber);
@@ -1597,7 +1605,7 @@ export const loadProjectPrint =  async function(){
   var project = sessionStorage.getItem('projectName'); 
   
   //get all documents from project in firebase wiht "projectName"
-  const phoogdocs = await getDocs(collection(db, project));
+  const allDocs = await getDocs(collection(db, project));
 
   var pages = document.querySelectorAll("[class^=page-]")
 
@@ -1605,7 +1613,7 @@ export const loadProjectPrint =  async function(){
   //all documents in firebase that have an attr. of pagenumber will have that value added to this list
   const allPageNums = []
       //for each document in firebase associated with "project"
-      phoogdocs.forEach((item) => {
+      allDocs.forEach((item) => {
           //if the document has an attr. page number
           if (item.data().pageNumber != undefined){
             //add that value to allPageNums
@@ -1638,7 +1646,7 @@ export const loadProjectPrint =  async function(){
 
 
   //for each document in firebase
-  phoogdocs.forEach((item) => {
+  allDocs.forEach((item) => {
       //if the document has pageNumber attr.
     if (item.data().pageNumber != undefined) {
       //get page by page number of document (pageNumber = 1 pulls page.id => 1)
@@ -1673,7 +1681,7 @@ export const loadProjectPrint =  async function(){
         //this is a list saved to firebase so var content is a list
       var content = item.data().content;
         //loop through items in content
-      for (let i = 0; i < content.length; i++) {
+      for (let i = 0; i < content.length-1; i++) {
           //set the innerHTML of the cell to item in content
         children[i].innerHTML = content[i];
       }
