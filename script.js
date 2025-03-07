@@ -1665,13 +1665,22 @@ export const loadProjectPrint =  async function(){
   //get a list of all elements whose class starts with "page-"
   //all page class names will be formatted as: page-format# (ex. page-1)
   pages = document.querySelectorAll("[class^=page-]")
+  if (pages.length%4 != 0) {
+    // console.log(pages.length%1)
+    addPagesPrint()
+  }
 
   // This loop sets the proper order of the pages
   // ex. 1, n, 2, n-1,...
   // for each set of 2 pages
   for (let i = 0; i < pages.length/2; i++) { 
-    pages[i*2].id = i+1;
-    pages[(i*2)+1].id = pages.length - i;
+    if (i%2 == 1) {
+      pages[i*2].id = i+1;
+      pages[(i*2)+1].id = pages.length - i;
+    }else if (i%2 == 0) {
+      pages[i*2].id = pages.length - i;
+      pages[(i*2)+1].id = i+1;
+    }
   }
 
   //loop through page elements and set id in this order (1, last - 1, 2, last - 2, ...)
