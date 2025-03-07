@@ -2,9 +2,42 @@
     background-color: #a6a6a6;
     width: 100%;
     height: 100%;
+    overflow: hidden;
+    outline: none;
+    border: 1px dotted white;
+}
+.text-box{
+    background-color: white;
+    width: 100%;
+    height: 100%;
 }
 
+.text-box:empty:not(:focus){
+    background-color: #a6a6a6;
+    width: 100%;
+    height: 100%;
+}
+
+[class^="cell"]:hover {
+    border: 1px dotted #612733;
+    
+}
+
+[class^="cell"]:focus {
+    border: 1px solid #793140;
+}
+
+
+
 /* cell-format #-cell # */
+
+/* format 0 */
+.cell-0-1 {
+    grid-row-start: 1;
+    grid-row-end: 7;
+    grid-column-start: 1;
+    grid-column-end: 7;
+}
 
 /* format 1 */
 .cell-1-1 {
