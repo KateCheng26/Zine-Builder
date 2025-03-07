@@ -273,6 +273,51 @@ export const addPages = function () {
 //making the new text/image buttons and making sure the functions link
 //append all the new stuff
 
+
+function constructForm0(page){
+  console.log("constructing form 0");
+  page.innerHTML = "";
+  const div1 = document.createElement("div");
+  div1.className = "cell-0-1";
+
+  const imginput = document.createElement("input");
+  imginput.tupe = "file"
+  imginput.style ="display: none;"
+  imginput.id = "image-input";
+
+  //text button 1
+  const button1 = document.createElement("button");
+  button1.className = "text-button";
+  button1.title = "Text";
+
+  //img button 1
+  const button2 = document.createElement("button");
+  button2.className = "img-button";
+  button2.id = "img-button";
+  button2.title = "Image";
+
+  // span
+  const span1 = document.createElement("span");
+  span1.innerHTML = "text_fields"
+  span1.className = "material-symbols-outlined";
+
+  const span2 = document.createElement("span");
+  span2.innerHTML = "image"
+  span2.className = "material-symbols-outlined";
+
+  //APPEND
+  button1.appendChild(span1);
+  button2.appendChild(span2);
+  div1.appendChild(imginput);
+  div1.appendChild(button1);
+  div1.appendChild(button2);
+
+  page.appendChild(div1);
+
+  reapplyButtonListeners(page);
+}
+
+
 function constructForm1(page){
   //create cell 1
   page.innerHTML = ""
@@ -1099,8 +1144,8 @@ export const loadProject = async function () {
   var project = sessionStorage.getItem("projectName");
   const allDocs = await getDocs(collection(db, project));
 
-  console.log("Total documents fetched:"+ allDocs.size);
-  allDocs.forEach((doc) => console.log(doc.id+ "   "+ doc.data().pageNumber));
+  // console.log("Total documents fetched:"+ allDocs.size);
+  // allDocs.forEach((doc) => console.log(doc.id+ "   "+ doc.data().pageNumber));
 
   const pages = document.querySelectorAll("[class^=page-]");
 
@@ -1117,41 +1162,29 @@ export const loadProject = async function () {
   }
   // Assign content and ensure page numbers
   allDocs.forEach((doc) => {
-    console.log(doc.data().pageNumber)
+    // console.log(doc.data().pageNumber)
     if (doc.data().pageNumber !== undefined) {
       var page = document.getElementById(String(doc.data().pageNumber));
-
       if (!page) {
         console.warn(`Page ${doc.data().pageNumber} not found.`);
         return;
       }
-      if(!doc.data().format){
-        page.className = "page-0"
-      }
-      else{
-        page.className = doc.data().format;
-        page.innerHTML = "";
-
-        switch (page.className) {
-          case "page-1":
-            constructForm1(page);
-            break;
-          case "page-2":
-            constructForm2(page);
-            break;
-          case "page-3":
-            constructForm3(page);
-            break;
-          case "page-4":
-            constructForm4(page);
-            break;
-          case "page-5":
-            constructForm5(page);
-            break;
-          case "page-6":
-            constructForm6(page);
-            break;
-        }
+      page.className = doc.data().format;
+      page.innerHTML = "";
+      if(page.className == "page-0"){
+        constructForm0(page);
+      }else if(page.className == "page-1"){
+        constructForm1(page)
+      }else if(page.className == "page-2") {
+        constructForm2(page)
+      }else if(page.className == "page-3") {
+        constructForm3(page)
+      }else if(page.className == "page-4") {
+        constructForm4(page)
+      }else if(page.className == "page-5") {
+        constructForm5(page)
+      }else if(page.className == "page-6") {
+        constructForm6(page)
       }
       var content = doc.data().content;
       var children = page.children;
@@ -1595,114 +1628,8 @@ export const addPagesPrint = function(){
   document.getElementById("container").appendChild(pagesContainer);
 
 
-//essentially the same as loadProject with minor differences
-
-export const loadProjectPrint =  async function(){
-  //get the name of project user is currently loaded into. 
-  //Set by the main menu
-  var project = sessionStorage.getItem('projectName'); 
-  
-  //get all documents from project in firebase wiht "projectName"
-  const phoogdocs = await getDocs(collection(db, project));
-
-  var pages = document.querySelectorAll("[class^=page-]")
-
-  //create an empty list
-  //all documents in firebase that have an attr. of pagenumber will have that value added to this list
-  const allPageNums = []
-      //for each document in firebase associated with "project"
-      phoogdocs.forEach((item) => {
-          //if the document has an attr. page number
-          if (item.data().pageNumber != undefined){
-            //add that value to allPageNums
-              allPageNums.push(String(item.data().pageNumber))
-          }
-      })
-
-  //this loop will add the proper amount of pages
-  //subtract the number of pages already existing from the number of pages exist only within firebase (by default, two pages are constructed)
-  //divide by two because pages are added in pairs
-  //call Add Pages x amount of times
-  for (let i = 0; i < (allPageNums.length - pages.length)/2; i++) {
-    addPagesPrint()
-  }
-
-  //get a list of all elements whose class starts with "page-"
-  //all page class names will be formatted as: page-format# (ex. page-1)
-  pages = document.querySelectorAll("[class^=page-]")
-  if (pages.length%4 != 0) {
-    console.log(pages.length%1)
-    addPagesPrint()
-  }
-
-  //get a list of all elements whose class starts with "page-"
-  //all page class names will be formatted as: page-format# (ex. page-1)
-  pages = document.querySelectorAll("[class^=page-]")
-
-  // This loop sets the proper order of the pages
-  // ex. 1, n, 2, n-1,...
-  // for each set of 2 pages
-  for (let i = 0; i < pages.length/2; i++) { 
-    if (i%2 == 1) {
-      pages[i*2].id = i+1;
-      pages[(i*2)+1].id = pages.length - i;
-    }else if (i%2 == 0) {
-      pages[i*2].id = pages.length - i;
-      pages[(i*2)+1].id = i+1;
-    }
-    
-  }
-
-  //loop through page elements and set id in this order (1, last - 1, 2, last - 2, ...)
-
-
-
-  //for each document in firebase
-  phoogdocs.forEach((item) => {
-      //if the document has pageNumber attr.
-    if (item.data().pageNumber != undefined) {
-      //get page by page number of document (pageNumber = 1 pulls page.id => 1)
-      var page = document.getElementById(item.data().pageNumber);
-      //set page classname to the saved format in firebase (ex. format: "page-1")
-      page.className = item.data().format
-
-
-      //clear page
-      page.innerHTML = ""
-        
-      
-      //call constructForm# depending on what the pages current format is
-      if(page.className == "page-1"){
-        constructForm1(page)
-      }else if(page.className == "page-2") {
-        constructForm2(page)
-      }else if(page.className == "page-3") {
-        constructForm3(page)
-      }else if(page.className == "page-4") {
-        constructForm4(page)
-      }else if(page.className == "page-5") {
-        constructForm5(page)
-      }else if(page.className == "page-6") {
-        constructForm6(page)
-      }
-
-        //create list of all child elements of page (will consist of cell elements)
-      var children = page.children;
-
-        //get content saved to firebase
-        //this is a list saved to firebase so var content is a list
-      var content = item.data().content;
-        //loop through items in content
-      for (let i = 0; i < content.length; i++) {
-          //set the innerHTML of the cell to item in content
-        children[i].innerHTML = content[i];
-      }
-              
-    }
-  },
-);
-
 }
+
 //essentially the same as loadProject with minor differences
 
 export const loadProjectPrint =  async function(){
@@ -1711,7 +1638,7 @@ export const loadProjectPrint =  async function(){
   var project = sessionStorage.getItem('projectName'); 
   
   //get all documents from project in firebase wiht "projectName"
-  const phoogdocs = await getDocs(collection(db, project));
+  const allDocs = await getDocs(collection(db, project));
 
   var pages = document.querySelectorAll("[class^=page-]")
 
@@ -1719,7 +1646,7 @@ export const loadProjectPrint =  async function(){
   //all documents in firebase that have an attr. of pagenumber will have that value added to this list
   const allPageNums = []
       //for each document in firebase associated with "project"
-      phoogdocs.forEach((item) => {
+      allDocs.forEach((item) => {
           //if the document has an attr. page number
           if (item.data().pageNumber != undefined){
             //add that value to allPageNums
@@ -1738,27 +1665,13 @@ export const loadProjectPrint =  async function(){
   //get a list of all elements whose class starts with "page-"
   //all page class names will be formatted as: page-format# (ex. page-1)
   pages = document.querySelectorAll("[class^=page-]")
-  if (pages.length%4 != 0) {
-    console.log(pages.length%1)
-    addPagesPrint()
-  }
-
-  //get a list of all elements whose class starts with "page-"
-  //all page class names will be formatted as: page-format# (ex. page-1)
-  pages = document.querySelectorAll("[class^=page-]")
 
   // This loop sets the proper order of the pages
   // ex. 1, n, 2, n-1,...
   // for each set of 2 pages
   for (let i = 0; i < pages.length/2; i++) { 
-    if (i%2 == 1) {
-      pages[i*2].id = i+1;
-      pages[(i*2)+1].id = pages.length - i;
-    }else if (i%2 == 0) {
-      pages[i*2].id = pages.length - i;
-      pages[(i*2)+1].id = i+1;
-    }
-    
+    pages[i*2].id = i+1;
+    pages[(i*2)+1].id = pages.length - i;
   }
 
   //loop through page elements and set id in this order (1, last - 1, 2, last - 2, ...)
@@ -1766,7 +1679,7 @@ export const loadProjectPrint =  async function(){
 
 
   //for each document in firebase
-  phoogdocs.forEach((item) => {
+  allDocs.forEach((item) => {
       //if the document has pageNumber attr.
     if (item.data().pageNumber != undefined) {
       //get page by page number of document (pageNumber = 1 pulls page.id => 1)
@@ -1780,7 +1693,9 @@ export const loadProjectPrint =  async function(){
         
       
       //call constructForm# depending on what the pages current format is
-      if(page.className == "page-1"){
+      if(page.className == "page-0"){
+        constructForm0(page);
+      }else if(page.className == "page-1"){
         constructForm1(page)
       }else if(page.className == "page-2") {
         constructForm2(page)
@@ -1801,229 +1716,13 @@ export const loadProjectPrint =  async function(){
         //this is a list saved to firebase so var content is a list
       var content = item.data().content;
         //loop through items in content
-      for (let i = 0; i < content.length; i++) {
+      for (let i = 0; i < content.length-1; i++) {
           //set the innerHTML of the cell to item in content
         children[i].innerHTML = content[i];
       }
-              
+       
+      makePageNums(page);
     }
   },
 );
-
-}
-//essentially the same as loadProject with minor differences
-
-export const loadProjectPrint =  async function(){
-  //get the name of project user is currently loaded into. 
-  //Set by the main menu
-  var project = sessionStorage.getItem('projectName'); 
-  
-  //get all documents from project in firebase wiht "projectName"
-  const phoogdocs = await getDocs(collection(db, project));
-
-  var pages = document.querySelectorAll("[class^=page-]")
-
-  //create an empty list
-  //all documents in firebase that have an attr. of pagenumber will have that value added to this list
-  const allPageNums = []
-      //for each document in firebase associated with "project"
-      phoogdocs.forEach((item) => {
-          //if the document has an attr. page number
-          if (item.data().pageNumber != undefined){
-            //add that value to allPageNums
-              allPageNums.push(String(item.data().pageNumber))
-          }
-      })
-
-  //this loop will add the proper amount of pages
-  //subtract the number of pages already existing from the number of pages exist only within firebase (by default, two pages are constructed)
-  //divide by two because pages are added in pairs
-  //call Add Pages x amount of times
-  for (let i = 0; i < (allPageNums.length - pages.length)/2; i++) {
-    addPagesPrint()
-  }
-
-  //get a list of all elements whose class starts with "page-"
-  //all page class names will be formatted as: page-format# (ex. page-1)
-  pages = document.querySelectorAll("[class^=page-]")
-  if (pages.length%4 != 0) {
-    console.log(pages.length%1)
-    addPagesPrint()
-  }
-
-  //get a list of all elements whose class starts with "page-"
-  //all page class names will be formatted as: page-format# (ex. page-1)
-  pages = document.querySelectorAll("[class^=page-]")
-
-  // This loop sets the proper order of the pages
-  // ex. 1, n, 2, n-1,...
-  // for each set of 2 pages
-  for (let i = 0; i < pages.length/2; i++) { 
-    if (i%2 == 1) {
-      pages[i*2].id = i+1;
-      pages[(i*2)+1].id = pages.length - i;
-    }else if (i%2 == 0) {
-      pages[i*2].id = pages.length - i;
-      pages[(i*2)+1].id = i+1;
-    }
-    
-  }
-
-  //loop through page elements and set id in this order (1, last - 1, 2, last - 2, ...)
-
-
-
-  //for each document in firebase
-  phoogdocs.forEach((item) => {
-      //if the document has pageNumber attr.
-    if (item.data().pageNumber != undefined) {
-      //get page by page number of document (pageNumber = 1 pulls page.id => 1)
-      var page = document.getElementById(item.data().pageNumber);
-      //set page classname to the saved format in firebase (ex. format: "page-1")
-      page.className = item.data().format
-
-
-      //clear page
-      page.innerHTML = ""
-        
-      
-      //call constructForm# depending on what the pages current format is
-      if(page.className == "page-1"){
-        constructForm1(page)
-      }else if(page.className == "page-2") {
-        constructForm2(page)
-      }else if(page.className == "page-3") {
-        constructForm3(page)
-      }else if(page.className == "page-4") {
-        constructForm4(page)
-      }else if(page.className == "page-5") {
-        constructForm5(page)
-      }else if(page.className == "page-6") {
-        constructForm6(page)
-      }
-
-        //create list of all child elements of page (will consist of cell elements)
-      var children = page.children;
-
-        //get content saved to firebase
-        //this is a list saved to firebase so var content is a list
-      var content = item.data().content;
-        //loop through items in content
-      for (let i = 0; i < content.length; i++) {
-          //set the innerHTML of the cell to item in content
-        children[i].innerHTML = content[i];
-      }
-              
-    }
-  },
-);
-
-}
-//essentially the same as loadProject with minor differences
-
-export const loadProjectPrint =  async function(){
-  //get the name of project user is currently loaded into. 
-  //Set by the main menu
-  var project = sessionStorage.getItem('projectName'); 
-  
-  //get all documents from project in firebase wiht "projectName"
-  const phoogdocs = await getDocs(collection(db, project));
-
-  var pages = document.querySelectorAll("[class^=page-]")
-
-  //create an empty list
-  //all documents in firebase that have an attr. of pagenumber will have that value added to this list
-  const allPageNums = []
-      //for each document in firebase associated with "project"
-      phoogdocs.forEach((item) => {
-          //if the document has an attr. page number
-          if (item.data().pageNumber != undefined){
-            //add that value to allPageNums
-              allPageNums.push(String(item.data().pageNumber))
-          }
-      })
-
-  //this loop will add the proper amount of pages
-  //subtract the number of pages already existing from the number of pages exist only within firebase (by default, two pages are constructed)
-  //divide by two because pages are added in pairs
-  //call Add Pages x amount of times
-  for (let i = 0; i < (allPageNums.length - pages.length)/2; i++) {
-    addPagesPrint()
-  }
-
-  //get a list of all elements whose class starts with "page-"
-  //all page class names will be formatted as: page-format# (ex. page-1)
-  pages = document.querySelectorAll("[class^=page-]")
-  if (pages.length%4 != 0) {
-    console.log(pages.length%1)
-    addPagesPrint()
-  }
-
-  //get a list of all elements whose class starts with "page-"
-  //all page class names will be formatted as: page-format# (ex. page-1)
-  pages = document.querySelectorAll("[class^=page-]")
-
-  // This loop sets the proper order of the pages
-  // ex. 1, n, 2, n-1,...
-  // for each set of 2 pages
-  for (let i = 0; i < pages.length/2; i++) { 
-    if (i%2 == 1) {
-      pages[i*2].id = i+1;
-      pages[(i*2)+1].id = pages.length - i;
-    }else if (i%2 == 0) {
-      pages[i*2].id = pages.length - i;
-      pages[(i*2)+1].id = i+1;
-    }
-    
-  }
-
-  //loop through page elements and set id in this order (1, last - 1, 2, last - 2, ...)
-
-
-
-  //for each document in firebase
-  phoogdocs.forEach((item) => {
-      //if the document has pageNumber attr.
-    if (item.data().pageNumber != undefined) {
-      //get page by page number of document (pageNumber = 1 pulls page.id => 1)
-      var page = document.getElementById(item.data().pageNumber);
-      //set page classname to the saved format in firebase (ex. format: "page-1")
-      page.className = item.data().format
-
-
-      //clear page
-      page.innerHTML = ""
-        
-      
-      //call constructForm# depending on what the pages current format is
-      if(page.className == "page-1"){
-        constructForm1(page)
-      }else if(page.className == "page-2") {
-        constructForm2(page)
-      }else if(page.className == "page-3") {
-        constructForm3(page)
-      }else if(page.className == "page-4") {
-        constructForm4(page)
-      }else if(page.className == "page-5") {
-        constructForm5(page)
-      }else if(page.className == "page-6") {
-        constructForm6(page)
-      }
-
-        //create list of all child elements of page (will consist of cell elements)
-      var children = page.children;
-
-        //get content saved to firebase
-        //this is a list saved to firebase so var content is a list
-      var content = item.data().content;
-        //loop through items in content
-      for (let i = 0; i < content.length; i++) {
-          //set the innerHTML of the cell to item in content
-        children[i].innerHTML = content[i];
-      }
-              
-    }
-  },
-);
-
 }
