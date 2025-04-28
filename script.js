@@ -1519,7 +1519,9 @@ export const changeFormat = function(format){
   var pageNumber = sessionStorage.getItem('pageNumber'); 
   var page = document.getElementById(pageNumber);
   page.className = format;
-  if(page.className == "page-1"){
+  if(page.className == "page-0"){
+    constructForm0(page)
+  }else if(page.className == "page-1"){
     constructForm1(page)
   }else if(page.className == "page-2") {
     constructForm2(page)
