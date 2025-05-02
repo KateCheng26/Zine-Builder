@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="format.css" media="screen">
      <script src="script.js"></script>
 </head>
-<body onload=" loadProject(); setProjectName();">
+<body onload="loadProject(); setProjectName();">
     <div class="top-bar">
         <div class = "project-title" id="project-title" contenteditable="true"></div>
         <div class = menu>
@@ -33,12 +33,90 @@
                     delete
                 </span>
             </button>
+            <button type="button" class="menubutton" data-element="bold" title="Bold">
+                <span class="material-symbols-outlined">
+                    format_bold
+                </span>
+            </button>
+            <button type="button" class="menubutton" data-element="italic" title="Italicize">
+                <span class="material-symbols-outlined">
+                    format_italic
+                </span>
+            </button>
+            <button type="button" class="menubutton" data-element="underline" title="Underline">
+                <span class="material-symbols-outlined">
+                    format_underlined
+                </span>
+            </button>
+            <button type="button" class="menubutton" data-element="insertUnorderedList" title="Bulleted List">
+                <span class="material-symbols-outlined">
+                    format_list_bulleted
+                </span>            
+            </button>
+            <button type="button" class="menubutton" data-element="insertOrderedList" title="Numbered List">
+                <span class="material-symbols-outlined">
+                    format_list_numbered
+                </span>            
+            </button>
+            <button type="button" class="menubutton" data-element="justifyLeft" title="Justify Left">
+                <span class="material-symbols-outlined">
+                    format_align_left
+                </span>            
+            </button>
+            <button type="button" class="menubutton" data-element="justifyCenter" title="Justify Center">
+                <span class="material-symbols-outlined">
+                    format_align_center
+                </span>            
+            </button>
+            <button type="button" class="menubutton" data-element="justifyRight" title="Justify Right">
+                <span class="material-symbols-outlined">
+                    format_align_right
+                </span>            
+            </button>
+            <button type="button" class="menubutton" data-element="justifyFull" title="Justify Full" onclick="formatText(x)">
+                <span class="material-symbols-outlined">
+                    format_align_justify
+                </span>            
+            </button>
+
+            <!-- <button type="button" class="dropdownbutton" onclick="menuPopup('ListPopup')" title="Bulleted List">
+                <span class="material-symbols-outlined">
+                    format_list_bulleted
+                </span>
+                <span class="material-symbols-outlined">
+                    <small>arrow_drop_down</small>
+                </span>
+                <span class="popup" id="ListPopup">
+                    
+                </span>
+            </button> -->
+<!-- 
+            <button type="button" class="dropdownbutton" onclick="menuPopup('AlignPopup')" title="Justify Left">
+                <span class="material-symbols-outlined">
+                    format_align_left
+                </span>    
+                <span class="material-symbols-outlined">
+                    <small>arrow_drop_down</small>
+                </span>   
+                <span class="popup" id="AlignPopup">
+                    
+                </span>      
+            </button> -->
+
         </div>
     </div>
     
     <div class="container" id="container">
         
-        <div id="pages-container" class="pages-container">
+        <div id="1" class="pages-container">
+            <div class="delete-section">
+                <button class = "delete-button" onclick="deletePages(1);">
+                    <span class="material-symbols-outlined">
+                        delete
+                    </span>
+                </button>
+            </div>
+
             <div class="editor">
                 <div class="page-0" id ="1">
                    
@@ -66,17 +144,19 @@
                 </div>
             </div>
         </div>
-        <div class = contentContainer id = "contentContainer">
-            <span class="content" id="myPopup">
-                <anchor class = "format-1" onclick = "closeFormatPopup(); changeFormat('page-1');"><img id = formatButtonImage src = "images/format1.png"></img></anchor> 
-                <anchor class = "format-2" onclick = "closeFormatPopup(); changeFormat('page-2');"><img id = formatButtonImage src = "images/format2.png"></img></anchor> 
-                <anchor class = "format-3" onclick = "closeFormatPopup(); changeFormat('page-3');"><img id = formatButtonImage src = "images/format3.png"></img></anchor> 
-                <anchor class = "format-4" onclick = "closeFormatPopup(); changeFormat('page-4');"><img id = formatButtonImage src = "images/format4.png"></img></anchor> 
-                <anchor class = "format-5" onclick = "closeFormatPopup(); changeFormat('page-5');"><img id = formatButtonImage src = "images/format5.png"></img></anchor> 
-                <anchor class = "format-0" onclick = "closeFormatPopup(); changeFormat('page-0');"><img id = formatButtonImage src = "images/format0.png"></img></anchor> 
-<!--                 <anchor class = "format-6" onclick = "closeFormatPopup(); changeFormat('page-6');"><img id = formatButtonImage src = "images/format6.png"></img></anchor>  -->
-            </span>
-        </div>
+    </div>
+
+
+
+    <div class = contentContainer id = "contentContainer">
+        <span class="content" id="myPopup">
+            <anchor class = "format-1" onclick = "closeFormatPopup(); changeFormat('page-1');"><img id = formatButtonImage src = "images/format1.png"></img></anchor> 
+            <anchor class = "format-2" onclick = "closeFormatPopup(); changeFormat('page-2');"><img id = formatButtonImage src = "images/format2.png"></img></anchor> 
+            <anchor class = "format-3" onclick = "closeFormatPopup(); changeFormat('page-3');"><img id = formatButtonImage src = "images/format3.png"></img></anchor> 
+            <anchor class = "format-4" onclick = "closeFormatPopup(); changeFormat('page-4');"><img id = formatButtonImage src = "images/format4.png"></img></anchor> 
+            <anchor class = "format-5" onclick = "closeFormatPopup(); changeFormat('page-5');"><img id = formatButtonImage src = "images/format5.png"></img></anchor> 
+            <anchor class = "format-0" onclick = "closeFormatPopup(); changeFormat('page-0');"><img id = formatButtonImage src = "images/format0.png"></img></anchor> 
+        </span>
     </div>
     <div class="bottom-bar">
         <button class = "pages-button" onclick="setTimeout(addPages,80); setTimeout(scrollBottom,80); ">
@@ -85,9 +165,37 @@
             </span>
         </button>
     </div>
+    
+    <script>
+        const elements = document.querySelectorAll('.menubutton');
+
+        elements.forEach(element => {
+            element.addEventListener('click', () => {
+                let command = element.dataset['element'];
+
+                document.execCommand(command);
+            });
+        });
+
+        function formatText(button) {
+            let element = document.getElementById(button)
+            let command = element.dataset['element'];
+
+            document.execCommand(command);
+        }
+
+        var myEvent = window.attachEvent || window.addEventListener;
+        var chkevent = window.attachEvent ? 'onbeforeunload' : 'beforeunload'; /// make IE7, IE8 compitable
+
+        myEvent(chkevent, function(e) { // For >=IE7, Chrome, Firefox
+            var confirmationMessage = 'Are you sure to leave the page?';  // a space
+            (e || window.event).returnValue = confirmationMessage;
+            return confirmationMessage;
+        });
+    </script>
 
     <script type="module">
-        import {saveProject, loadProject, addPages, deleteProject, chooseFormat, scrollBottom, closeFormatPopup, changeFormat, setProjectName} from './script.js';
+        import {saveProject, loadProject, addPages, deleteProject, chooseFormat, scrollBottom, closeFormatPopup, changeFormat, setProjectName, deletePages} from './script.js';
         window.saveProject = saveProject;
         window.loadProject = loadProject;
         window.addPages = addPages;
@@ -97,6 +205,7 @@
         window.closeFormatPopup  = closeFormatPopup;
         window.changeFormat = changeFormat;
         window.setProjectName = setProjectName;
+        window.deletePages = deletePages;
     </script>
 
 </body>
