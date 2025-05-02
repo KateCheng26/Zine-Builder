@@ -11,10 +11,15 @@ html {
     background-color: #e7e7e7;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 /* all pages */
 .container {
     display: block;
     height: 100%;
+    padding-top: 150px;
 }
 
 .project-title{
@@ -42,19 +47,18 @@ html {
     text-overflow: clip;
 }
 
-#delete-pages{
+.delete-section{
     grid-row-start: 1;
     grid-row-end: 2;
     grid-column-start: 1;
     grid-column-end: 3;
-    margin: 1%;
 }
 
 /* set of two pages */
 .pages-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 100%;
+    grid-template-rows: 5% 95%;
     width: 100%;
     max-height: 90vh;
     height: fit-content;
@@ -72,6 +76,7 @@ html {
 /*page*/
 [class^="page-"] {
 
+    grid-row-start: 2;
     background-color: white;
     box-shadow: 0px 5px 10px 0px #dadada;
     max-height: 90%;
@@ -91,15 +96,15 @@ html {
 
 
 .tools {
-    background-color: white;
+    background-color: transparent;
     content-visibility: visible;
     width: fit-content;
-    height: auto;
-    padding: 10px;
+    height: fit-content;
+    padding: 0;
     border-radius: 50px;
     text-align: center;
     margin: 0 auto;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 
@@ -107,28 +112,44 @@ button {
     cursor: pointer;
 }
 
+.delete-button {
+    margin-top: 20px;
+    margin-left: 10px;
+    position: absolute;
+    z-index: 50S;
+    background-color: transparent;
+}
+
+.text-button, .img-button {
+    background-color: transparent;
+}
+
 /*all buttons*/
-.format-button, .pages-button, .menubutton, .text-button, .img-button{
+.format-button, .pages-button, .menubutton, .text-button, .img-button, .dropdownbutton, .dropdownoption, .delete-button{
     text-align: center;
     transition: .6s ease;
     border: none;
 }
 
 /*content editing buttons*/
-.format-button, .pages-button, .text-button, .img-button{
+.format-button, .pages-button, .text-button, .img-button, .delete-button{
     margin-inline: .25rem;
     padding: 5px;
     width: 3rem;
     height: 3rem;
-    background-color: transparent;
     border-radius: 100% ;
 }
 
 /*top section*/
 .top-bar {  
+    position: fixed;
+    z-index: 30;
+    width: 100%;
     background-color: #e7e7e7;
     padding: 10px;
     top: 0; 
+    border-bottom: 1px dotted #dadada;
+    box-shadow: 0px 0px 10px #969696;
 }
 
 /*subsection of top-bar (contains file buttons)*/
@@ -142,7 +163,7 @@ button {
 
 /*home, delete, and save buttons*/
 }
-.menubutton{
+.menubutton, .dropdownoption{
     margin-inline: .01rem;
     width: 2rem;
     height: 2rem;
@@ -150,18 +171,91 @@ button {
     border-radius: 7px;
 }
 
+
+.dropdownbutton{
+    margin-inline: .01rem;
+    width: 3.5rem;
+    height: 2rem;
+    background-color: transparent;
+    border-radius: 7px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+
+
+.hide {
+    visibility: hidden;
+    -webkit-animation: fadeOut 1s;
+    animation: fadeOut 1s;
+}
+
+/* The actual popup */
+.popup {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+  }
+  
+  /* Popup arrow */
+.popup::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+  
+
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;} 
+    to {opacity: 1;}
+  }
+  
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+  }
+
+@-webkit-keyframes fadeOut {
+    from {opacity: 1;} 
+    to {opacity: 0;}
+}
+
+@keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity:0 ;}
+}
+
 /*delete button*/
 #delete {
     float: right;
 }
 
-.format-button:hover, .pages-button:hover,.menubutton:hover, .text-button:hover, .img-button:hover{
+.format-button:hover, .pages-button:hover,.menubutton:hover, .text-button:hover, .img-button:hover, .dropdownbutton:hover, .dropdownoption:hover, .delete-button:hover{
 
     background-color: rgb(206, 206, 206);
 
 }
 
-.format-button:active, .pages-button:active, .menubutton:active, .text-button:active, .img-button:active{
+.format-button:active, .pages-button:active, .menubutton:active, .text-button:active, .img-button:active, .dropdownbutton:active, .dropdownoption:active, .delete-button:active{
 
     background-color: rgb(136, 136, 136);
     transition: .2s ease;
@@ -295,9 +389,16 @@ changes layout
 .pages-container {
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 90vh 90vh;
+    grid-template-rows: 5% 90vh 90vh;
     width: 100%;
     max-height: none;
+}
+
+.delete-section{
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 2;
 }
 
 .page {
@@ -450,6 +551,7 @@ changes layout
     
     @page{
         size: landscape;
-        margin:0;
+        margin:0 auto;
+
     }
 }
