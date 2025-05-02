@@ -187,8 +187,13 @@ async function deleteFromCollectionNames(docId){
 
 export const addPages = function () {
   // Create elements
+  const allPageContainers = document.getElementsByClassName("pages-container")
   const pagesContainer = document.createElement("div");
   pagesContainer.className = "pages-container";
+  pagesContainer.id = allPageContainers.length + 1;
+
+  // console.log(pagesContainer.className)
+
 
   const editor1 = document.createElement("div");
   editor1.className = "editor";
@@ -198,6 +203,7 @@ export const addPages = function () {
   // Get the current number of pages to set correct IDs
   const pages = document.querySelectorAll("[class^=page-]");
   const nextPageNum = pages.length + 1;
+
 
   const page1 = document.createElement("div");
   page1.className = "page-0";
@@ -212,6 +218,7 @@ export const addPages = function () {
   tools1.className = "tools";
   const tools2 = document.createElement("div");
   tools2.className = "tools";
+
 
   // Buttons
   const button1 = document.createElement("button");
@@ -228,6 +235,16 @@ export const addPages = function () {
     chooseFormat(String(nextPageNum + 1));
   };
 
+  const deleteSection = document.createElement("div")
+  deleteSection.className = "delete-section";
+
+
+  const button3 = document.createElement("button");
+  button3.className = "delete-button";
+  button3.onclick = () => {
+    deletePages(allPageContainers.length + 1);
+  };
+
   const span1 = document.createElement("span");
   span1.innerHTML = "dashboard";
   span1.className = "material-symbols-outlined";
@@ -236,9 +253,19 @@ export const addPages = function () {
   span2.innerHTML = "dashboard";
   span2.className = "material-symbols-outlined";
 
+  const span3 = document.createElement("span");
+  span3.innerHTML = "delete";
+  span3.className = "material-symbols-outlined";
+
   // Assemble elements
   button1.appendChild(span1);
   button2.appendChild(span2);
+
+  button3.appendChild(span3);
+  deleteSection.appendChild(button3);
+
+  constructForm0(page1);
+  constructForm0(page2);
 
   tools1.appendChild(button1);
   tools2.appendChild(button2);
@@ -249,11 +276,15 @@ export const addPages = function () {
   editor2.appendChild(page2);
   editor2.appendChild(tools2);
 
-
+  pagesContainer.appendChild(deleteSection);
   pagesContainer.appendChild(editor1);
   pagesContainer.appendChild(editor2);
 
+  // console.log(pagesContainer.id)
+  // console.log(pagesContainer.children[0].className)
+
   document.getElementById("container").appendChild(pagesContainer);
+
 
   // Call makePageNums immediately after adding the pages
   makePageNums(page1);
@@ -275,13 +306,14 @@ export const addPages = function () {
 
 
 function constructForm0(page){
-  console.log("constructing form 0");
+  // console.log("constructing form 0");
   page.innerHTML = "";
+
   const div1 = document.createElement("div");
   div1.className = "cell-0-1";
 
   const imginput = document.createElement("input");
-  imginput.tupe = "file"
+  imginput.type = "file"
   imginput.style ="display: none;"
   imginput.id = "image-input";
 
@@ -1141,6 +1173,7 @@ function constructForm6(page){
 
 
 export const loadProject = async function () {
+
   var project = sessionStorage.getItem("projectName");
   const allDocs = await getDocs(collection(db, project));
 
@@ -1148,6 +1181,7 @@ export const loadProject = async function () {
   // allDocs.forEach((doc) => console.log(doc.id+ "   "+ doc.data().pageNumber));
 
   const pages = document.querySelectorAll("[class^=page-]");
+  // console.log(pages)
 
   const allPageNums = [];
   allDocs.forEach((doc) => {
@@ -1155,6 +1189,8 @@ export const loadProject = async function () {
       allPageNums.push(String(doc.data().pageNumber));
     }
   });
+  // console.log(allPageNums)
+  
   // Ensure enough pages exist
   let pagesToAdd = Math.max(0, Math.ceil((allPageNums.length - pages.length) / 2));
   for (let i = 0; i < pagesToAdd; i++) {
@@ -1165,12 +1201,16 @@ export const loadProject = async function () {
     // console.log(doc.data().pageNumber)
     if (doc.data().pageNumber !== undefined) {
       var page = document.getElementById(String(doc.data().pageNumber));
+
       if (!page) {
         console.warn(`Page ${doc.data().pageNumber} not found.`);
         return;
       }
+
       page.className = doc.data().format;
+      
       page.innerHTML = "";
+
       if(page.className == "page-0"){
         constructForm0(page);
       }else if(page.className == "page-1"){
@@ -1183,11 +1223,11 @@ export const loadProject = async function () {
         constructForm4(page)
       }else if(page.className == "page-5") {
         constructForm5(page)
-      }else if(page.className == "page-6") {
-        constructForm6(page)
       }
+
       var content = doc.data().content;
       var children = page.children;
+
 
       for (let i = 0; i < content.length-1; i++) {
         children[i].innerHTML = content[i];
@@ -1516,6 +1556,7 @@ export const scrollBottom = function() {
 
 
 export const changeFormat = function(format){
+  
   var pageNumber = sessionStorage.getItem('pageNumber'); 
   var page = document.getElementById(pageNumber);
   page.className = format;
@@ -1668,10 +1709,11 @@ export const loadProjectPrint =  async function(){
   //all page class names will be formatted as: page-format# (ex. page-1)
   pages = document.querySelectorAll("[class^=page-]")
   if (pages.length%4 != 0) {
-    // console.log(pages.length%1)
     addPagesPrint()
   }
 
+  pages = document.querySelectorAll("[class^=page-]")
+  // console.log(pages)
   // This loop sets the proper order of the pages
   // ex. 1, n, 2, n-1,...
   // for each set of 2 pages
@@ -1701,6 +1743,7 @@ export const loadProjectPrint =  async function(){
 
       //clear page
       page.innerHTML = ""
+
         
       
       //call constructForm# depending on what the pages current format is
@@ -1737,3 +1780,26 @@ export const loadProjectPrint =  async function(){
   },
 );
 }
+
+export const deletePages =  async function(section_num){
+  //get the name of project user is currently loaded into. 
+  //Set by the main menu
+  var project = sessionStorage.getItem('projectName'); 
+  
+  //get all documents from project in firebase wiht "projectName"
+  const allDocs = await getDocs(collection(db, project));
+
+
+  let page_num1 = (section_num * 2) - 1
+  let page_num2 = (section_num * 2)
+  let pages = document.getElementById(String(section_num));
+
+  pages.remove()
+
+
+
+  allDocs.forEach((item) => {
+    //if the document has pageNumber attr.
+})
+}
+
