@@ -82,16 +82,33 @@ export const newProject = async function(){
   try {
       //saves whatever the user inputs as the name of the collection
       var collectionName = document.getElementById('enterProjectName').value;
+      console.log(collectionName)
+
+      var username = sessionStorage.getItem('username');
+      console.log(username)
+
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let key = '';
+      for (let i = 0; i < 16; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        key += characters.charAt(randomIndex);
+      }
+
+      collectionName = collectionName +"§"+ username + key;
+      console.log(collectionName)
       //creates a new collection since it doesn't exist and makes a document called projectName
       await addDoc(collection(db, collectionName), {
-          projectName: collectionName,
+          projectName: collectionName,  
       });
       //adds 2 page documents
       await addDoc(collection(db, collectionName),{
-          pageNumber: "1"
+          pageNumber: "1",
+          format: "page-0"
+
       });
       await addDoc(collection(db, collectionName),{
-          pageNumber: "2"
+          pageNumber: "2",
+          format: "page-0"
       });
       //adds the name of the collection to a seperate collection of names in order to loop through it later
       await addDoc(collection(db, "collection-names"),{
@@ -126,13 +143,16 @@ export const showProjects = async function(){
     });
     document.getElementById("allProjects").appendChild(newProjectDiv);
 
+    var projNameArray = project.data().projectName.split("§");
+    console.log(projNameArray[0])
+
     var stabImage = document.createElement("img");
     stabImage.src = "images/stab.png";
     stabImage.style.width = "13vw";
     newProjectDiv.appendChild(stabImage);
 
     var newProjectName = document.createElement("p");
-    newProjectName.innerHTML = project.data().projectName;
+    newProjectName.innerHTML = projNameArray[0]; 
     newProjectName.id = "projectText";
     newProjectDiv.appendChild(newProjectName);
   })
@@ -165,6 +185,7 @@ export const deleteProject = async function(){
 }
 
 async function deleteCollection(docId, projName){
+
   try {
     // Delete the document from the specific project collection
     await deleteDoc(doc(db, projName, docId));
@@ -190,7 +211,9 @@ export const addPages = function () {
   const allPageContainers = document.getElementsByClassName("pages-container")
   const pagesContainer = document.createElement("div");
   pagesContainer.className = "pages-container";
-  pagesContainer.id = allPageContainers.length + 1;
+  var num = allPageContainers.length + 1
+  console.log(num)
+  pagesContainer.id = "container-"+num;
 
   // console.log(pagesContainer.className)
 
@@ -242,8 +265,9 @@ export const addPages = function () {
   const button3 = document.createElement("button");
   button3.className = "delete-button";
   button3.onclick = () => {
-    deletePages(allPageContainers.length + 1);
+    deletePages(num);
   };
+  
 
   const span1 = document.createElement("span");
   span1.innerHTML = "dashboard";
@@ -1030,157 +1054,20 @@ function constructForm5(page){
 
 }
 
-function constructForm6(page){
-  page.innerHTML = ""
-  const div1 = document.createElement("div");
-  div1.className = "cell-6-1";
-
-  const div2 = document.createElement("div");
-  div2.className = "cell-6-2";
-
-  const div3 = document.createElement("div");
-  div3.className = "cell-6-3";
-
-  const div4 = document.createElement("div");
-  div4.className = "cell-6-4";
-
-  const imginput = document.createElement("input");
-  imginput.type = "file";
-  imginput.style ="display: none;"
-  imginput.id = "image-input";
-
-  const button1 = document.createElement("button");
-  button1.className = "text-button";
-  button1.title = "Text";
-
-  const button2 = document.createElement("button");
-  button2.className = "img-button";
-  button2.id = "img-button";
-  button2.title = "Image";
-
-  // span
-  const span1 = document.createElement("span");
-  span1.innerHTML = "text_fields"
-  span1.className = "material-symbols-outlined";
-
-  const span2 = document.createElement("span");
-  span2.innerHTML = "image"
-  span2.className = "material-symbols-outlined";
-
-  const imginput2 = document.createElement("input");
-  imginput2.type = "file";
-  imginput2.style ="display: none;"
-  imginput2.id = "image-input2";
-
-  const button21 = document.createElement("button");
-  button21.className = "text-button";
-  button21.title = "Text";
-
-  const button22 = document.createElement("button");
-  button22.className = "img-button";
-  button22.id = "img-button";
-  button22.title = "Image";
-
-  // span
-  const span21 = document.createElement("span");
-  span21.innerHTML = "text_fields"
-  span21.className = "material-symbols-outlined";
-
-  const span22 = document.createElement("span");
-  span22.innerHTML = "image"
-  span22.className = "material-symbols-outlined";
-
-  const imginput3 = document.createElement("input");
-  imginput3.type = "file";
-  imginput3.style ="display: none;"
-  imginput3.id = "image-input3";
-
-  const button31 = document.createElement("button");
-  button31.className = "text-button";
-  button31.title = "Text";
-
-  const button32 = document.createElement("button");
-  button32.className = "img-button";
-  button32.id = "img-button";
-  button32.title = "Image";
-
-  // span
-  const span31 = document.createElement("span");
-  span31.innerHTML = "text_fields"
-  span31.className = "material-symbols-outlined";
-
-  const span32 = document.createElement("span");
-  span32.innerHTML = "image"
-  span32.className = "material-symbols-outlined";
-
-  const imginput4 = document.createElement("input");
-  imginput4.type = "file";
-  imginput4.style ="display: none;"
-  imginput4.id = "image-input4";
-
-  const button41 = document.createElement("button");
-  button41.className = "text-button";
-  button41.title = "Text";
-
-  const button42 = document.createElement("button");
-  button42.className = "img-button";
-  button42.id = "img-button";
-  button42.title = "Image";
-
-  // span
-  const span41 = document.createElement("span");
-  span41.innerHTML = "text_fields"
-  span41.className = "material-symbols-outlined";
-
-  const span42 = document.createElement("span");
-  span42.innerHTML = "image"
-  span42.className = "material-symbols-outlined";
-
-
-  button1.appendChild(span1);
-  button2.appendChild(span2);
-  div1.appendChild(imginput);
-  div1.appendChild(button1);
-  div1.appendChild(button2);
-
-  button21.appendChild(span21);
-  button22.appendChild(span22);
-  div2.appendChild(imginput2);
-  div2.appendChild(button21);
-  div2.appendChild(button22);
-
-  button31.appendChild(span31);
-  button32.appendChild(span32);
-  div3.appendChild(imginput3);
-  div3.appendChild(button31);
-  div3.appendChild(button32);
-
-  button41.appendChild(span41);
-  button42.appendChild(span42);
-  div4.appendChild(imginput4);
-  div4.appendChild(button41);
-  div4.appendChild(button42);
-
-  page.appendChild(div1);
-  page.appendChild(div2);
-  page.appendChild(div3);
-  page.appendChild(div4);
-
-  reapplyButtonListeners(page);
-
-}
-
 
 
 export const loadProject = async function () {
+  console.log("hai")
 
   var project = sessionStorage.getItem("projectName");
+  console.log(project)
   const allDocs = await getDocs(collection(db, project));
 
   // console.log("Total documents fetched:"+ allDocs.size);
   // allDocs.forEach((doc) => console.log(doc.id+ "   "+ doc.data().pageNumber));
 
   const pages = document.querySelectorAll("[class^=page-]");
+  console.log(pages)
   // console.log(pages)
 
   const allPageNums = [];
@@ -1189,18 +1076,24 @@ export const loadProject = async function () {
       allPageNums.push(String(doc.data().pageNumber));
     }
   });
+  console.log(allPageNums)
+
   // console.log(allPageNums)
   
   // Ensure enough pages exist
   let pagesToAdd = Math.max(0, Math.ceil((allPageNums.length - pages.length) / 2));
   for (let i = 0; i < pagesToAdd; i++) {
     addPages();
+    console.log("pages added")
   }
+
   // Assign content and ensure page numbers
   allDocs.forEach((doc) => {
     // console.log(doc.data().pageNumber)
     if (doc.data().pageNumber !== undefined) {
-      var page = document.getElementById(String(doc.data().pageNumber));
+      var page = document.getElementById(doc.data().pageNumber);
+      console.log(page)
+
 
       if (!page) {
         console.warn(`Page ${doc.data().pageNumber} not found.`);
@@ -1208,8 +1101,6 @@ export const loadProject = async function () {
       }
 
       page.className = doc.data().format;
-      
-      page.innerHTML = "";
 
       if(page.className == "page-0"){
         constructForm0(page);
@@ -1580,8 +1471,9 @@ export const changeFormat = function(format){
 export const setProjectName = function(){
   var projectName = document.getElementById("project-title");
   let project = sessionStorage.getItem("projectName");
+  let projectNameAdjust = project.split("§");
   // console.log(project);
-  projectName.innerHTML = project;
+  projectName.innerHTML = projectNameAdjust[0];
 }
 
 export const printProject = () => {
@@ -1786,20 +1678,81 @@ export const deletePages =  async function(section_num){
   //Set by the main menu
   var project = sessionStorage.getItem('projectName'); 
   
-  //get all documents from project in firebase wiht "projectName"
-  const allDocs = await getDocs(collection(db, project));
 
 
   let page_num1 = (section_num * 2) - 1
   let page_num2 = (section_num * 2)
-  let pages = document.getElementById(String(section_num));
+  console.log("?")
+  console.log(page_num1)
+  console.log(page_num2)
+
+  let section = ("container-" + String(section_num))
+  console.log(section)
+
+  var pages = document.getElementById(section);
+  console.log(pages)
+
 
   pages.remove()
 
+  var q = query(collection(db, project), where("pageNumber", "==", page_num1));
+  var page = await getDocs(q);
+  for (const document of page.docs) {
+    try {
+      // Delete the document from the specific project collection
+      await deleteDoc(doc(db, project, document.id));
+      // console.log(`Document with ID: ${docId} deleted from collection ${projName}`);
+    } catch (error) {
+      console.error("Error deleting document:", error);
+    }
+  }
+  
+
+  q = query(collection(db, project), where("pageNumber", "==", page_num2));
+  var page = await getDocs(q);
+  for (const document of page.docs) {
+    try {
+      // Delete the document from the specific project collection
+      await deleteDoc(doc(db, project, document.id));
+      console.log("hai")
+      // console.log(`Document with ID: ${docId} deleted from collection ${projName}`);
+    } catch (error) {
+      console.error("Error deleting document:", error);
+    }
+  }
 
 
-  allDocs.forEach((item) => {
-    //if the document has pageNumber attr.
-})
+  
 }
 
+
+export const fontSize =  function(size){
+
+  var sel = document.getSelection(); // Gets selection
+
+  var selectedHtml = "";
+  if (sel.rangeCount) {
+      var container = document.createElement("div");
+      for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+          container.appendChild(sel.getRangeAt(i).cloneContents());
+      }
+      const children = container.getElementsByTagName("*")
+      for(let child of children) {
+          if(child.style.fontSize) {
+              child.style.fontSize = `${size}px`
+          }
+      }
+      selectedHtml = container.innerHTML;
+  }
+
+  let html = `<div style="font-size: ${size}px;">${selectedHtml}</div>`
+  document.execCommand('insertHTML', false, html);
+}
+
+export const editColor =  function(){
+  let win = window.open(
+    'homepage.html',
+    null,
+    'popup,width=400,height=400,left=300,top=500'
+  )
+}
