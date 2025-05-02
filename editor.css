@@ -122,10 +122,18 @@ button {
 
 .text-button, .img-button {
     background-color: transparent;
+    position: relative;
+    top: 50%;
+    
+
+}
+.text-button{
+    left:50%;
 }
 
+
 /*all buttons*/
-.format-button, .pages-button, .menubutton, .text-button, .img-button, .dropdownbutton, .dropdownoption, .delete-button{
+.format-button, .pages-button,#fontSize, .menubutton, .text-button, .img-button, .dropdownbutton, .dropdownoption, .delete-button{
     text-align: center;
     transition: .6s ease;
     border: none;
@@ -163,12 +171,20 @@ button {
 
 /*home, delete, and save buttons*/
 }
-.menubutton, .dropdownoption{
+.menubutton{
     margin-inline: .01rem;
     width: 2rem;
     height: 2rem;
     background-color: transparent;
     border-radius: 7px;
+}
+#fontSize{
+    margin-inline: .01rem;
+    width: 4rem;
+    height: 2rem;
+    background-color: transparent;
+    border-radius: 7px;
+    
 }
 
 
@@ -249,13 +265,13 @@ button {
     float: right;
 }
 
-.format-button:hover, .pages-button:hover,.menubutton:hover, .text-button:hover, .img-button:hover, .dropdownbutton:hover, .dropdownoption:hover, .delete-button:hover{
+.format-button:hover, .pages-button:hover,#fontSize:hover,.menubutton:hover, .text-button:hover, .img-button:hover, .dropdownbutton:hover, .dropdownoption:hover, .delete-button:hover{
 
     background-color: rgb(206, 206, 206);
 
 }
 
-.format-button:active, .pages-button:active, .menubutton:active, .text-button:active, .img-button:active, .dropdownbutton:active, .dropdownoption:active, .delete-button:active{
+.format-button:active, .pages-button:active,#fontSize:active, .menubutton:active, .text-button:active, .img-button:active, .dropdownbutton:active, .dropdownoption:active, .delete-button:active{
 
     background-color: rgb(136, 136, 136);
     transition: .2s ease;
