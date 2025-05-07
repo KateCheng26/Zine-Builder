@@ -1096,33 +1096,24 @@ function constructForm5(page){
 
 export const loadProject = async function () {
   // console.log("hai")
-
   var project = sessionStorage.getItem("projectName");
-  console.log(project)
   const allDocs = await getDocs(collection(db, project));
-
   // console.log("Total documents fetched:"+ allDocs.size);
   // allDocs.forEach((doc) => console.log(doc.id+ "   "+ doc.data().pageNumber));
-
   const pages = document.querySelectorAll("[class^=page-]");
-  console.log(pages)
   // console.log(pages)
-
   const allPageNums = [];
   allDocs.forEach((doc) => {
     if (doc.data().pageNumber !== undefined) {
       allPageNums.push(String(doc.data().pageNumber));
     }
   });
-  console.log(allPageNums)
-
   // console.log(allPageNums)
-  
   // Ensure enough pages exist
   let pagesToAdd = Math.max(0, Math.ceil((allPageNums.length - pages.length) / 2));
   for (let i = 0; i < pagesToAdd; i++) {
     addPages();
-    console.log("pages added")
+    // console.log("pages added")
   }
 
   // Assign content and ensure page numbers
@@ -1130,16 +1121,13 @@ export const loadProject = async function () {
     // console.log(doc.data().pageNumber)
     if (doc.data().pageNumber !== undefined) {
       var page = document.getElementById(doc.data().pageNumber);
-      console.log(page)
-
-
+      // console.log(page)
       if (!page) {
         console.warn(`Page ${doc.data().pageNumber} not found.`);
         return;
       }
-
       page.className = doc.data().format;
-
+        
       if(page.className == "page-0"){
         constructForm0(page);
       }else if(page.className == "page-1"){
@@ -1156,7 +1144,6 @@ export const loadProject = async function () {
 
       var content = doc.data().content;
       var children = page.children;
-
 
       for (let i = 0; i < content.length-1; i++) {
         if(!content[i].startsWith("https") || (!children[i].querySelector("button"))){
