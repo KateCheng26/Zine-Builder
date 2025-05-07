@@ -1729,13 +1729,22 @@ export const loadProjectPrint =  async function(){
         //create list of all child elements of page (will consist of cell elements)
       var children = page.children;
 
-        //get content saved to firebase
-        //this is a list saved to firebase so var content is a list
-      var content = item.data().content;
-        //loop through items in content
-      for (let i = 0; i < content.length-1; i++) {
-          //set the innerHTML of the cell to item in content
-        children[i].innerHTML = content[i];
+        for (let i = 0; i < content.length-1; i++) {
+        if(!content[i].startsWith("https") || (!children[i].querySelector("button"))){
+          children[i].innerHTML = content[i];
+          children[i].setAttribute("contenteditable", "true");
+          // children[i].setAttribute('contenteditable', 'false');
+        }
+        else{
+          // console.log(page.id);
+          const newImg = document.createElement("img");
+          newImg.id = "image";
+          newImg.src = content[i];
+          newImg.alt = content[i];
+          children[i].innerHTML = ""
+          // console.log(children[i].className);
+          children[i].appendChild(newImg);
+        }
       }
        
       makePageNums(page);
