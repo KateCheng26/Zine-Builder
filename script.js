@@ -1120,14 +1120,14 @@ export const loadProject = async function () {
   allDocs.forEach((doc) => {
     // console.log(doc.data().pageNumber)
     if (doc.data().pageNumber !== undefined) {
-      var page = document.getElementById(doc.data().pageNumber);
+      var page = document.getElementById(String(doc.data().pageNumber));
       // console.log(page)
       if (!page) {
         console.warn(`Page ${doc.data().pageNumber} not found.`);
         return;
       }
       page.className = doc.data().format;
-        
+    //page.innerHTML=""; 
       if(page.className == "page-0"){
         constructForm0(page);
       }else if(page.className == "page-1"){
