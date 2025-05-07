@@ -18,6 +18,44 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 
+var imagesList = [];
+async function storeFile(imageFile, imageContainer){
+  try {
+    const imagesRef = ref(storage, sessionStorage.getItem("projectName"));
+    const pageRef = ref(imagesRef, imageContainer.parentNode.id);
+    const divRef = ref(pageRef, imageContainer.className);
+    const storageRef = ref(divRef, imageFile.name);
+    console.log(imageFile.name);
+    const snapshot = await uploadBytes(storageRef, imageFile)
+    console.log("file uploaded to div "+imageContainer.id);
+    var photoURL = await getUrl(storageRef);
+    console.log(photoURL);
+
+
+    const imageObject = {
+      url: photoURL,
+      location: imageContainer.id
+    }
+    imagesList.push(imageObject);
+    sessionStorage.setItem("imageStorage", JSON.stringify(imagesList));
+    console.log(sessionStorage.getItem("imageStorage"));
+
+
+    const img = document.createElement("img");
+    img.src = photoURL;
+    img.id = "image";
+    imageContainer.appendChild(img);
+  } catch (error) {
+    console.error("Error uploading file: "+ error);
+  }
+}
+
+async function getUrl(storageRef){
+  return await getDownloadURL(storageRef);
+}
+
+
+
 //login function for submit button
 export const login = function (email, password){
   //call signInWithEmailAndPassword, firebase function
@@ -1057,7 +1095,7 @@ function constructForm5(page){
 
 
 export const loadProject = async function () {
-  console.log("hai")
+  // console.log("hai")
 
   var project = sessionStorage.getItem("projectName");
   console.log(project)
@@ -1121,9 +1159,20 @@ export const loadProject = async function () {
 
 
       for (let i = 0; i < content.length-1; i++) {
-        children[i].innerHTML = content[i];
-        if (!children[i].querySelector("img") && !children[i].querySelector("button")) {
-          makeEditable(children[i]);
+        if(!content[i].startsWith("https") || (!children[i].querySelector("button"))){
+          children[i].innerHTML = content[i];
+          children[i].setAttribute("contenteditable", "true");
+          // children[i].setAttribute('contenteditable', 'false');
+        }
+        else{
+          // console.log(page.id);
+          const newImg = document.createElement("img");
+          newImg.id = "image";
+          newImg.src = content[i];
+          newImg.alt = content[i];
+          children[i].innerHTML = ""
+          // console.log(children[i].className);
+          children[i].appendChild(newImg);
         }
       }
 
@@ -1391,11 +1440,33 @@ export const saveProject =  async function(){
         //loop through children
         for(let i = 0; i < children.length; i++){
           //if innerhtml of given child element is not undefined add its content to content list
-          if (children[i].innerHTML != undefined) {
+          if ((children[i].innerHTML != undefined)&& (!children[i].querySelector("img"))){
             //add content to content list
             content.push(children[i].innerHTML);
-          }  else {
-           content.push("");
+          }  
+          else if(children[i].querySelector("img")&&(children[i].children[0].src!=undefined)){
+            console.log(children[i].children[0].src);
+            // console.log(doc.data().content[i]);
+            console.log("image already exists here!");
+            content.push(children[i].children[0].src);
+          }
+          else{
+            console.log("found img");
+            const listOfImages = JSON.parse(sessionStorage.getItem("imageStorage"));
+            console.log(listOfImages);
+            listOfImages.forEach((image) => { 
+              // console.log("loop");
+              console.log(image.location);
+              console.log(children[i].id);
+              if(image.location == children[i].id){
+                // console.log("true");
+                const id = image.location;
+                const lastDashIndex = id.lastIndexOf("_");
+                const lastNumber = id.substring(lastDashIndex + 1);
+                console.log("splicing Url: "+image.url)
+                content.splice(lastNumber, 0, image.url);
+              }
+            });
           }
         }
 
