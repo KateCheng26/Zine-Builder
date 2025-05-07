@@ -19,30 +19,37 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-
+//create an empty list of image objects
 var imagesList = [];
+//upload file function, called with image button in a certain page + div
 async function storeFile(imageFile, imageContainer){
   try {
+      //get project name from firebase and create a reference for it in cloud storage
     const imagesRef = ref(storage, sessionStorage.getItem("projectName"));
+      //create cloud storage references for page, div, and image according to their ids in javascript
     const pageRef = ref(imagesRef, imageContainer.parentNode.id);
     const divRef = ref(pageRef, imageContainer.className);
     const storageRef = ref(divRef, imageFile.name);
     console.log(imageFile.name);
+      //uploadBytes firebase function to upload the right image in the right reference
     const snapshot = await uploadBytes(storageRef, imageFile)
     console.log("file uploaded to div "+imageContainer.id);
+      //get the url of the now uploaded image from colud storage
     var photoURL = await getUrl(storageRef);
     console.log(photoURL);
 
-
+      //create an image object for the newly uploaded image that will store its url and div as attributes
     const imageObject = {
       url: photoURL,
       location: imageContainer.id
     }
+      //add the new image to the list of all images
     imagesList.push(imageObject);
+      //put the list of images in a session storage for later access
     sessionStorage.setItem("imageStorage", JSON.stringify(imagesList));
     console.log(sessionStorage.getItem("imageStorage"));
 
-
+      //create <img> in html and set the .src to the uploaded image's url
     const img = document.createElement("img");
     img.src = photoURL;
     img.id = "image";
@@ -52,6 +59,7 @@ async function storeFile(imageFile, imageContainer){
   }
 }
 
+//firebase function which returns the url of the image with the given reference in cloud storage
 async function getUrl(storageRef){
   return await getDownloadURL(storageRef);
 }
@@ -1148,12 +1156,14 @@ export const loadProject = async function () {
       var children = page.children;
 
       for (let i = 0; i < content.length-1; i++) {
+          //if its text, set the right content and make it editable
         if(!content[i].startsWith("https") || (!children[i].querySelector("button"))){
           children[i].innerHTML = content[i];
           children[i].setAttribute("contenteditable", "true");
           // children[i].setAttribute('contenteditable', 'false');
         }
         else{
+            //if its an image, recreate the correct image content
           // console.log(page.id);
           const newImg = document.createElement("img");
           newImg.id = "image";
@@ -1231,6 +1241,7 @@ function reapplyButtonListeners(page) {
     };
 
     // Handle image selection and display
+      //input button has onchange function to accept the file when clicked with fileReader
     imgInput.onchange = function () {
       var file = this.files[0];
       if (file) {
@@ -1246,6 +1257,7 @@ function reapplyButtonListeners(page) {
           img.id = "image";
           img.src = event.target.result;
 
+            //create image delete button 
           var imgDelete = document.createElement("button");
           var imgDeleteSpan = document.createElement("span");
           imgDeleteSpan.innerHTML = "delete";
@@ -1277,6 +1289,8 @@ function reapplyButtonListeners(page) {
   });
 }
 
+//image delete button function
+//sets innerHTML to "" and remakes text and image buttons
 function handleImageDelete(imageContainer, page) {
   imageContainer.innerHTML = "";
   imageContainer.style.display = "block";
@@ -1428,25 +1442,31 @@ export const saveProject =  async function(){
 
         //loop through children
         for(let i = 0; i < children.length; i++){
-          //if innerhtml of given child element is not undefined add its content to content list
+          //if innerhtml of given child element is not undefined and is not an image, add its content to content list
           if ((children[i].innerHTML != undefined)&& (!children[i].querySelector("img"))){
             //add content to content list
             content.push(children[i].innerHTML);
           }  
+            //if given child element is an image and is already in the firebase storage,
+            //save it to the new content so it stays there when the content is overwritten
           else if(children[i].querySelector("img")&&(children[i].children[0].src!=undefined)){
             console.log(children[i].children[0].src);
             // console.log(doc.data().content[i]);
             console.log("image already exists here!");
             content.push(children[i].children[0].src);
           }
+              //if the given child element is a new image add it to the new content
           else{
             console.log("found img");
+              //retrieve the list of image objects from session storage
             const listOfImages = JSON.parse(sessionStorage.getItem("imageStorage"));
             console.log(listOfImages);
             listOfImages.forEach((image) => { 
               // console.log("loop");
               console.log(image.location);
               console.log(children[i].id);
+                //if an image's registered location is the same as the current child element (the div),
+                //splice it into the correct section of new content
               if(image.location == children[i].id){
                 // console.log("true");
                 const id = image.location;
@@ -1718,6 +1738,7 @@ export const loadProjectPrint =  async function(){
         //create list of all child elements of page (will consist of cell elements)
       var children = page.children;
 
+        //for all content, if it is text make it editable
         for (let i = 0; i < content.length-1; i++) {
         if(!content[i].startsWith("https") || (!children[i].querySelector("button"))){
           children[i].innerHTML = content[i];
@@ -1725,6 +1746,7 @@ export const loadProjectPrint =  async function(){
           // children[i].setAttribute('contenteditable', 'false');
         }
         else{
+            //for an image, recreate the html and assign it the correct content
           // console.log(page.id);
           const newImg = document.createElement("img");
           newImg.id = "image";
