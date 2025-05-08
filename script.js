@@ -1213,7 +1213,7 @@ function makeEditable(element) {
 
 function reapplyButtonListeners(page) {
   // Reattach text button events
-  page.querySelectorAll(".text-button").forEach(button => {
+  page.querySelectorAll(".text-button").forEach((button) => {
     button.onclick = function () {
       const textBox = button.parentNode;
       makeEditable(textBox); // Ensure the text area is editable
@@ -1241,51 +1241,55 @@ function reapplyButtonListeners(page) {
     };
 
     // Handle image selection and display
-      //input button has onchange function to accept the file when clicked with fileReader
     imgInput.onchange = function () {
-      var file = this.files[0];
-      if (file) {
-        var reader = new FileReader();
-        reader.onload = function (event) {
+      var selectedFile = this.files[0];
+      if (selectedFile) {
+        // var reader = new FileReader();
+        // reader.onload = function (event) {
           var imageContainer = button.parentNode;
           imageContainer.innerHTML = ""; // Clear content
-          imageContainer.style.display = "flex";
-          imageContainer.style.justifyContent = "center";
-          imageContainer.style.alignItems = "center";
+          
 
-          var img = document.createElement("img");
-          img.id = "image";
-          img.src = event.target.result;
+          // var img = document.createElement("img");
+          // img.id = "image";
+          // img.src = event.target.result;
 
-            //create image delete button 
-          var imgDelete = document.createElement("button");
-          var imgDeleteSpan = document.createElement("span");
-          imgDeleteSpan.innerHTML = "delete";
-          imgDeleteSpan.className = "material-symbols-outlined";
-          imgDelete.id = "imageDelete";
-          imgDelete.style.visibility = "hidden";
+          storeFile(selectedFile, imageContainer);
 
-          imgDelete.onclick = function () {
-            handleImageDelete(imageContainer, page);
-          };
-
-          imgDelete.appendChild(imgDeleteSpan);
-          imageContainer.appendChild(img);
-          imageContainer.appendChild(imgDelete);
-
-          imageContainer.addEventListener("mouseover", function () {
-            imgDelete.style.visibility = "visible";
-          });
-
-          imageContainer.addEventListener("mouseout", function () {
-            imgDelete.style.visibility = "hidden";
-          });
-        };
-        reader.readAsDataURL(file);
+          createImageDelete(imageContainer);
+        // };
       } else {
         alert("Please select an image first.");
       }
     };
+  });
+}
+
+function createImageDelete(container){
+  container.style.display = "flex";
+  container.style.justifyContent = "center";
+  container.style.alignItems = "center";
+  var imgDelete = document.createElement("button");
+  var imgDeleteSpan = document.createElement("span");
+  imgDeleteSpan.innerHTML = "delete";
+  imgDeleteSpan.className = "material-symbols-outlined";
+  imgDelete.id = "imageDelete";
+  imgDelete.style.visibility = "hidden";
+
+  imgDelete.onclick = function () {
+    console.log("being clicked");
+    handleImageDelete(container, container.parentNode);
+  };
+
+  imgDelete.appendChild(imgDeleteSpan);
+  container.appendChild(imgDelete);
+
+  container.addEventListener("mouseover", function () {
+    imgDelete.style.visibility = "visible";
+  });
+
+  container.addEventListener("mouseout", function () {
+    imgDelete.style.visibility = "hidden";
   });
 }
 
