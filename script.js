@@ -380,9 +380,9 @@ export const addPages = function () {
 function constructForm0(page){
   // console.log("constructing form 0");
   page.innerHTML = "";
-
   const div1 = document.createElement("div");
   div1.className = "cell-0-1";
+  div1.id = page.id+"_1";
 
   const imginput = document.createElement("input");
   imginput.type = "file"
@@ -427,12 +427,15 @@ function constructForm1(page){
   page.innerHTML = ""
   const div1 = document.createElement("div");
   div1.className = "cell-1-1";
+  div1.id = page.id+"_1";
   //create cell 2
   const div2 = document.createElement("div");
   div2.className = "cell-1-2";
+  div2.id = page.id+"_2";
   //create cell 3
   const div3 = document.createElement("div");
   div3.className = "cell-1-3";
+  div3.id = page.id+"_3"
 
   //file picker 1, creates the input and then hides it
   const imginput = document.createElement("input");
@@ -546,15 +549,19 @@ function constructForm2(page){
   page.innerHTML = ""
   const div1 = document.createElement("div");
   div1.className = "cell-2-1";
+  div1.id = page.id+"_1";
 
   const div2 = document.createElement("div");
   div2.className = "cell-2-2";
+  div2.id = page.id+"_2";
 
   const div3 = document.createElement("div");
   div3.className = "cell-2-3";
+  div3.id = page.id+"_3";
 
   const div4 = document.createElement("div");
   div4.className = "cell-2-4";
+  div4.id = page.id+"_4";
 
   const imginput = document.createElement("input");
   imginput.type = "file";
@@ -686,15 +693,19 @@ function constructForm3(page){
   page.innerHTML = ""
   const div1 = document.createElement("div");
   div1.className = "cell-3-1";
+  div1.id = page.id+"_1";
 
   const div2 = document.createElement("div");
   div2.className = "cell-3-2";
+  div2.id = page.id+"_2";
 
   const div3 = document.createElement("div");
   div3.className = "cell-3-3";
+  div3.id = page.id+"_3";
 
   const div4 = document.createElement("div");
   div4.className = "cell-3-4";
+  div4.id = page.id+"_4";
 
   const imginput = document.createElement("input");
   imginput.type = "file";
@@ -826,15 +837,19 @@ function constructForm4(page){
   page.innerHTML = ""
   const div1 = document.createElement("div");
   div1.className = "cell-4-1";
+  div1.id = page.id+"_1";
 
   const div2 = document.createElement("div");
   div2.className = "cell-4-2";
+  div2.id = page.id+"_2";
 
   const div3 = document.createElement("div");
   div3.className = "cell-4-3";
+  div3.id = page.id+"_3";
 
   const div4 = document.createElement("div");
   div4.className = "cell-4-4";
+  div4.id = page.id+"_4";
 
   const imginput = document.createElement("input");
   imginput.type = "file";
@@ -966,15 +981,19 @@ function constructForm5(page){
   page.innerHTML = ""
   const div1 = document.createElement("div");
   div1.className = "cell-5-1";
+  div1.id = page.id+"_1";
 
   const div2 = document.createElement("div");
   div2.className = "cell-5-2";
+  div2.id = page.id+"_2";
 
   const div3 = document.createElement("div");
   div3.className = "cell-5-3";
+  div3.id = page.id+"_3";
 
   const div4 = document.createElement("div");
   div4.className = "cell-5-4";
+  div4.id = page.id+"_4";
 
   const imginput = document.createElement("input");
   imginput.type = "file";
