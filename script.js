@@ -1609,7 +1609,7 @@ export const addPagesPrint = function(){
 
   //page-container
   const pagesContainer = document.createElement("div");
-  pagesContainer.className = "pages-container";
+  pagesContainer.className = "pages-container-print";
 
   //editors
   const editor1 = document.createElement("div");
