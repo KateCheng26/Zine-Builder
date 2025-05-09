@@ -1811,7 +1811,7 @@ export const deletePages =  async function(section_num){
 
   pages.remove()
 
-  var q = query(collection(db, project), where("pageNumber", "==", page_num1));
+  var q = query(collection(db, project), where("pageNumber", "==", String(page_num1)));
   var page = await getDocs(q);
   for (const document of page.docs) {
     try {
@@ -1824,7 +1824,7 @@ export const deletePages =  async function(section_num){
   }
   
 
-  q = query(collection(db, project), where("pageNumber", "==", page_num2));
+  q = query(collection(db, project), where("pageNumber", "==", String(page_num2)));
   var page = await getDocs(q);
   for (const document of page.docs) {
     try {
