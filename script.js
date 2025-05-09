@@ -1191,6 +1191,7 @@ export const loadProject = async function () {
           children[i].innerHTML = ""
           // console.log(children[i].className);
           children[i].appendChild(newImg);
+            createImageDelete(children[i]);
         }
       }
 
