@@ -1272,9 +1272,9 @@ function reapplyButtonListeners(page) {
           // var img = document.createElement("img");
           // img.id = "image";
           // img.src = event.target.result;
-
+            //store the image uploaded with fileReader
           storeFile(selectedFile, imageContainer);
-
+            //call function to create image delete buttons
           createImageDelete(imageContainer);
         // };
       } else {
@@ -1284,6 +1284,7 @@ function reapplyButtonListeners(page) {
   });
 }
 
+//create an image delete button with proper style  connected to the image div
 function createImageDelete(container){
   container.style.display = "flex";
   container.style.justifyContent = "center";
