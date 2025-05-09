@@ -1842,17 +1842,30 @@ export const deletePages =  async function(section_num){
 }
 
 
+//changes the font size based on param size
+//size: an integer for font size (in px)
 export const fontSize =  function(size){
 
-  var sel = document.getSelection(); // Gets selection
+  // Gets currently highlighted text by user ("selection")
+  var sel = document.getSelection(); 
 
+  //initialize selectedHTML variable
   var selectedHtml = "";
+
+  //selection more than nothing
+  //.rangeCount returns an amount of ranges in an object
   if (sel.rangeCount) {
+
+    //create a container element
       var container = document.createElement("div");
+
       for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+            //add each range from user selection to container ^^^
           container.appendChild(sel.getRangeAt(i).cloneContents());
       }
+
       const children = container.getElementsByTagName("*")
+      
       for(let child of children) {
           if(child.style.fontSize) {
               child.style.fontSize = `${size}px`
@@ -1863,12 +1876,4 @@ export const fontSize =  function(size){
 
   let html = `<div style="font-size: ${size}px;">${selectedHtml}</div>`
   document.execCommand('insertHTML', false, html);
-}
-
-export const editColor =  function(){
-  let win = window.open(
-    'homepage.html',
-    null,
-    'popup,width=400,height=400,left=300,top=500'
-  )
 }
