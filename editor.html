@@ -186,48 +186,42 @@
             </button>
         </div>
         
-        <script>
+<script>
             const elements = document.querySelectorAll('.menubutton');
 
+            //on click events for formatting buttons
             elements.forEach(element => {
                 element.addEventListener('click', () => {
+                    
+                    //get dataelement command from buttton
                     let command = element.dataset['element'];
 
+                    //execute the dataelement command of button
                     document.execCommand(command);
                 });
             });
-
-            const options = document.querySelectorAll('.menuoptions');
-
-            options.forEach(element => {
-                element.addEventListener('click', () => {
-                    let command = element.dataset['element'];
-
-                    document.execCommand(command);
-                });
-            });
-
 
             var myEvent = window.attachEvent || window.addEventListener;
             var chkevent = window.attachEvent ? 'onbeforeunload' : 'beforeunload'; /// make IE7, IE8 compitable
 
+            //prevent default event on unload (reminder to save before unloading page)
             myEvent(chkevent, function(e) { // For >=IE7, Chrome, Firefox
                 var confirmationMessage = 'Are you sure to leave the page?';  // a space
                 (e || window.event).returnValue = confirmationMessage;
                 return confirmationMessage;
             });
 
+            //onchange for fontSize adjuster. Calls fontSize method with a param: font size in pxs
             document.getElementById("fontSize").onchange = function()
             {
 
+            //calls with a different param depending on the value of the font size adjuster.
             if(this.value === "10")
                 {
-                    //do this function
                     fontSize(10);
                 }
                 else if(this.value == "12")
                 {
-                    //do this function
                     fontSize(12);
                 }
                 else if(this.value == "14")
