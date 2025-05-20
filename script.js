@@ -150,13 +150,13 @@ export const newProject = async function(){
       });
       //adds 2 page documents
       await addDoc(collection(db, collectionName),{
-          pageNumber: "1",
-          format: "page-0"
+          pageNumber: "front",
+          format: "page-cover"
 
       });
       await addDoc(collection(db, collectionName),{
-          pageNumber: "2",
-          format: "page-0"
+          pageNumber: "back",
+          format: "page-cover"
       });
       //adds the name of the collection to a seperate collection of names in order to loop through it later
       await addDoc(collection(db, "collection-names"),{
@@ -278,11 +278,11 @@ export const addPages = function () {
 
   const page1 = document.createElement("div");
   page1.className = "page-0";
-  page1.id = String(pages.length + 1);
+  page1.id = String(pages.length - 1);
 
   const page2 = document.createElement("div");
   page2.className = "page-0";
-  page2.id = String(pages.length + 2);
+  page2.id = String(pages.length);
 
   // Tools
   const tools1 = document.createElement("div");
@@ -1174,7 +1174,7 @@ export const loadProject = async function () {
       var content = doc.data().content;
       var children = page.children;
 
-      for (let i = 0; i < content.length-1; i++) {
+      for (let i = 0; i < ((content.length)-1); i++) {
           //if its text, set the right content and make it editable
         if(!content[i].startsWith("https") || (!children[i].querySelector("button"))){
           children[i].innerHTML = content[i];
@@ -1467,40 +1467,42 @@ export const saveProject =  async function(){
 
         //loop through children
         for(let i = 0; i < children.length; i++){
-          //if innerhtml of given child element is not undefined and is not an image, add its content to content list
-          if ((children[i].innerHTML != undefined)&& (!children[i].querySelector("img"))){
-            //add content to content list
-            content.push(children[i].innerHTML);
-          }  
-            //if given child element is an image and is already in the firebase storage,
-            //save it to the new content so it stays there when the content is overwritten
-          else if(children[i].querySelector("img")&&(children[i].children[0].src!=undefined)){
-            console.log(children[i].children[0].src);
-            // console.log(doc.data().content[i]);
-            console.log("image already exists here!");
-            content.push(children[i].children[0].src);
-          }
-              //if the given child element is a new image add it to the new content
-          else{
-            console.log("found img");
-              //retrieve the list of image objects from session storage
-            const listOfImages = JSON.parse(sessionStorage.getItem("imageStorage"));
-            console.log(listOfImages);
-            listOfImages.forEach((image) => { 
-              // console.log("loop");
-              console.log(image.location);
-              console.log(children[i].id);
-                //if an image's registered location is the same as the current child element (the div),
-                //splice it into the correct section of new content
-              if(image.location == children[i].id){
-                // console.log("true");
-                const id = image.location;
-                const lastDashIndex = id.lastIndexOf("_");
-                const lastNumber = id.substring(lastDashIndex + 1);
-                console.log("splicing Url: "+image.url)
-                content.splice(lastNumber, 0, image.url);
-              }
-            });
+          if(children[i].className != "pageNum"){
+            //if innerhtml of given child element is not undefined and is not an image, add its content to content list
+            if ((children[i].innerHTML != undefined)&& (!children[i].querySelector("img"))){
+              //add content to content list
+              content.push(children[i].innerHTML);
+            }  
+              //if given child element is an image and is already in the firebase storage,
+              //save it to the new content so it stays there when the content is overwritten
+            else if(children[i].querySelector("img")&&(children[i].children[0].src!=undefined)){
+              console.log(children[i].children[0].src);
+              // console.log(doc.data().content[i]);
+              console.log("image already exists here!");
+              content.push(children[i].children[0].src);
+            }
+                //if the given child element is a new image add it to the new content
+            else{
+              console.log("found img");
+                //retrieve the list of image objects from session storage
+              const listOfImages = JSON.parse(sessionStorage.getItem("imageStorage"));
+              console.log(listOfImages);
+              listOfImages.forEach((image) => { 
+                // console.log("loop");
+                console.log(image.location);
+                console.log(children[i].id);
+                  //if an image's registered location is the same as the current child element (the div),
+                  //splice it into the correct section of new content
+                if(image.location == children[i].id){
+                  // console.log("true");
+                  const id = image.location;
+                  const lastDashIndex = id.lastIndexOf("_");
+                  const lastNumber = id.substring(lastDashIndex + 1);
+                  console.log("splicing Url: "+image.url)
+                  content.splice(lastNumber, 0, image.url);
+                }
+              });
+            }
           }
         }
 
@@ -1676,11 +1678,15 @@ export const loadProjectPrint =  async function(){
   //get the name of project user is currently loaded into. 
   //Set by the main menu
   var project = sessionStorage.getItem('projectName'); 
+  console.log(project)
+
   
   //get all documents from project in firebase wiht "projectName"
   const allDocs = await getDocs(collection(db, project));
 
   var pages = document.querySelectorAll("[class^=page-]")
+  console.log(pages)
+
 
   //create an empty list
   //all documents in firebase that have an attr. of pagenumber will have that value added to this list
@@ -1702,25 +1708,39 @@ export const loadProjectPrint =  async function(){
     addPagesPrint()
   }
 
+  //add two pages. One is for front cover, other is for back cover.
+  addPagesPrint()
+
   //get a list of all elements whose class starts with "page-"
   //all page class names will be formatted as: page-format# (ex. page-1)
   pages = document.querySelectorAll("[class^=page-]")
-  if (pages.length%4 != 0) {
+  if ((pages.length)%4 != 0) {
     addPagesPrint()
   }
 
   pages = document.querySelectorAll("[class^=page-]")
-  // console.log(pages)
+  console.log(pages)
+
+
+  //make first page = front cover
+  pages[1].id = "front"
+  pages[1].className = "page-front"
+
+  pages[0].id = "back"
+  pages[0].className = "page-back"
+
+
+  
   // This loop sets the proper order of the pages
   // ex. 1, n, 2, n-1,...
   // for each set of 2 pages
-  for (let i = 0; i < pages.length/2; i++) { 
+  for (let i = 1; i < (pages.length - 2)/2; i++) { 
     if (i%2 == 1) {
-      pages[i*2].id = i+1;
-      pages[(i*2)+1].id = pages.length - i;
+      pages[i*2].id = i;
+      pages[(i*2)+1].id = pages.length - (i+1);
     }else if (i%2 == 0) {
-      pages[i*2].id = pages.length - i;
-      pages[(i*2)+1].id = i+1;
+      pages[i*2].id = pages.length - (i+1);
+      pages[(i*2)+1].id = i;
     }
   }
 
@@ -1730,6 +1750,7 @@ export const loadProjectPrint =  async function(){
 
   //for each document in firebase
   allDocs.forEach((item) => {
+    console.log(`page num: ${item.data().pageNumber}`)
       //if the document has pageNumber attr.
     if (item.data().pageNumber != undefined) {
       //get page by page number of document (pageNumber = 1 pulls page.id => 1)
@@ -1762,12 +1783,15 @@ export const loadProjectPrint =  async function(){
 
         //create list of all child elements of page (will consist of cell elements)
       var children = page.children;
+      var content = item.data().content;
+      console.log(content)
+
 
         //for all content, if it is text make it editable
         for (let i = 0; i < content.length-1; i++) {
         if(!content[i].startsWith("https") || (!children[i].querySelector("button"))){
           children[i].innerHTML = content[i];
-          children[i].setAttribute("contenteditable", "true");
+          // children[i].setAttribute("contenteditable", "true");
           // children[i].setAttribute('contenteditable', 'false');
         }
         else{
@@ -1838,7 +1862,7 @@ export const deletePages =  async function(section_num){
   }
 
 
-  
+  fixPageNums();
 }
 
 
@@ -1876,4 +1900,48 @@ export const fontSize =  function(size){
 
   let html = `<div style="font-size: ${size}px;">${selectedHtml}</div>`
   document.execCommand('insertHTML', false, html);
+}
+
+
+
+export const fixPageNums =  async function(){  
+    console.log("started")
+
+    //get the project name from session storage
+    var project = sessionStorage.getItem("projectName");
+    //query the collection, pull documents in ascending order by page number
+    const q = query(collection(db, project), where("pageNumber", "!=", "undefined"));
+
+    //docs from query
+    const allDocs = await getDocs(q);
+    
+    //a variable that is = to page number that should be assigned
+    //default to 1 because first page gets page number 1 (not 0)
+    var num = 1;
+
+
+    allDocs.forEach((item) => {
+      // if the document has a page number
+
+        //define page element (user side) to adjust pageNum
+        var page = document.getElementById(item.data().pageNumber);
+  
+        //define document (server side) to adjust pageNum
+        var updateItem = doc(db, project, item.id);
+
+        //adjust page number of page element (user side)
+        page.id = String(num);
+        console.log(`Page Updated with ${num}`)
+
+
+        //update pageNumber in firebase document (server side)
+        updateDoc(updateItem, {
+          pageNumber: String(num)
+        });
+        console.log(`Doc Updated with ${num}`)
+
+        //add 1 to num
+        num += 1;
+
+    });
 }
