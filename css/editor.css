@@ -55,20 +55,21 @@ html {
 }
 
 /* set of two pages */
-.pages-container {
+.pages-container, .covers-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 5% 95%;
     width: 100%;
-    max-height: 90vh;
+    height: 100%;
     height: fit-content;
 }
 
 .pages-container-print {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: 5% 95%;
     width: 100%;
-    max-height: 90vh;
+    height: 100%;
     height: fit-content;
 }
 
@@ -82,12 +83,12 @@ html {
 }
 
 /*page*/
-[class^="page-"] {
+[class^="page-"], .cover {
 
     grid-row-start: 2;
     background-color: white;
     box-shadow: 0px 5px 10px 0px #dadada;
-    max-height: 90%;
+    width: 5.5in;
     aspect-ratio: 5.5/8.5;
     display: grid;
     row-gap: 1.5%;
@@ -410,12 +411,12 @@ changes layout
 */
 @media only screen and (max-width: 768px) {
 
-.pages-container {
+.pages-container, .covers-container {
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 5% 90vh 90vh;
+    grid-template-rows: 5% 100vh 100vh;
     width: 100%;
-    max-height: none;
+    height: fit-content;
 }
 
 .delete-section{
@@ -545,7 +546,7 @@ changes layout
     } */
 
     /* set of two pages */
-    .pages-container {
+    .pages-container, .covers-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 100%;
