@@ -30,6 +30,7 @@ async function storeFile(imageFile, imageContainer){
     const pageRef = ref(imagesRef, imageContainer.parentNode.id);
     const divRef = ref(pageRef, imageContainer.className);
     const storageRef = ref(divRef, imageFile.name);
+      
     console.log(imageFile.name);
       //uploadBytes firebase function to upload the right image in the right reference
     const snapshot = await uploadBytes(storageRef, imageFile)
