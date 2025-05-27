@@ -13,7 +13,7 @@ const firebaseConfig = {
     appId: "1:1037717512420:web:51b5d77bec663069310cf1"
   };
 
-//initialize Firbase
+//initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -1336,25 +1336,28 @@ function handleImageDelete(imageContainer, page) {
   imageContainer.innerHTML = "";
   imageContainer.style.display = "block";
   var imageList = JSON.parse(sessionStorage.getItem("imageStorage"));
-
+//for every image stored
   imageList.forEach((item) => {
     console.log("container id: "+imageContainer.id);
     console.log("location: "+item.location);
     console.log("file name: "+item.fileName);
+//if the current image matches the div we are deleting in (i.e. having found the right image and its attributes)
     if (item.location == imageContainer.id){
-      //create cloud storage references for page, div, and image according to their ids in javascript
+      //finds the cloud storage references for page, div, and image according to their ids in javascript
       const imagesRef = ref(storage, sessionStorage.getItem("projectName"));
       const pageRef = ref(imagesRef, imageContainer.parentNode.id);
       const divRef = ref(pageRef, imageContainer.className);
       const storageRef = ref(divRef, item.fileName);
 
+        //cloud storage delete function that takes the parameter of the reference for the div the image in is
+        //this will delete the given image from cloud storage
       deleteObject(storageRef).then(() => {
         console.log("deleted image "+item.url+ " from storage");
       }).catch((error) => {
         console.warn("Unable to delete file: "+error)
       });
         
-
+        //this section handles deleting the given image from the master list of images
       let elementToRemove = item;
       let index = imageList.indexOf(elementToRemove);
       if (index > -1) { // Check if the element exists in the array
@@ -1365,6 +1368,7 @@ function handleImageDelete(imageContainer, page) {
     }
   });
 
+    //remaking text and image buttons for format-0
   const imginput = document.createElement("input");
   imginput.type = "file";
   imginput.style.display = "none";
