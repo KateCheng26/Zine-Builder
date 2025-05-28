@@ -1,7 +1,7 @@
 // Import Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getFirestore, collection, addDoc, setDoc, getDoc, getDocs, doc, updateDoc, deleteDoc, query, where, getCountFromServer} from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-storage.js"; 
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-storage.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -30,28 +30,25 @@ async function storeFile(imageFile, imageContainer){
     const pageRef = ref(imagesRef, imageContainer.parentNode.id);
     const divRef = ref(pageRef, imageContainer.className);
     const storageRef = ref(divRef, imageFile.name);
-      
     console.log(imageFile.name);
       //uploadBytes firebase function to upload the right image in the right reference
     const snapshot = await uploadBytes(storageRef, imageFile)
     console.log("file uploaded to div "+imageContainer.id);
       //get the url of the now uploaded image from colud storage
     var photoURL = await getUrl(storageRef);
-    // console.log("url: "+photoURL);
+    console.log(photoURL);
 
       //create an image object for the newly uploaded image that will store its url and div as attributes
-      const imageObject = {
-        url: photoURL,
-        location: imageContainer.id,
+    const imageObject = {
+      url: photoURL,
+      location: imageContainer.id,
         fileName:imageFile.name
-      }
-
-      // console.log("storage ref: "+storageRef);
+    }
       //add the new image to the list of all images
     imagesList.push(imageObject);
       //put the list of images in a session storage for later access
     sessionStorage.setItem("imageStorage", JSON.stringify(imagesList));
-    // console.log(sessionStorage.getItem("imageStorage"));
+    console.log(sessionStorage.getItem("imageStorage"));
 
       //create <img> in html and set the .src to the uploaded image's url
     const img = document.createElement("img");
@@ -134,10 +131,10 @@ export const newProject = async function(){
   try {
       //saves whatever the user inputs as the name of the collection
       var collectionName = document.getElementById('enterProjectName').value;
-      // console.log(collectionName)
+      console.log(collectionName)
 
       var username = sessionStorage.getItem('username');
-      // console.log(username)
+      console.log(username)
 
       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       let key = '';
@@ -154,13 +151,13 @@ export const newProject = async function(){
       });
       //adds 2 page documents
       await addDoc(collection(db, collectionName),{
-          pageNumber: "1",
-          format: "page-0"
+          pageNumber: "front",
+          format: "page-cover"
 
       });
       await addDoc(collection(db, collectionName),{
-          pageNumber: "2",
-          format: "page-0"
+          pageNumber: "back",
+          format: "page-cover"
       });
       //adds the name of the collection to a seperate collection of names in order to loop through it later
       await addDoc(collection(db, "collection-names"),{
@@ -196,7 +193,7 @@ export const showProjects = async function(){
     document.getElementById("allProjects").appendChild(newProjectDiv);
 
     var projNameArray = project.data().projectName.split("§");
-    // console.log(projNameArray[0])
+    console.log(projNameArray[0])
 
     var stabImage = document.createElement("img");
     stabImage.src = "images/stab.png";
@@ -264,7 +261,7 @@ export const addPages = function () {
   const pagesContainer = document.createElement("div");
   pagesContainer.className = "pages-container";
   var num = allPageContainers.length + 1
-  // console.log(num)
+  console.log(num)
   pagesContainer.id = "container-"+num;
 
   // console.log(pagesContainer.className)
@@ -282,11 +279,11 @@ export const addPages = function () {
 
   const page1 = document.createElement("div");
   page1.className = "page-0";
-  page1.id = String(pages.length + 1);
+  page1.id = String(pages.length - 1);
 
   const page2 = document.createElement("div");
   page2.className = "page-0";
-  page2.id = String(pages.length + 2);
+  page2.id = String(pages.length);
 
   // Tools
   const tools1 = document.createElement("div");
@@ -317,10 +314,10 @@ export const addPages = function () {
   const button3 = document.createElement("button");
   button3.className = "delete-button";
   button3.onclick = async function() {
-    if(confirm("Do you want to delete these pages?")==true){
-      deletePages(num);
-       await saveProject();
-       await loadProject();
+      if(confirm("Do you want to delete these pages?")==true){
+            deletePages(num);
+            await saveProject();
+            await loadProject();
     }
   };
   
@@ -365,10 +362,10 @@ export const addPages = function () {
 
   document.getElementById("container").appendChild(pagesContainer);
 
+
   // Call makePageNums immediately after adding the pages
   makePageNums(page1);
   makePageNums(page2);
-
 };
 
 
@@ -1145,10 +1142,10 @@ export const loadProject = async function () {
       allPageNums.push(String(doc.data().pageNumber));
     }
   });
+    makePageNums(document.getElementById("1"));
+    makePageNums(document.getElementById("2"));
   // console.log(allPageNums)
   // Ensure enough pages exist
-  makePageNums(document.getElementById("1"));
-  makePageNums(document.getElementById("2"));
   let pagesToAdd = Math.max(0, Math.ceil((allPageNums.length - pages.length) / 2));
   for (let i = 0; i < pagesToAdd; i++) {
     addPages();
@@ -1163,7 +1160,6 @@ export const loadProject = async function () {
       // console.log(page)
       if (!page) {
         console.warn(`Page ${doc.data().pageNumber} not found.`);
-        // makePageNums(page);
         return;
       }
       page.className = doc.data().format;
@@ -1185,7 +1181,7 @@ export const loadProject = async function () {
       var content = doc.data().content;
       var children = page.children;
 
-      for (let i = 0; i < content.length-1; i++) {
+      for (let i = 0; i < ((content.length)-1); i++) {
           //if its text, set the right content and make it editable
         if(!content[i].startsWith("https") || (!children[i].querySelector("button"))){
           children[i].innerHTML = content[i];
@@ -1207,20 +1203,18 @@ export const loadProject = async function () {
       }
 
       reapplyButtonListeners(page);
-      
+      makePageNums(page);
     }
   });
-  // //make sure every page has a page number
-  // pages.forEach((page) => {
-  //   console.log("making page nums");
-  //   makePageNums(page);
-  // });
+
+  //make sure every page has a page number
+  document.querySelectorAll("[class^=page-]").forEach((page) => {
+    makePageNums(page);
+  });
 }
 
 
-
 async function makePageNums(page) {
-  console.log("making page nums");
   const r = query(
     collection(db, sessionStorage.getItem("projectName")),
     where("pageNumber", "==", String(page.id)) // Ensure comparison works
@@ -1228,9 +1222,7 @@ async function makePageNums(page) {
   const querySnapshot = await getDocs(r);
   // Prevent duplicate page numbers
   if (!page.querySelector(".pageNum")) {
-    console.log("page id: "+page.id);
     querySnapshot.forEach((doc) => {
-      console.log("page number: "+doc.data().pageNumber);
       const pageNum = document.createElement("p");
       pageNum.className = "pageNum";
       pageNum.innerHTML = doc.data().pageNumber;
@@ -1332,9 +1324,9 @@ function createImageDelete(container){
 //image delete button function
 //sets innerHTML to "" and remakes text and image buttons
 function handleImageDelete(imageContainer, page) {
-  console.log("function running");
   imageContainer.innerHTML = "";
   imageContainer.style.display = "block";
+
   var imageList = JSON.parse(sessionStorage.getItem("imageStorage"));
 
   imageList.forEach((item) => {
@@ -1353,7 +1345,7 @@ function handleImageDelete(imageContainer, page) {
       }).catch((error) => {
         console.warn("Unable to delete file: "+error)
       });
-        
+
 
       let elementToRemove = item;
       let index = imageList.indexOf(elementToRemove);
@@ -1483,18 +1475,50 @@ export const saveProject =  async function(){
   //Set by the main menu
   var project = sessionStorage.getItem('projectName'); 
   
+  //get all documents in the project
+  var allDocs = await getDocs(collection(db, project));
+  
+  //create an empty list
+  //all documents in firebase that have an attr. of pagenumber will have that value added to this list
+  const allPageNums = []
+      //for each document in firebase associated with "project"
+      allDocs.forEach((item) => {
+          //if the document has an attr. page number
+          if (item.data().pageNumber != undefined){
+            //add that value to allPageNums
+              allPageNums.push(String(item.data().pageNumber))
+          }
+      })
+
+  
+  //get a list of all elements whose class starts with "page-"
+  //all page class names will be formatted as: page-format# (ex. page-1)
+  const allPages = document.querySelectorAll("[class^=page-]")
+
+  //for every page element in allPages
+  for (let i = 0; i < allPages.length; i++) {
+      //if allPageNums (a list of page numbers found in firebase) does not have a page with the page number, add a document to firebase
+      //this adds all new pages that have been created to firebase
+      if (!(allPageNums.includes(allPages[i].id))){
+          //add document with the correct pagenumber 
+          await addDoc(collection(db, project),{
+              pageNumber: allPages[i].id
+          });
+      }
+  }
+  
 
   //get all documents in the project
   //(this must be called again because pages may have been added that did not exist when "phoogdocs" was originally declared
-  const allDocs = await getDocs(collection(db, project));
-
+  allDocs = await getDocs(collection(db, project));
+  
   //for each document in project
   allDocs.forEach((item) => {
       //if the document has pageNumber attr.
       if(item.data().pageNumber != null) {
         //pull page element with the same page number as doc
         var page = document.getElementById(item.data().pageNumber);
-        // console.log("class name of page "+page.id+": "+page.className)
+        // console.log(page.id)
 
         //define item to update
         const updateItem = doc(db, project, item.id);
@@ -1518,40 +1542,42 @@ export const saveProject =  async function(){
 
         //loop through children
         for(let i = 0; i < children.length; i++){
-          //if innerhtml of given child element is not undefined and is not an image, add its content to content list
-          if ((children[i].innerHTML != undefined)&& (!children[i].querySelector("img"))){
-            //add content to content list
-            content.push(children[i].innerHTML);
-          }  
-            //if given child element is an image and is already in the firebase storage,
-            //save it to the new content so it stays there when the content is overwritten
-          else if(children[i].querySelector("img")&&(children[i].children[0].src!=undefined)){
-            console.log(children[i].children[0].src);
-            // console.log(doc.data().content[i]);
-            console.log("image already exists here!");
-            content.push(children[i].children[0].src);
-          }
-              //if the given child element is a new image add it to the new content
-          else{
-            console.log("found img");
-              //retrieve the list of image objects from session storage
-            const listOfImages = JSON.parse(sessionStorage.getItem("imageStorage"));
-            console.log(listOfImages);
-            listOfImages.forEach((image) => { 
-              // console.log("loop");
-              console.log(image.location);
-              console.log(children[i].id);
-                //if an image's registered location is the same as the current child element (the div),
-                //splice it into the correct section of new content
-              if(image.location == children[i].id){
-                // console.log("true");
-                const id = image.location;
-                const lastDashIndex = id.lastIndexOf("_");
-                const lastNumber = id.substring(lastDashIndex + 1);
-                console.log("splicing Url: "+image.url)
-                content.splice(lastNumber, 0, image.url);
-              }
-            });
+          if(children[i].className != "pageNum"){
+            //if innerhtml of given child element is not undefined and is not an image, add its content to content list
+            if ((children[i].innerHTML != undefined)&& (!children[i].querySelector("img"))){
+              //add content to content list
+              content.push(children[i].innerHTML);
+            }  
+              //if given child element is an image and is already in the firebase storage,
+              //save it to the new content so it stays there when the content is overwritten
+            else if(children[i].querySelector("img")&&(children[i].children[0].src!=undefined)){
+              console.log(children[i].children[0].src);
+              // console.log(doc.data().content[i]);
+              console.log("image already exists here!");
+              content.push(children[i].children[0].src);
+            }
+                //if the given child element is a new image add it to the new content
+            else{
+              console.log("found img");
+                //retrieve the list of image objects from session storage
+              const listOfImages = JSON.parse(sessionStorage.getItem("imageStorage"));
+              console.log(listOfImages);
+              listOfImages.forEach((image) => { 
+                // console.log("loop");
+                console.log(image.location);
+                console.log(children[i].id);
+                  //if an image's registered location is the same as the current child element (the div),
+                  //splice it into the correct section of new content
+                if(image.location == children[i].id){
+                  // console.log("true");
+                  const id = image.location;
+                  const lastDashIndex = id.lastIndexOf("_");
+                  const lastNumber = id.substring(lastDashIndex + 1);
+                  console.log("splicing Url: "+image.url)
+                  content.splice(lastNumber, 0, image.url);
+                }
+              });
+            }
           }
         }
 
@@ -1676,6 +1702,116 @@ export const printProject = () => {
     }, 500);
   }, 100);
 };
+
+
+export const deletePages =  async function(section_num){
+  console.log("deleting");
+  //get the name of project user is currently loaded into. 
+  //Set by the main menu
+  var project = sessionStorage.getItem('projectName'); 
+  
+
+
+  let page_num1 = (section_num * 2) - 1
+  let page_num2 = (section_num * 2)
+  // console.log("?")
+  // console.log(page_num1)
+  // console.log(page_num2)
+
+  let section = ("container-" + String(section_num));
+  // console.log(section)
+
+  var pages = document.getElementById(section);
+  // console.log(pages)
+
+  pages.remove();
+  console.log("before deleteDoc for pages");
+
+  var q = query(collection(db, project), where("pageNumber", "==", String(page_num1)));
+  var page = await getDocs(q);
+  for (const document of page.docs) {
+    try {
+      // Delete the document from the specific project collection
+      await deleteDoc(doc(db, project, document.id));
+      console.log(`Document with Page Number: ${document.data().pageNumber} deleted from collection ${project}`);
+    } catch (error) {
+      console.error("Error deleting document:"+ error);
+    }
+  }
+  
+
+  q = query(collection(db, project), where("pageNumber", "==", String(page_num2)));
+  var page = await getDocs(q);
+  for (const document of page.docs) {
+    try {
+      // Delete the document from the specific project collection
+      await deleteDoc(doc(db, project, document.id));
+      console.log(`Document with Page Number: ${document.data().pageNumber} deleted from collection ${project}`);
+    } catch (error) {
+      console.error("Error deleting document:"+ error);
+    }
+  }
+
+
+   //REORDER PAGE NUMBERS
+   const s = query(collection(db, project), where("pageNumber", "!=", "undefined"));
+   //docs from query
+   const allDocs = await getDocs(s);
+ 
+   allDocs.forEach((item)=>{
+     var num = Number(item.data().pageNumber);
+     if(num>page_num2){
+       var newNum = num-2;
+ 
+       var updateItem = doc(db, project, item.id);
+       updateDoc(updateItem, {
+         pageNumber: String(newNum)
+       });
+       console.log("updated firebase with page number: "+newNum);
+     }
+   });
+  //  document.querySelectorAll("[class^=page-]").forEach((page) => {
+  //   makePageNums(page);
+  // });
+}
+
+//changes the font size based on param size
+//size: an integer for font size (in px)
+export const fontSize =  function(size){
+
+  // Gets currently highlighted text by user ("selection")
+  var sel = document.getSelection(); 
+
+  //initialize selectedHTML variable
+  var selectedHtml = "";
+
+  //selection more than nothing
+  //.rangeCount returns an amount of ranges in an object
+  if (sel.rangeCount) {
+
+    //create a container element
+      var container = document.createElement("div");
+
+      for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+            //add each range from user selection to container ^^^
+          container.appendChild(sel.getRangeAt(i).cloneContents());
+      }
+
+      const children = container.getElementsByTagName("*")
+      
+      for(let child of children) {
+          if(child.style.fontSize) {
+              child.style.fontSize = `${size}px`
+          }
+      }
+      selectedHtml = container.innerHTML;
+  }
+
+  let html = `<div style="font-size: ${size}px;">${selectedHtml}</div>`
+  document.execCommand('insertHTML', false, html);
+}
+
+
 
 //essentially the same as addPages
 //adds pages but with minimal buttons for the print preview page
@@ -1838,107 +1974,4 @@ export const loadProjectPrint =  async function(){
     }
   },
 );
-}
-
-export const deletePages =  async function(section_num){
-  console.log("deleting");
-  //get the name of project user is currently loaded into. 
-  //Set by the main menu
-  var project = sessionStorage.getItem('projectName'); 
-  
-
-
-  let page_num1 = (section_num * 2) - 1
-  let page_num2 = (section_num * 2)
-  // console.log("?")
-  // console.log(page_num1)
-  // console.log(page_num2)
-
-  let section = ("container-" + String(section_num));
-  // console.log(section)
-
-  var pages = document.getElementById(section);
-  // console.log(pages)
-
-  pages.remove();
-  console.log("before deleteDoc for pages");
-
-  var q = query(collection(db, project), where("pageNumber", "==", String(page_num1)));
-  var page = await getDocs(q);
-  for (const document of page.docs) {
-    try {
-      // Delete the document from the specific project collection
-      await deleteDoc(doc(db, project, document.id));
-      console.log(`Document with Page Number: ${document.data().pageNumber} deleted from collection ${project}`);
-    } catch (error) {
-      console.error("Error deleting document:"+ error);
-    }
-  }
-  
-
-  q = query(collection(db, project), where("pageNumber", "==", String(page_num2)));
-  var page = await getDocs(q);
-  for (const document of page.docs) {
-    try {
-      // Delete the document from the specific project collection
-      await deleteDoc(doc(db, project, document.id));
-      console.log(`Document with Page Number: ${document.data().pageNumber} deleted from collection ${project}`);
-    } catch (error) {
-      console.error("Error deleting document:"+ error);
-    }
-  }
-
-
-   //REORDER PAGE NUMBERS
-   const s = query(collection(db, project), where("pageNumber", "!=", "undefined"));
-   //docs from query
-   const allDocs = await getDocs(s);
- 
-   allDocs.forEach((item)=>{
-     var num = Number(item.data().pageNumber);
-     if(num>page_num2){
-       var newNum = num-2;
- 
-       var updateItem = doc(db, project, item.id);
-       updateDoc(updateItem, {
-         pageNumber: String(newNum)
-       });
-       console.log("updated firebase with page number: "+newNum);
-     }
-   });
-  //  document.querySelectorAll("[class^=page-]").forEach((page) => {
-  //   makePageNums(page);
-  // });
-}
-
-
-export const fontSize =  function(size){
-
-  var sel = document.getSelection(); // Gets selection
-
-  var selectedHtml = "";
-  if (sel.rangeCount) {
-      var container = document.createElement("div");
-      for (var i = 0, len = sel.rangeCount; i < len; ++i) {
-          container.appendChild(sel.getRangeAt(i).cloneContents());
-      }
-      const children = container.getElementsByTagName("*")
-      for(let child of children) {
-          if(child.style.fontSize) {
-              child.style.fontSize = `${size}px`
-          }
-      }
-      selectedHtml = container.innerHTML;
-  }
-
-  let html = `<div style="font-size: ${size}px;">${selectedHtml}</div>`
-  document.execCommand('insertHTML', false, html);
-}
-
-export const editColor =  function(){
-  let win = window.open(
-    'homepage.html',
-    null,
-    'popup,width=400,height=400,left=300,top=500'
-  )
 }
