@@ -1939,10 +1939,10 @@ export const fontSize =  function(size){
   document.execCommand('insertHTML', false, html);
 }
 
-export const editColor =  function(){
-  let win = window.open(
-    'homepage.html',
-    null,
-    'popup,width=400,height=400,left=300,top=500'
-  )
-}
+// export const editColor =  function(){
+//   let win = window.open(
+//     'homepage.html',
+//     null,
+//     'popup,width=400,height=400,left=300,top=500'
+//   )
+// }
