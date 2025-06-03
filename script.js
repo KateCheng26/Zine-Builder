@@ -152,12 +152,12 @@ export const newProject = async function(){
       //adds 2 page documents
       await addDoc(collection(db, collectionName),{
           pageNumber: "front",
-          format: "page-cover"
+          format: "page-0"
 
       });
       await addDoc(collection(db, collectionName),{
           pageNumber: "back",
-          format: "page-cover"
+          format: "page-0"
       });
       //adds the name of the collection to a seperate collection of names in order to loop through it later
       await addDoc(collection(db, "collection-names"),{
@@ -297,14 +297,14 @@ export const addPages = function () {
   button1.className = "format-button";
   button1.title = "Formats";
   button1.onclick = () => {
-    chooseFormat(String(nextPageNum));
+    chooseFormat(String(nextPageNum - 2));
   };
 
   const button2 = document.createElement("button");
   button2.className = "format-button";
   button2.title = "Formats";
   button2.onclick = () => {
-    chooseFormat(String(nextPageNum + 1));
+    chooseFormat(String(nextPageNum - 1));
   };
 
   const deleteSection = document.createElement("div")
@@ -1135,16 +1135,15 @@ export const loadProject = async function () {
   // console.log("Total documents fetched:"+ allDocs.size);
   // allDocs.forEach((doc) => console.log(doc.id+ "   "+ doc.data().pageNumber));
   const pages = document.querySelectorAll("[class^=page-]");
-  // console.log(pages)
+
   const allPageNums = [];
+
   allDocs.forEach((doc) => {
     if (doc.data().pageNumber !== undefined) {
       allPageNums.push(String(doc.data().pageNumber));
     }
   });
-    makePageNums(document.getElementById("1"));
-    makePageNums(document.getElementById("2"));
-  // console.log(allPageNums)
+
   // Ensure enough pages exist
   let pagesToAdd = Math.max(0, Math.ceil((allPageNums.length - pages.length) / 2));
   for (let i = 0; i < pagesToAdd; i++) {
@@ -1157,12 +1156,14 @@ export const loadProject = async function () {
     // console.log(doc.data().pageNumber)
     if (doc.data().pageNumber !== undefined) {
       var page = document.getElementById(String(doc.data().pageNumber));
-      // console.log(page)
+      console.log(`current page: ${page.id}`)
       if (!page) {
         console.warn(`Page ${doc.data().pageNumber} not found.`);
         return;
       }
+
       page.className = doc.data().format;
+      console.log(`current format: ${page.className}`)
     //page.innerHTML=""; 
       if(page.className == "page-0"){
         constructForm0(page);
@@ -1484,7 +1485,7 @@ export const saveProject =  async function(){
       //for each document in firebase associated with "project"
       allDocs.forEach((item) => {
           //if the document has an attr. page number
-          if (item.data().pageNumber != undefined){
+          if (item.data().pageNumber != undefined ){
             //add that value to allPageNums
               allPageNums.push(String(item.data().pageNumber))
           }
@@ -1495,17 +1496,7 @@ export const saveProject =  async function(){
   //all page class names will be formatted as: page-format# (ex. page-1)
   const allPages = document.querySelectorAll("[class^=page-]")
 
-  //for every page element in allPages
-  for (let i = 0; i < allPages.length; i++) {
-      //if allPageNums (a list of page numbers found in firebase) does not have a page with the page number, add a document to firebase
-      //this adds all new pages that have been created to firebase
-      if (!(allPageNums.includes(allPages[i].id))){
-          //add document with the correct pagenumber 
-          await addDoc(collection(db, project),{
-              pageNumber: allPages[i].id
-          });
-      }
-  }
+
   
 
   //get all documents in the project
@@ -1516,6 +1507,7 @@ export const saveProject =  async function(){
   allDocs.forEach((item) => {
       //if the document has pageNumber attr.
       if(item.data().pageNumber != null) {
+
         //pull page element with the same page number as doc
         var page = document.getElementById(item.data().pageNumber);
         // console.log(page.id)
@@ -1629,9 +1621,12 @@ export const scrollBottom = function() {
 
 
 export const changeFormat = function(format){
+  console.log(`format: ${format}`)
   
   var pageNumber = sessionStorage.getItem('pageNumber'); 
   var page = document.getElementById(pageNumber);
+
+  console.log(`page Num: ${page.id}`)
   page.className = format;
   if(page.className == "page-0"){
     constructForm0(page)
@@ -1859,119 +1854,111 @@ export const addPagesPrint = function(){
 
 //essentially the same as loadProject with minor differences
 
-export const loadProjectPrint =  async function(){
-  //get the name of project user is currently loaded into. 
-  //Set by the main menu
-  var project = sessionStorage.getItem('projectName'); 
-  
-  //get all documents from project in firebase wiht "projectName"
-  const allDocs = await getDocs(collection(db, project));
+// export const loadProjectPrint = async function () {
+//   // console.log("hai")
+//   var project = sessionStorage.getItem("projectName");
+//   const allDocs = await getDocs(collection(db, project));
+//   // console.log("Total documents fetched:"+ allDocs.size);
+//   // allDocs.forEach((doc) => console.log(doc.id+ "   "+ doc.data().pageNumber));
+//   var pages = document.querySelectorAll("[class^=page-]");
 
-  var pages = document.querySelectorAll("[class^=page-]")
+//   const allPageNums = [];
 
-  //create an empty list
-  //all documents in firebase that have an attr. of pagenumber will have that value added to this list
-  const allPageNums = []
-      //for each document in firebase associated with "project"
-      allDocs.forEach((item) => {
-          //if the document has an attr. page number
-          if (item.data().pageNumber != undefined){
-            //add that value to allPageNums
-              allPageNums.push(String(item.data().pageNumber))
-          }
-      })
+//   allDocs.forEach((doc) => {
+//     if (doc.data().pageNumber !== undefined) {
+//       allPageNums.push(String(doc.data().pageNumber));
+//     }
+//   });
 
-  //this loop will add the proper amount of pages
-  //subtract the number of pages already existing from the number of pages exist only within firebase (by default, two pages are constructed)
-  //divide by two because pages are added in pairs
-  //call Add Pages x amount of times
-  for (let i = 0; i < (allPageNums.length - pages.length)/2; i++) {
-    addPagesPrint()
-  }
+//   // Ensure enough pages exist
+//   for (let i = 0; i < (allPageNums.length - pages.length)/2; i++) {
+//     addPagesPrint()
+//   }
 
-  //get a list of all elements whose class starts with "page-"
-  //all page class names will be formatted as: page-format# (ex. page-1)
-  pages = document.querySelectorAll("[class^=page-]")
-  if (pages.length%4 != 0) {
-    addPagesPrint()
-  }
+//   //get a list of all elements whose class starts with "page-"
+//   //all page class names will be formatted as: page-format# (ex. page-1)
+//   pages = document.querySelectorAll("[class^=page-]")
+//   if (pages.length%4 != 0) {
+//     addPagesPrint()
+//   }
 
-  pages = document.querySelectorAll("[class^=page-]")
-  // console.log(pages)
-  // This loop sets the proper order of the pages
-  // ex. 1, n, 2, n-1,...
-  // for each set of 2 pages
-  for (let i = 0; i < pages.length/2; i++) { 
-    if (i%2 == 1) {
-      pages[i*2].id = i+1;
-      pages[(i*2)+1].id = pages.length - i;
-    }else if (i%2 == 0) {
-      pages[i*2].id = pages.length - i;
-      pages[(i*2)+1].id = i+1;
-    }
-  }
+//   pages = document.querySelectorAll("[class^=page-]")
 
-  //loop through page elements and set id in this order (1, last - 1, 2, last - 2, ...)
+//   pages[0].id = "front"
+//   pages[1].id = "back"
+
+//   for (let i = 1; i < pages.length/2; i++) { 
+//     if (i%2 == 1) {
+//       pages[i*2].id = pages.length - (i - 3);
+//       pages[(i*2)+1].id = i;
+//     }else if (i%2 == 0) {
+//       pages[i*2].id = i;
+//       pages[(i*2)+1].id = pages.length - (i - 3);
+//     }
+//   }
 
 
 
-  //for each document in firebase
-  allDocs.forEach((item) => {
-      //if the document has pageNumber attr.
-    if (item.data().pageNumber != undefined) {
-      //get page by page number of document (pageNumber = 1 pulls page.id => 1)
-      var page = document.getElementById(item.data().pageNumber);
-      //set page classname to the saved format in firebase (ex. format: "page-1")
-      page.className = item.data().format
+//   // Assign content and ensure page numbers
+//   allDocs.forEach((doc) => {
+//     // console.log(doc.data().pageNumber)
+//     if (doc.data().pageNumber !== undefined && doc.data().pageNumber !== "front" && doc.data().pageNumber !== "back") {
+//       var page = document.getElementById(String(doc.data().pageNumber));
+//       console.log(`PRINT current page: ${page.id}`)
 
+//       if (!page) {
+//         console.warn(`Page ${doc.data().pageNumber} not found.`);
+//         return;
+//       }
 
-      //clear page
-      page.innerHTML = ""
-
-        
+//       page.className = doc.data().format;
+//       console.log(`PRINT current format: ${page.className}`)
       
-      //call constructForm# depending on what the pages current format is
-      if(page.className == "page-0"){
-        constructForm0(page);
-      }else if(page.className == "page-1"){
-        constructForm1(page)
-      }else if(page.className == "page-2") {
-        constructForm2(page)
-      }else if(page.className == "page-3") {
-        constructForm3(page)
-      }else if(page.className == "page-4") {
-        constructForm4(page)
-      }else if(page.className == "page-5") {
-        constructForm5(page)
-      }else if(page.className == "page-6") {
-        constructForm6(page)
-      }
+//       page.innerHTML = `page num: ${page.id}| format: ${page.className}`
+//     // //page.innerHTML=""; 
+//     //   if(page.className == "page-0"){
+//     //     constructForm0(page);
+//     //   }else if(page.className == "page-1"){
+//     //     constructForm1(page)
+//     //   }else if(page.className == "page-2") {
+//     //     constructForm2(page)
+//     //   }else if(page.className == "page-3") {
+//     //     constructForm3(page)
+//     //   }else if(page.className == "page-4") {
+//     //     constructForm4(page)
+//     //   }else if(page.className == "page-5") {
+//     //     constructForm5(page)
+//     //   }
 
-        //create list of all child elements of page (will consist of cell elements)
-      var children = page.children;
-      var content = item.data().content;
+      
+//       // var content = doc.data().content;
+//       // var children = page.children;
 
-        //for all content, if it is text make it editable
-        for (let i = 0; i < content.length-1; i++) {
-        if(!content[i].startsWith("https") || (!children[i].querySelector("button"))){
-          children[i].innerHTML = content[i];
-          // children[i].setAttribute('contenteditable', 'false');
-        }
-        else{
-            //for an image, recreate the html and assign it the correct content
-          // console.log(page.id);
-          const newImg = document.createElement("img");
-          newImg.id = "image";
-          newImg.src = content[i];
-          newImg.alt = content[i];
-          children[i].innerHTML = ""
-          // console.log(children[i].className);
-          children[i].appendChild(newImg);
-        }
-      }
-       
-      makePageNums(page);
-    }
-  },
-);
-}
+//       // for (let i = 0; i < ((content.length)-1); i++) {
+//       //     //if its text, set the right content and make it editable
+//       //   if(!content[i].startsWith("https") || (!children[i].querySelector("button"))){
+//       //     children[i].innerHTML = content[i];
+//       //     // children[i].setAttribute('contenteditable', 'false');
+//       //   }
+//       //   else{
+//       //       //if its an image, recreate the correct image content
+//       //     // console.log(page.id);
+//       //     const newImg = document.createElement("img");
+//       //     newImg.id = "image";
+//       //     newImg.src = content[i];
+//       //     newImg.alt = content[i];
+//       //     children[i].innerHTML = ""
+//       //     // console.log(children[i].className);
+//       //     children[i].appendChild(newImg);
+//       //       createImageDelete(children[i]);
+//       //   }
+//       // }
+
+//     }
+//   });
+
+//   document.querySelectorAll("[class^=page-]").forEach((page) => {
+//     makePageNums(page);
+//   });
+// }
+
