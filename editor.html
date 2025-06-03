@@ -93,32 +93,6 @@
                         format_align_justify
                     </span>            
                 </button>
-                
-                
-
-                <!-- <button type="button" class="dropdownbutton" onclick="menuPopup('ListPopup')" title="Bulleted List">
-                    <span class="material-symbols-outlined">
-                        format_list_bulleted
-                    </span>
-                    <span class="material-symbols-outlined">
-                        <small>arrow_drop_down</small>
-                    </span>
-                    <span class="popup" id="ListPopup">
-                        
-                    </span>
-                </button> -->
-    <!-- 
-                <button type="button" class="dropdownbutton" onclick="menuPopup('AlignPopup')" title="Justify Left">
-                    <span class="material-symbols-outlined">
-                        format_align_left
-                    </span>    
-                    <span class="material-symbols-outlined">
-                        <small>arrow_drop_down</small>
-                    </span>   
-                    <span class="popup" id="AlignPopup">
-                        
-                    </span>      
-                </button> -->
 
             </div>
         </div>
@@ -127,11 +101,6 @@
             
             <div id="container-1" class="pages-container">
                 <div class="delete-section">
-                    <button class = "delete-button" onclick="deletePages(1);">
-                        <span class="material-symbols-outlined">
-                            delete
-                        </span>
-                    </button>
                 </div>
 
                 <div class="editor">
@@ -139,29 +108,15 @@
                     
             
 
-                    <div class="page-0" id ="1">
+                    <div class="page-0" id ="front">
                     
-                    </div>
-                    <div class="tools">
-                        <button class = "format-button" onclick="chooseFormat('1');">
-                            <span class="material-symbols-outlined">
-                                dashboard
-                            </span>
-                        </button>
                     </div>
                 </div>
 
             
                 <div class="editor">
-                    <div class="page-0" id ="2">
+                    <div class="page-0" id ="back">
 
-                    </div>
-                    <div class="tools">
-                        <button class = "format-button" onclick="chooseFormat('2');">
-                            <span class="material-symbols-outlined">
-                                dashboard
-                            </span>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -264,7 +219,8 @@
                 changeFormat, 
                 setProjectName, 
                 deletePages, 
-                fontSize 
+                fontSize,
+                makeNewPageDocs 
                 
             } from './script.js';
             window.saveProject = saveProject;
@@ -278,6 +234,8 @@
             window.setProjectName = setProjectName;
             window.deletePages = deletePages;
             window.fontSize = fontSize;
+            window.makeNewPageDocs = makeNewPageDocs;
+
 
 
         </script>
